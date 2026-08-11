@@ -1,177 +1,187 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestor de Vôlei Mobile</title>
+  <title>App Vôlei Completo</title>
   <style>
     :root { --bg: #0f172a; --card-bg: #1e293b; --accent: #facc15; --text: #f8fafc; --danger: #ef4444; }
-    body { background: var(--bg); color: var(--text); padding: 1rem; padding-bottom: 80px; font-family: system-ui, sans-serif; margin: 0; }
-    .card { background: var(--card-bg); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
-    h2, h3 { margin-top: 0; }
-    input { width: 90%; padding: 10px; margin: 5px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; }
-    button { padding: 10px 14px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; margin: 4px 2px; }
-    .btn-main { background: var(--accent); color: #000; width: 100%; font-size: 1rem; }
-    .btn-danger { background: var(--danger); color: #fff; }
-    .btn-edit { background: #3b82f6; color: #fff; }
-    .btn-win { background: #22c55e; color: #fff; }
-    .tab-content { display: none; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 80px; font-family: sans-serif; margin: 0; }
+    .tab-content { display: none; padding: 1rem; }
     .tab-content.active { display: block; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #334155; }
-    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #020617; display: flex; justify-content: space-around; padding: 12px 0; border-top: 2px solid var(--accent); }
-    nav button { background: none; color: white; font-size: 1.4rem; }
+    .card { background: var(--card-bg); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center; }
+    input { width: 90%; padding: 10px; margin: 5px 0; border-radius: 6px; border: none; }
+    button { padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; margin: 4px; }
+    .btn-main { background: var(--accent); color: #000; width: 100%; }
+    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; justify-content: space-around; padding: 12px 0; border-top: 2px solid var(--accent); }
+    nav button { background: none; color: white; font-size: 1.2rem; }
   </style>
 </head>
 <body>
 
-  <!-- GERENCIAR DUPLAS -->
-  <div id="tab-times" class="tab-content active">
+  <!-- PLACAR -->
+  <div id="tab-placar" class="tab-content active">
     <div class="card">
-      <h3 id="form-title">➕ Nova Dupla</h3>
+        <div id="timer" style="font-size: 2.5rem; font-weight:bold;">00:00</div>
+        <button onclick="startTimer()">▶ Iniciar</button>
+        <button onclick="pauseTimer()">⏸ Pausar</button>
+        <button onclick="resetTimer()">⏹ Zerar Tempo</button>
+    </div>
+    <div class="card">
+        <h3>Time A: <span id="s1">0</span> | Time B: <span id="s2">0</span></h3>
+        <button onclick="addPoint(1)">+1 Time A</button>
+        <button onclick="addPoint(2)">+1 Time B</button>
+        <br><br>
+        <button onclick="resetMatch()" style="background:var(--danger); color:white;">Reiniciar Partida</button>
+    </div>
+  </div>
+
+  <!-- TIMES -->
+  <div id="tab-times" class="tab-content">
+    <div class="card">
+      <h3>➕ Cadastrar / Editar Dupla</h3>
       <input type="hidden" id="edit-id">
-      <input type="text" id="timeName" placeholder="Nome do Time/Dupla">
+      <input type="text" id="timeName" placeholder="Nome da Dupla">
       <input type="text" id="p1Name" placeholder="Jogador 1">
       <input type="text" id="p2Name" placeholder="Jogador 2">
       <button class="btn-main" onclick="saveTeam()">Salvar Dupla</button>
-      <button id="btn-cancel" style="display:none;" onclick="resetForm()">Cancelar Edição</button>
     </div>
-
-    <div class="card">
-      <h3>👥 Duplas Cadastradas</h3>
-      <div id="teamsList"></div>
-    </div>
+    <div id="teamsList" class="card"></div>
   </div>
 
   <!-- RANKING -->
   <div id="tab-ranking" class="tab-content">
     <div class="card">
-      <h3>🏆 Tabela de Classificação</h3>
-      <table id="rankingTable"></table>
+      <h3>🏆 Ranking Geral</h3>
+      <table id="rankingTable" width="100%"></table>
     </div>
+  </div>
+
+  <!-- DICAS -->
+  <div id="tab-dicas" class="tab-content">
+    <div class="card">
+      <h3>💡 Dicas</h3>
+      <p>Consulte suas táticas e vídeos aqui.</p>
+    </div>
+  </div>
+
+  <!-- TEMPO -->
+  <div id="tab-tempo" class="tab-content">
+    <div class="card" id="weather">Clique abaixo para ver a previsão do tempo</div>
+    <button onclick="getWeather()" class="btn-main">Obter Previsão</button>
   </div>
 
   <!-- NAVEGAÇÃO -->
   <nav>
+    <button onclick="show('tab-placar')">🏐</button>
     <button onclick="show('tab-times')">👥</button>
     <button onclick="show('tab-ranking')">🏆</button>
+    <button onclick="show('tab-dicas')">💡</button>
+    <button onclick="show('tab-tempo')">☀️</button>
   </nav>
 
   <script>
-    let teams = JSON.parse(localStorage.getItem('volei_teams')) || [];
-
-    function show(tabId) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      if (tabId === 'tab-ranking') renderRanking();
+    // Navegação
+    function show(id) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'tab-ranking') renderRanking();
     }
+
+    // Cronômetro e Placar
+    let s1=0, s2=0, timerInterval=null, secs=0;
+    function addPoint(t) { t===1?s1++:s2++; document.getElementById('s'+t).innerText = t===1?s1:s2; }
+    function startTimer() { if(!timerInterval) timerInterval = setInterval(()=>{secs++; document.getElementById('timer').innerText = new Date(secs*1000).toISOString().substr(14,5);}, 1000); }
+    function pauseTimer() { clearInterval(timerInterval); timerInterval=null; }
+    function resetTimer() { pauseTimer(); secs=0; document.getElementById('timer').innerText="00:00"; }
+    function resetMatch() { s1=0; s2=0; document.getElementById('s1').innerText=0; document.getElementById('s2').innerText=0; resetTimer(); }
+
+    // Gestão de Duplas e Ranking
+    let teams = JSON.parse(localStorage.getItem('teams')) || [];
 
     function saveTeam() {
-      const id = document.getElementById('edit-id').value;
-      const name = document.getElementById('timeName').value.trim();
-      const p1 = document.getElementById('p1Name').value.trim();
-      const p2 = document.getElementById('p2Name').value.trim();
+        let name = document.getElementById('timeName').value;
+        let p1 = document.getElementById('p1Name').value;
+        let p2 = document.getElementById('p2Name').value;
+        let editId = document.getElementById('edit-id').value;
 
-      if (!name || !p1 || !p2) {
-        alert("Preencha todos os campos!");
-        return;
-      }
+        if(!name) return alert("Digite o nome da dupla!");
 
-      if (id) {
-        // Editar Dupla existente
-        const team = teams.find(t => t.id == id);
-        if (team) {
-          team.name = name;
-          team.p1 = p1;
-          team.p2 = p2;
+        if(editId) {
+            let t = teams.find(item => item.id == editId);
+            if(t) { t.name = name; t.p1 = p1; t.p2 = p2; }
+        } else {
+            teams.push({id: Date.now(), name, p1, p2, wins: 0});
         }
-      } else {
-        // Criar Nova Dupla
-        teams.push({ id: Date.now(), name, p1, p2, wins: 0 });
-      }
 
-      saveAndRender();
-      resetForm();
-    }
-
-    function editTeam(id) {
-      const team = teams.find(t => t.id == id);
-      if (!team) return;
-
-      document.getElementById('edit-id').value = team.id;
-      document.getElementById('timeName').value = team.name;
-      document.getElementById('p1Name').value = team.p1;
-      document.getElementById('p2Name').value = team.p2;
-
-      document.getElementById('form-title').innerText = "✏️ Editar Dupla";
-      document.getElementById('btn-cancel').style.display = "inline-block";
-    }
-
-    function deleteTeam(id) {
-      if (confirm("Tem certeza que deseja apagar esta dupla?")) {
-        teams = teams.filter(t => t.id != id);
-        saveAndRender();
-      }
-    }
-
-    function addWin(id) {
-      const team = teams.find(t => t.id == id);
-      if (team) {
-        team.wins++;
-        saveAndRender();
-      }
+        localStorage.setItem('teams', JSON.stringify(teams));
+        resetForm();
+        renderTeams();
     }
 
     function resetForm() {
-      document.getElementById('edit-id').value = '';
-      document.getElementById('timeName').value = '';
-      document.getElementById('p1Name').value = '';
-      document.getElementById('p2Name').value = '';
-      document.getElementById('form-title').innerText = "➕ Nova Dupla";
-      document.getElementById('btn-cancel').style.display = "none";
+        document.getElementById('edit-id').value = '';
+        document.getElementById('timeName').value = '';
+        document.getElementById('p1Name').value = '';
+        document.getElementById('p2Name').value = '';
     }
 
-    function saveAndRender() {
-      localStorage.setItem('volei_teams', JSON.stringify(teams));
-      renderTeams();
+    function editTeam(id) {
+        let t = teams.find(item => item.id == id);
+        if(t) {
+            document.getElementById('edit-id').value = t.id;
+            document.getElementById('timeName').value = t.name;
+            document.getElementById('p1Name').value = t.p1 || '';
+            document.getElementById('p2Name').value = t.p2 || '';
+        }
+    }
+
+    function deleteTeam(id) {
+        if(confirm("Apagar esta dupla?")) {
+            teams = teams.filter(item => item.id != id);
+            localStorage.setItem('teams', JSON.stringify(teams));
+            renderTeams();
+        }
+    }
+
+    function addWin(id) {
+        let t = teams.find(item => item.id == id);
+        if(t) { t.wins++; localStorage.setItem('teams', JSON.stringify(teams)); renderTeams(); }
     }
 
     function renderTeams() {
-      const container = document.getElementById('teamsList');
-      if (teams.length === 0) {
-        container.innerHTML = "<p>Nenhuma dupla cadastrada.</p>";
-        return;
-      }
-
-      let html = "";
-      teams.forEach(t => {
-        html += `
-          <div style="border-bottom: 1px solid #334155; padding: 8px 0;">
-            <strong>${t.name}</strong> (${t.p1} & ${t.p2})<br>
-            <small>Vitórias: ${t.wins}</small><br>
-            <button class="btn-win" onclick="addWin(${t.id})">+1 Vitória</button>
-            <button class="btn-edit" onclick="editTeam(${t.id})">Editar</button>
-            <button class="btn-danger" onclick="deleteTeam(${t.id})">Excluir</button>
-          </div>
-        `;
-      });
-      container.innerHTML = html;
+        let h = "";
+        teams.forEach(t => {
+            h += `<div style="border-bottom:1px solid #334155; padding:8px 0; text-align:left;">
+                    <strong>${t.name}</strong> (${t.p1 || '-'} & ${t.p2 || '-'})<br>
+                    <small>Vitórias: ${t.wins}</small><br>
+                    <button onclick="addWin(${t.id})" style="background:#22c55e; color:white;">+1 Vitória</button>
+                    <button onclick="editTeam(${t.id})" style="background:#3b82f6; color:white;">Editar</button>
+                    <button onclick="deleteTeam(${t.id})" style="background:var(--danger); color:white;">Excluir</button>
+                  </div>`;
+        });
+        document.getElementById('teamsList').innerHTML = h || "<p>Nenhuma dupla cadastrada.</p>";
     }
 
     function renderRanking() {
-      const sorted = [...teams].sort((a, b) => b.wins - a.wins);
-      let html = "<tr><th>Pos</th><th>Dupla</th><th>Jogadores</th><th>Vitórias</th></tr>";
-      sorted.forEach((t, i) => {
-        html += `
-          <tr>
-            <td>${i + 1}º</td>
-            <td><strong>${t.name}</strong></td>
-            <td>${t.p1} / ${t.p2}</td>
-            <td>${t.wins}</td>
-          </tr>
-        `;
-      });
-      document.getElementById('rankingTable').innerHTML = html;
+        let sorted = [...teams].sort((a,b) => b.wins - a.wins);
+        let h = "<tr><th>Pos</th><th>Dupla</th><th>Vitórias</th></tr>";
+        sorted.forEach((t, i) => {
+            h += `<tr><td>${i+1}º</td><td><strong>${t.name}</strong></td><td>${t.wins}</td></tr>`;
+        });
+        document.getElementById('rankingTable').innerHTML = h;
+    }
+
+    // Previsão do Tempo
+    async function getWeather() {
+        const key = "SUA_API_KEY_AQUI";
+        if(key === "SUA_API_KEY_AQUI") return alert("Insira sua API Key do OpenWeather no código.");
+        navigator.geolocation.getCurrentPosition(async (p) => {
+            const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${p.coords.latitude}&lon=${p.coords.longitude}&appid=${key}&units=metric&lang=pt_br`);
+            const data = await res.json();
+            document.getElementById('weather').innerHTML = `<h3>${data.name}</h3><p>${data.main.temp}°C - ${data.weather[0].description}</p>`;
+        });
     }
 
     renderTeams();

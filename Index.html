@@ -122,6 +122,15 @@
       border-radius: 8px;
     }
 
+    .volley-alert {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -259,8 +268,11 @@
   <div id="tab-tempo" class="tab-content">
     <div class="card">
       <h3>☀️ Previsão do Tempo</h3>
-      <div id="weather-display" style="margin: 15px 0;">Clique no botão abaixo para buscar o clima da sua localização.</div>
-      <button onclick="getWeather()" class="btn-main">Atualizar Previsão</button>
+      <input type="text" id="cityName" placeholder="Digite sua cidade (ex: Ibaiti)">
+      <button onclick="getWeather()" class="btn-main" style="margin-top: 8px;">Buscar Previsão</button>
+      <button onclick="getWeatherByGPS()" style="background: #475569; color: white; width: 100%; margin-top: 5px;">📍 Usar Minha Localização Atual</button>
+
+      <div id="weather-display" style="margin-top: 20px;"></div>
     </div>
   </div>
 
@@ -288,7 +300,7 @@
       if (id === 'tab-placar') populateTeamSelectors();
     }
 
-    // Gerenciamento de Seletores de Dupla no Placar
+    // Seletores no Placar
     function populateTeamSelectors() {
       const selectA = document.getElementById('selectTeamA');
       const selectB = document.getElementById('selectTeamB');
@@ -317,7 +329,7 @@
       document.getElementById('labelTeamB').innerText = nameB || "Time B";
     }
 
-    // Controles do Placar e Sets
+    // Controles do Placar
     function addPoint(team) {
       if (team === 1) s1++; else s2++;
       updateScoreboard();
@@ -365,10 +377,9 @@
       } else {
         if (s1 > s2) winnerName = nameA;
         else if (s2 > s1) winnerName = nameB;
-        else return alert("A partida está empatada! Defina o vencedor no placar antes de encerrar.");
+        else return alert("A partida está empatada!");
       }
 
-      // Adiciona a vitória automaticamente no ranking
       let winnerObj = teams.find(t => t.name === winnerName);
       if (winnerObj) {
         winnerObj.wins++;
@@ -478,54 +489,81 @@
       document.getElementById('rankingTable').innerHTML = html;
     }
 
-    // Previsão do Tempo Detalhada
+    // Previsão do Tempo Personalizada para Vôlei
+    const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather entre as aspas
+
     async function getWeather() {
-      const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather entre as aspas
+      const city = document.getElementById('cityName').value.trim();
+      if (!city) return alert("Por favor, digite o nome de uma cidade!");
+      fetchWeatherData(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${key}&units=metric&lang=pt_br`);
+    }
+
+    function getWeatherByGPS() {
       const display = document.getElementById('weather-display');
-
-      if (key === "SUA_API_KEY_AQUI") {
-        return alert("Por favor, cole sua chave do OpenWeather na linha 'const key' no código.");
-      }
-
-      display.innerHTML = "📍 Buscando localização do dispositivo...";
-
-      if (!navigator.geolocation) {
-        display.innerHTML = "Geolocalização não é suportada pelo seu navegador.";
-        return;
-      }
+      display.innerHTML = "📍 Buscando localização do GPS...";
+      if (!navigator.geolocation) return alert("Geolocalização não suportada.");
 
       navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          try {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric&lang=pt_br`);
-            const data = await res.json();
-
-            if (data.cod !== 200) {
-              display.innerHTML = "Erro ao buscar dados do tempo. Verifique sua chave de API.";
-              return;
-            }
-
-            display.innerHTML = `
-              <div style="font-size: 1.4rem; font-weight: bold;">${data.name}</div>
-              <div style="font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 5px 0;">${Math.round(data.main.temp)}°C</div>
-              <div style="text-transform: capitalize; font-size: 1.1rem; margin-bottom: 10px;">${data.weather[0].description}</div>
-              <div class="grid-weather">
-                <div class="weather-item"><strong>Sensação</strong><br>${Math.round(data.main.feels_like)}°C</div>
-                <div class="weather-item"><strong>Umidade</strong><br>${data.main.humidity}%</div>
-                <div class="weather-item"><strong>Vento</strong><br>${data.wind.speed} m/s</div>
-                <div class="weather-item"><strong>Mín / Máx</strong><br>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</div>
-              </div>
-            `;
-          } catch (e) {
-            display.innerHTML = "Erro de conexão ao buscar clima.";
-          }
+        (pos) => {
+          fetchWeatherData(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${key}&units=metric&lang=pt_br`);
         },
-        () => {
-          display.innerHTML = "Permissão de localização negada pelo dispositivo.";
-        }
+        () => alert("Permissão de localização negada.")
       );
+    }
+
+    async function fetchWeatherData(url) {
+      const display = document.getElementById('weather-display');
+      if (key === "SUA_API_KEY_AQUI") return alert("Insira sua chave do OpenWeather no código!");
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.cod !== 200) {
+          display.innerHTML = "Cidade não encontrada ou erro na chave de API.";
+          return;
+        }
+
+        const mainWeather = data.weather[0].main.toLowerCase();
+        const windSpeed = data.wind.speed;
+        const temp = data.main.temp;
+        let alertMsg = "";
+        let alertStyle = "";
+
+        // Verificação de condições do Vôlei
+        if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) {
+          alertMsg = "🌧️ Ops, marcando chuva! Voleizinho em dúvida ☔";
+          alertStyle = "background: #7f1d1d; color: #fca5a5;";
+        } else if (temp >= 30) {
+          alertMsg = "🔥 Calor acima da média, o voleizinho vai ser quente ☀️";
+          alertStyle = "background: #9a3412; color: #fed7aa;";
+        } else if (windSpeed > 5) {
+          alertMsg = "💨 Vento acima da média, a bola pode sofrer desvios!";
+          alertStyle = "background: #78350f; color: #fde68a;";
+        } else {
+          alertMsg = "☀️ Condição ideal para um voleizinho!";
+          alertStyle = "background: #14532d; color: #86efac;";
+        }
+
+        display.innerHTML = `
+          <div style="font-size: 1.4rem; font-weight: bold;">${data.name}, ${data.sys.country}</div>
+          <div style="font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 5px 0;">${Math.round(temp)}°C</div>
+          <div style="text-transform: capitalize; font-size: 1.1rem;">${data.weather[0].description}</div>
+          
+          <div class="volley-alert" style="${alertStyle}">
+            ${alertMsg}
+          </div>
+
+          <div class="grid-weather">
+            <div class="weather-item"><strong>Sensação</strong><br>${Math.round(data.main.feels_like)}°C</div>
+            <div class="weather-item"><strong>Umidade</strong><br>${data.main.humidity}%</div>
+            <div class="weather-item"><strong>Vento</strong><br>${windSpeed} m/s</div>
+            <div class="weather-item"><strong>Mín / Máx</strong><br>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</div>
+          </div>
+        `;
+      } catch (e) {
+        display.innerHTML = "Erro de conexão ao buscar clima.";
+      }
     }
 
     // Inicialização do app

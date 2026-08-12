@@ -6,16 +6,17 @@
   <title>App Vôlei Pro</title>
   <style>
     :root {
-      --bg: #0b1329;
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent: #facc15;
-      --accent-glow: rgba(250, 204, 21, 0.25);
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-sky: #38bdf8;
+      --bg-sand: #fef08a;
+      --card-bg: rgba(255, 255, 255, 0.82);
+      --card-border: rgba(255, 255, 255, 0.6);
+      --accent: #d97706; /* Laranja Sunset / Areia */
+      --accent-glow: rgba(217, 119, 6, 0.25);
+      --primary: #0284c7; /* Azul Oceano */
+      --text: #0f172a;
+      --text-muted: #475569;
       --danger: #ef4444;
       --success: #10b981;
-      --action: #3b82f6;
     }
 
     * {
@@ -24,7 +25,8 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 60%, #0b1329 100%);
+      /* Fundo Temático: Céu azul para Areia Ensolarada */
+      background: linear-gradient(180deg, #7dd3fc 0%, #fef08a 60%, #fde047 100%);
       background-attachment: fixed;
       color: var(--text);
       padding-bottom: 100px;
@@ -37,15 +39,16 @@
     .app-header {
       text-align: center;
       padding: 18px 16px 10px;
-      font-size: 1.2rem;
-      font-weight: 800;
+      font-size: 1.3rem;
+      font-weight: 900;
       letter-spacing: 0.5px;
-      color: var(--accent);
+      color: #0369a1;
       text-transform: uppercase;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
     }
 
     .tab-content {
@@ -65,25 +68,25 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Cards com Glassmorphism */
+    /* Cards Claras estilo Beach Glassmorphism */
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
       padding: 1.25rem;
       border-radius: 20px;
       margin-bottom: 1.25rem;
       text-align: center;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 25px -5px rgba(180, 83, 9, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     }
 
     .card h3 {
       margin-top: 0;
       margin-bottom: 1rem;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0c4a6e;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -96,17 +99,18 @@
       padding: 14px;
       margin: 6px 0 12px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(15, 23, 42, 0.8);
-      color: #fff;
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
       font-size: 0.95rem;
+      font-weight: 600;
       outline: none;
       transition: all 0.2s ease;
     }
 
     input:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
     }
 
     .search-inputs {
@@ -117,16 +121,16 @@
     .search-inputs input { flex: 3; }
     .search-inputs select { flex: 1; }
 
-    /* Botões Modernos */
+    /* Botões Modernos e Vibrantes */
     button {
       padding: 12px 18px;
       border-radius: 12px;
       border: none;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 800;
       margin: 4px;
       font-size: 0.95rem;
-      transition: transform 0.1s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -138,35 +142,35 @@
     }
 
     .btn-main {
-      background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
-      color: #0f172a;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white;
       width: 100%;
       padding: 14px;
       font-size: 1rem;
-      box-shadow: 0 4px 15px var(--accent-glow);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
 
     .btn-add {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
       padding: 12px 20px;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
     .btn-sub {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
+      background: rgba(15, 23, 42, 0.06);
+      color: var(--text);
       padding: 12px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     .btn-action {
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
       color: white;
       padding: 12px;
       margin-top: 8px;
       width: 100%;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
     }
 
     .team-select-container {
@@ -183,33 +187,33 @@
     .team-select-box label {
       font-size: 0.8rem;
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       margin-left: 2px;
     }
 
-    /* Placar Estilizado */
+    /* Placar Solar */
     .score-display-box {
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(255, 255, 255, 0.65);
       border-radius: 16px;
       padding: 12px;
       margin-bottom: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
     .team-name-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0369a1;
     }
 
     .score-number {
-      font-size: 3rem;
+      font-size: 3.2rem;
       font-weight: 900;
-      color: var(--accent);
+      color: #d97706;
       line-height: 1;
       margin: 6px 0;
-      text-shadow: 0 0 20px var(--accent-glow);
+      text-shadow: 0 2px 4px rgba(217, 119, 6, 0.15);
     }
 
     .score-control {
@@ -221,7 +225,7 @@
 
     .divider {
       height: 1px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.08);
       margin: 16px 0;
     }
 
@@ -233,10 +237,10 @@
     }
 
     .weather-item {
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(255, 255, 255, 0.6);
       padding: 12px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.8);
       font-size: 0.9rem;
       color: var(--text-muted);
     }
@@ -252,7 +256,7 @@
       margin-top: 15px;
       padding: 14px;
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 0.95rem;
       line-height: 1.4;
     }
@@ -262,10 +266,10 @@
       margin-top: 15px;
       border-radius: 16px;
       overflow: hidden;
-      background: #0f172a;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      background: #7dd3fc;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffffff;
     }
 
     .court-svg {
@@ -302,7 +306,7 @@
       100% { transform: translateX(400px); opacity: 0; }
     }
 
-    /* Tabela de Ranking Modernizada */
+    /* Tabela de Ranking */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -315,12 +319,12 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       padding: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.06);
     }
 
     td {
       padding: 14px 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       font-size: 0.95rem;
     }
 
@@ -334,14 +338,15 @@
       height: 26px;
       line-height: 26px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      font-weight: bold;
+      background: rgba(0, 0, 0, 0.08);
+      font-weight: 800;
       font-size: 0.85rem;
+      color: var(--text);
     }
 
-    .rank-1 .rank-badge { background: #facc15; color: #000; }
-    .rank-2 .rank-badge { background: #cbd5e1; color: #000; }
-    .rank-3 .rank-badge { background: #b45309; color: #fff; }
+    .rank-1 .rank-badge { background: #facc15; color: #78350f; }
+    .rank-2 .rank-badge { background: #cbd5e1; color: #334155; }
+    .rank-3 .rank-badge { background: #f97316; color: #fff; }
 
     /* MENU DE NAVEGAÇÃO FLUTUANTE (DOCK) */
     nav {
@@ -351,21 +356,21 @@
       transform: translateX(-50%);
       width: calc(100% - 32px);
       max-width: 450px;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       display: flex;
       justify-content: space-around;
       padding: 8px 12px;
       border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 30px rgba(180, 83, 9, 0.18);
       z-index: 1000;
     }
 
     nav button {
       background: transparent;
-      color: var(--text-muted);
+      color: #64748b;
       font-size: 1.3rem;
       margin: 0;
       padding: 10px;
@@ -377,8 +382,8 @@
     }
 
     nav button.active-nav {
-      color: var(--accent);
-      background: rgba(250, 204, 21, 0.12);
+      color: #0284c7;
+      background: rgba(2, 132, 199, 0.12);
       transform: translateY(-2px);
     }
 
@@ -390,7 +395,7 @@
       transform: translateX(-50%);
       width: 5px;
       height: 5px;
-      background: var(--accent);
+      background: #0284c7;
       border-radius: 50%;
     }
   </style>
@@ -419,11 +424,11 @@
 
     <!-- Cronômetro -->
     <div class="card">
-      <div id="timer" style="font-size: 2.8rem; font-weight: 800; font-family: monospace; letter-spacing: 2px; color: #38bdf8; margin-bottom: 8px;">00:00</div>
+      <div id="timer" style="font-size: 2.8rem; font-weight: 900; font-family: monospace; letter-spacing: 2px; color: #0284c7; margin-bottom: 8px;">00:00</div>
       <div style="display: flex; justify-content: center; gap: 4px;">
-        <button onclick="startTimer()" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">▶ Iniciar</button>
-        <button onclick="pauseTimer()" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">⏸ Pausar</button>
-        <button onclick="resetTimer()" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">⏹ Zerar</button>
+        <button onclick="startTimer()" style="background: rgba(16, 185, 129, 0.15); color: #047857;">▶ Iniciar</button>
+        <button onclick="pauseTimer()" style="background: rgba(245, 158, 11, 0.15); color: #b45309;">⏸ Pausar</button>
+        <button onclick="resetTimer()" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c;">⏹ Zerar</button>
       </div>
     </div>
 
@@ -432,7 +437,7 @@
       <!-- TIME A -->
       <div class="score-display-box">
         <div class="team-name-title"><span id="labelTeamA">Time A</span></div>
-        <div style="font-size: 0.85rem; color: var(--text-muted);">Sets Vencidos: <strong id="sets1" style="color: var(--accent);">0</strong></div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sets Vencidos: <strong id="sets1" style="color: #0284c7;">0</strong></div>
         <div class="score-number" id="s1">0</div>
         <div class="score-control">
           <button class="btn-sub" onclick="removePoint(1)">-1</button>
@@ -445,7 +450,7 @@
       <!-- TIME B -->
       <div class="score-display-box">
         <div class="team-name-title"><span id="labelTeamB">Time B</span></div>
-        <div style="font-size: 0.85rem; color: var(--text-muted);">Sets Vencidos: <strong id="sets2" style="color: var(--accent);">0</strong></div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sets Vencidos: <strong id="sets2" style="color: #0284c7;">0</strong></div>
         <div class="score-number" id="s2">0</div>
         <div class="score-control">
           <button class="btn-sub" onclick="removePoint(2)">-1</button>
@@ -456,7 +461,7 @@
       <div class="divider"></div>
 
       <button class="btn-action" onclick="finishSet()">🏁 Finalizar Set</button>
-      <button class="btn-action" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);" onclick="finishMatch()">🏆 Finalizar Partida</button>
+      <button class="btn-action" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);" onclick="finishMatch()">🏆 Finalizar Partida</button>
       <br>
       <button onclick="resetMatch()" style="background: transparent; color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Reiniciar Placar</button>
     </div>
@@ -483,7 +488,7 @@
     <div class="card">
       <h3>🏆 Ranking de Vitórias</h3>
       <table id="rankingTable"></table>
-      <button onclick="resetRanking()" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); margin-top: 20px; width: 100%;">🔄 Zerar Vitórias do Ranking</button>
+      <button onclick="resetRanking()" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3); margin-top: 20px; width: 100%;">🔄 Zerar Vitórias do Ranking</button>
     </div>
   </div>
 
@@ -539,7 +544,7 @@
       </div>
 
       <button onclick="getWeather()" class="btn-main">Buscar Previsão</button>
-      <button onclick="getWeatherByGPS()" style="background: rgba(255, 255, 255, 0.08); color: white; width: 100%; margin-top: 6px;">📍 Minha Localização Atual</button>
+      <button onclick="getWeatherByGPS()" style="background: rgba(2, 132, 199, 0.1); color: #0284c7; width: 100%; margin-top: 6px;">📍 Minha Localização Atual</button>
 
       <div id="weather-display" style="margin-top: 15px;"></div>
     </div>
@@ -740,15 +745,15 @@
       let html = "";
       teams.forEach(t => {
         html += `
-          <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255,255,255,0.9); padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <strong style="color: var(--accent); font-size: 1rem;">${t.name}</strong>
+              <strong style="color: #0369a1; font-size: 1rem;">${t.name}</strong>
               <div style="font-size: 0.85rem; color: var(--text-muted);">${t.p1 || '-'} & ${t.p2 || '-'}</div>
-              <small style="color: #64748b;">Vitórias: ${t.wins}</small>
+              <small style="color: #64748b; font-weight: 600;">Vitórias: ${t.wins}</small>
             </div>
             <div>
-              <button onclick="editTeam(${t.id})" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 6px 10px; font-size: 0.8rem;">Editar</button>
-              <button onclick="deleteTeam(${t.id})" style="background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 6px 10px; font-size: 0.8rem;">Excluir</button>
+              <button onclick="editTeam(${t.id})" style="background: rgba(2, 132, 199, 0.15); color: #0284c7; padding: 6px 10px; font-size: 0.8rem;">Editar</button>
+              <button onclick="deleteTeam(${t.id})" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c; padding: 6px 10px; font-size: 0.8rem;">Excluir</button>
             </div>
           </div>`;
       });
@@ -763,7 +768,7 @@
         html += `<tr class="${rankClass}">
           <td style="width: 50px;"><span class="rank-badge">${i + 1}</span></td>
           <td><strong>${t.name}</strong></td>
-          <td><strong style="color: var(--accent); font-size: 1.1rem;">${t.wins}</strong></td>
+          <td><strong style="color: #d97706; font-size: 1.1rem;">${t.wins}</strong></td>
         </tr>`;
       });
       document.getElementById('rankingTable').innerHTML = html;
@@ -853,59 +858,59 @@
       let sunElement = `
         <g class="anim-sun-pulse">
           <circle cx="330" cy="40" r="26" fill="#facc15" />
-          <circle cx="330" cy="40" r="32" fill="#fef08a" opacity="0.3" />
+          <circle cx="330" cy="40" r="32" fill="#fef08a" opacity="0.4" />
         </g>
       `;
 
       if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) {
-        alertMsg = "🌧️ Ops, chuva na área! Voleizinho sob risco ☔";
-        alertStyle = "background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);";
-        cStop1 = "#1e293b"; cStop2 = "#475569";
+        alertMsg = "🌧️ Chuva na área! Cuidado com a quadra molhada ☔";
+        alertStyle = "background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3);";
+        cStop1 = "#475569"; cStop2 = "#94a3b8";
         
         weatherAnimationElements = `
           <g class="anim-cloud-slow"><path d="M 10 35 Q 25 15 50 20 Q 75 10 100 25 Q 120 25 125 40 Z" fill="#64748b" opacity="0.95"/></g>
           <g class="anim-cloud-fast"><path d="M 180 30 Q 195 10 220 15 Q 245 5 270 20 Q 290 20 295 35 Z" fill="#475569" opacity="0.9"/></g>
           <g class="anim-rain-drop">
-            <line x1="60" y1="50" x2="50" y2="70" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
-            <line x1="110" y1="55" x2="100" y2="75" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
-            <line x1="210" y1="45" x2="200" y2="65" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
-            <line x1="270" y1="50" x2="260" y2="70" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
-            <line x1="330" y1="40" x2="320" y2="60" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
+            <line x1="60" y1="50" x2="50" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+            <line x1="110" y1="55" x2="100" y2="75" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+            <line x1="210" y1="45" x2="200" y2="65" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+            <line x1="270" y1="50" x2="260" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+            <line x1="330" y1="40" x2="320" y2="60" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
           </g>
         `;
       } else if (mainWeather.includes("clouds")) {
-        alertMsg = "☁️ Tempo nublado! Excelente para jogar sem sol incômodo.";
-        alertStyle = "background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3);";
-        cStop1 = "#475569"; cStop2 = "#94a3b8";
+        alertMsg = "☁️ Tempo nublado! Ótimo para jogar sem o sol queimando.";
+        alertStyle = "background: rgba(100, 116, 139, 0.15); color: #334155; border: 1px solid rgba(100, 116, 139, 0.3);";
+        cStop1 = "#64748b"; cStop2 = "#cbd5e1";
         
         weatherAnimationElements = `
           <g class="anim-cloud-slow"><path d="M -20 30 Q 0 10 30 15 Q 55 5 80 20 Q 100 20 105 35 Z" fill="#ffffff" opacity="0.85"/></g>
-          <g class="anim-cloud-fast"><path d="M 150 25 Q 170 5 195 10 Q 220 0 245 15 Q 265 15 270 30 Z" fill="#e2e8f0" opacity="0.95"/></g>
+          <g class="anim-cloud-fast"><path d="M 150 25 Q 170 5 195 10 Q 220 0 245 15 Q 265 15 270 30 Z" fill="#f1f5f9" opacity="0.95"/></g>
         `;
       } else if (windSpeed > 5) {
-        alertMsg = "💨 Vento forte! A bola pode variar bastante de trajetória.";
-        alertStyle = "background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3);";
+        alertMsg = "💨 Vento forte! Bola pode mudar de trajeto no ar.";
+        alertStyle = "background: rgba(245, 158, 11, 0.15); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.3);";
         weatherAnimationElements = sunElement + `
           <g class="anim-wind-line">
-            <path d="M 10 30 Q 60 20 120 35 T 200 25" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.6" stroke-dasharray="8"/>
-            <path d="M 50 50 Q 110 40 180 55 T 260 45" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.5" stroke-dasharray="6"/>
+            <path d="M 10 30 Q 60 20 120 35 T 200 25" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8" stroke-dasharray="8"/>
+            <path d="M 50 50 Q 110 40 180 55 T 260 45" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.7" stroke-dasharray="6"/>
           </g>
         `;
       } else {
-        alertMsg = temp >= 30 ? "🔥 Muito quente! Lembre-se de se hidratar ☀️" : "☀️ Condição perfeita para o jogo!";
-        alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.2); color: #fdba74; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3);";
+        alertMsg = temp >= 30 ? "🔥 Dia quente! Beba bastante água na arena ☀️" : "☀️ Dia de sol perfeito para o vôlei de praia!";
+        alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.15); color: #c2410c; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);";
         
         weatherAnimationElements = sunElement + `
-          <g class="anim-cloud-slow"><path d="M 20 25 Q 35 10 55 15 Q 75 5 95 20 Q 110 20 115 30 Z" fill="#ffffff" opacity="0.6"/></g>
+          <g class="anim-cloud-slow"><path d="M 20 25 Q 35 10 55 15 Q 75 5 95 20 Q 110 20 115 30 Z" fill="#ffffff" opacity="0.7"/></g>
         `;
       }
 
       let locationText = data.name + (stateHint ? `, ${stateHint}` : '') + ` - ${data.sys.country}`;
 
       display.innerHTML = `
-        <div style="font-size: 1.2rem; font-weight: 700;">${locationText}</div>
-        <div style="font-size: 3rem; font-weight: 900; color: var(--accent); margin: 2px 0;">${Math.round(temp)}°C</div>
-        <div style="text-transform: capitalize; font-size: 1rem; color: var(--text-muted);">${data.weather[0].description}</div>
+        <div style="font-size: 1.2rem; font-weight: 800; color: #0369a1;">${locationText}</div>
+        <div style="font-size: 3.2rem; font-weight: 900; color: #d97706; margin: 2px 0;">${Math.round(temp)}°C</div>
+        <div style="text-transform: capitalize; font-size: 1rem; color: var(--text-muted); font-weight: 600;">${data.weather[0].description}</div>
 
         <div class="court-illustration-container">
           <svg class="court-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">

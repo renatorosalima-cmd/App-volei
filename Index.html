@@ -42,7 +42,6 @@
     }
 
     input, select {
-      width: 90%;
       padding: 12px;
       margin: 6px 0;
       border-radius: 8px;
@@ -51,6 +50,20 @@
       color: #fff;
       font-size: 1rem;
       box-sizing: border-box;
+    }
+
+    .search-inputs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .search-inputs input {
+      flex: 3;
+    }
+
+    .search-inputs select {
+      flex: 1;
     }
 
     button {
@@ -179,11 +192,11 @@
       <div class="team-select-container">
         <div class="team-select-box">
           <label><small>Time A (Esquerda)</small></label>
-          <select id="selectTeamA" onchange="updateMatchTeams()"></select>
+          <select id="selectTeamA" style="width: 100%;" onchange="updateMatchTeams()"></select>
         </div>
         <div class="team-select-box">
           <label><small>Time B (Direita)</small></label>
-          <select id="selectTeamB" onchange="updateMatchTeams()"></select>
+          <select id="selectTeamB" style="width: 100%;" onchange="updateMatchTeams()"></select>
         </div>
       </div>
     </div>
@@ -237,9 +250,9 @@
     <div class="card">
       <h3>➕ Cadastrar / Editar Dupla</h3>
       <input type="hidden" id="edit-id">
-      <input type="text" id="timeName" placeholder="Nome da Dupla">
-      <input type="text" id="p1Name" placeholder="Jogador 1">
-      <input type="text" id="p2Name" placeholder="Jogador 2">
+      <input type="text" id="timeName" style="width: 90%;" placeholder="Nome da Dupla">
+      <input type="text" id="p1Name" style="width: 90%;" placeholder="Jogador 1">
+      <input type="text" id="p2Name" style="width: 90%;" placeholder="Jogador 2">
       <button class="btn-main" onclick="saveTeam()">Salvar Dupla</button>
     </div>
     <div class="card">
@@ -268,7 +281,41 @@
   <div id="tab-tempo" class="tab-content">
     <div class="card">
       <h3>☀️ Previsão do Tempo</h3>
-      <input type="text" id="cityName" placeholder="Digite sua cidade (ex: Ibaiti)">
+      
+      <div class="search-inputs">
+        <input type="text" id="cityName" placeholder="Cidade (ex: Ibaiti)">
+        <select id="stateSelect">
+          <option value="">UF</option>
+          <option value="PR" selected>PR</option>
+          <option value="SP">SP</option>
+          <option value="SC">SC</option>
+          <option value="RS">RS</option>
+          <option value="MG">MG</option>
+          <option value="RJ">RJ</option>
+          <option value="AC">AC</option>
+          <option value="AL">AL</option>
+          <option value="AP">AP</option>
+          <option value="AM">AM</option>
+          <option value="BA">BA</option>
+          <option value="CE">CE</option>
+          <option value="DF">DF</option>
+          <option value="ES">ES</option>
+          <option value="GO">GO</option>
+          <option value="MA">MA</option>
+          <option value="MT">MT</option>
+          <option value="MS">MS</option>
+          <option value="PA">PA</option>
+          <option value="PB">PB</option>
+          <option value="PE">PE</option>
+          <option value="PI">PI</option>
+          <option value="RN">RN</option>
+          <option value="RO">RO</option>
+          <option value="RR">RR</option>
+          <option value="SE">SE</option>
+          <option value="TO">TO</option>
+        </select>
+      </div>
+
       <button onclick="getWeather()" class="btn-main" style="margin-top: 8px;">Buscar Previsão</button>
       <button onclick="getWeatherByGPS()" style="background: #475569; color: white; width: 100%; margin-top: 5px;">📍 Usar Minha Localização Atual</button>
 
@@ -489,13 +536,39 @@
       document.getElementById('rankingTable').innerHTML = html;
     }
 
-    // Previsão do Tempo Personalizada para Vôlei
+    // Previsão do Tempo Personalizada
     const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather entre as aspas
 
     async function getWeather() {
-      const city = document.getElementById('cityName').value.trim();
+      let city = document.getElementById('cityName').value.trim();
+      let state = document.getElementById('stateSelect').value;
+      
       if (!city) return alert("Por favor, digite o nome de uma cidade!");
-      fetchWeatherData(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${key}&units=metric&lang=pt_br`);
+
+      const display = document.getElementById('weather-display');
+      display.innerHTML = "⏳ Buscando previsão...";
+
+      try {
+        // Busca com precisão por Geocoding API usando Cidade, Estado, Brasil
+        let query = state ? `${city},${state},BR` : `${city},BR`;
+        let geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=1&appid=${key}`;
+        
+        let geoRes = await fetch(geoUrl);
+        let geoData = await geoRes.json();
+
+        if (geoData && geoData.length > 0) {
+          let lat = geoData[0].lat;
+          let lon = geoData[0].lon;
+          let stateFound = geoData[0].state || state || "";
+          
+          let weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric&lang=pt_br`;
+          fetchWeatherData(weatherUrl, stateFound);
+        } else {
+          display.innerHTML = "❌ Cidade não encontrada. Verifique o nome e o estado selecionado.";
+        }
+      } catch (e) {
+        display.innerHTML = "❌ Erro ao buscar previsão. Verifique a conexão ou a API key.";
+      }
     }
 
     function getWeatherByGPS() {
@@ -511,7 +584,7 @@
       );
     }
 
-    async function fetchWeatherData(url) {
+    async function fetchWeatherData(url, customState = "") {
       const display = document.getElementById('weather-display');
       if (key === "SUA_API_KEY_AQUI") return alert("Insira sua chave do OpenWeather no código!");
 
@@ -520,7 +593,7 @@
         const data = await res.json();
 
         if (data.cod !== 200) {
-          display.innerHTML = "Cidade não encontrada ou erro na chave de API.";
+          display.innerHTML = "❌ Cidade não encontrada ou erro na chave de API.";
           return;
         }
 
@@ -545,8 +618,10 @@
           alertStyle = "background: #14532d; color: #86efac;";
         }
 
+        let stateLabel = customState ? `, ${customState}` : "";
+
         display.innerHTML = `
-          <div style="font-size: 1.4rem; font-weight: bold;">${data.name}, ${data.sys.country}</div>
+          <div style="font-size: 1.4rem; font-weight: bold;">${data.name}${stateLabel} - ${data.sys.country}</div>
           <div style="font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 5px 0;">${Math.round(temp)}°C</div>
           <div style="text-transform: capitalize; font-size: 1.1rem;">${data.weather[0].description}</div>
           

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Vôlei Completo</title>
   <style>
-    :root { --bg: #0f172a; --card-bg: #1e293b; --accent: #facc15; --text: #f8fafc; --danger: #ef4444; }
+    :root { --bg: #0f172a; --card-bg: #1e293b; --accent: #facc15; --text: #f8fafc; --danger: #ef4444; --success: #22c55e; }
     body { background: var(--bg); color: var(--text); padding-bottom: 80px; font-family: sans-serif; margin: 0; }
     .tab-content { display: none; padding: 1rem; }
     .tab-content.active { display: block; }
@@ -14,19 +13,23 @@
     input, select { width: 90%; padding: 10px; margin: 5px 0; border-radius: 6px; border: none; background: #0f172a; color: #fff; font-size: 1rem; }
     button { padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; margin: 4px; }
     .btn-main { background: var(--accent); color: #000; width: 100%; }
+    .btn-add { background: var(--success); color: white; padding: 10px 18px; font-size: 1rem; }
+    .btn-sub { background: #64748b; color: white; padding: 10px 14px; font-size: 1rem; }
+    .btn-action { background: #3b82f6; color: white; padding: 10px; font-size: 0.95rem; margin-top: 8px; }
     nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; justify-content: space-around; padding: 12px 0; border-top: 2px solid var(--accent); }
     nav button { background: none; color: white; font-size: 1.2rem; }
     .team-select-container { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 10px; }
     .team-select-box { flex: 1; }
+    .score-control { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0; }
   </style>
 </head>
 <body>
 
   <!-- PLACAR -->
   <div id="tab-placar" class="tab-content active">
-    <!-- SELEÇÃO DE DUPLAS DA PARTIDA -->
+    <!-- SELEÇÃO DE DUPLAS -->
     <div class="card">
-      <h3>🏐 Seleção do Confronot</h3>
+      <h3>🏐 Seleção do Confronto</h3>
       <div class="team-select-container">
         <div class="team-select-box">
           <label><small>Time A (Esquerda)</small></label>
@@ -49,13 +52,37 @@
 
     <!-- PLACAR PRINCIPAL -->
     <div class="card">
-        <h3><span id="labelTeamA">Time A</span>: <span id="s1" style="font-size:2rem; color:var(--accent);">0</span></h3>
-        <button onclick="addPoint(1)" style="background:#22c55e; color:white;">+1 Ponto (A)</button>
+        <!-- TIME A -->
+        <h3>
+          <span id="labelTeamA">Time A</span> 
+          <small style="color:var(--accent);">(Sets: <span id="sets1">0</span>)</small>: 
+          <span id="s1" style="font-size:2rem; color:var(--accent);">0</span>
+        </h3>
+        <div class="score-control">
+          <button class="btn-sub" onclick="removePoint(1)">-1</button>
+          <button class="btn-add" onclick="addPoint(1)">+1 Ponto (A)</button>
+        </div>
+
         <hr style="border-color: #334155; margin: 15px 0;">
-        <h3><span id="labelTeamB">Time B</span>: <span id="s2" style="font-size:2rem; color:var(--accent);">0</span></h3>
-        <button onclick="addPoint(2)" style="background:#22c55e; color:white;">+1 Ponto (B)</button>
-        <br><br>
-        <button onclick="resetMatch()" style="background:var(--danger); color:white;">Reiniciar Partida</button>
+
+        <!-- TIME B -->
+        <h3>
+          <span id="labelTeamB">Time B</span> 
+          <small style="color:var(--accent);">(Sets: <span id="sets2">0</span>)</small>: 
+          <span id="s2" style="font-size:2rem; color:var(--accent);">0</span>
+        </h3>
+        <div class="score-control">
+          <button class="btn-sub" onclick="removePoint(2)">-1</button>
+          <button class="btn-add" onclick="addPoint(2)">+1 Ponto (B)</button>
+        </div>
+
+        <hr style="border-color: #334155; margin: 15px 0;">
+
+        <!-- AÇÕES DO JOGO -->
+        <button class="btn-action" onclick="finishSet()">🏁 Finalizar Set</button>
+        <button class="btn-action" style="background:#8b5cf6;" onclick="finishMatch()">🏆 Finalizar Partida</button>
+        <br>
+        <button onclick="resetMatch()" style="background:var(--danger); color:white; margin-top:10px;">Reiniciar Partida</button>
     </div>
   </div>
 
@@ -105,6 +132,9 @@
 
   <script>
     let teams = JSON.parse(localStorage.getItem('teams')) || [];
+    let s1 = 0, s2 = 0;
+    let sets1 = 0, sets2 = 0;
+    let timerInterval = null, secs = 0;
 
     // Navegação
     function show(id) {
@@ -143,13 +173,79 @@
         document.getElementById('labelTeamB').innerText = nameB || "Time B";
     }
 
-    // Cronômetro e Placar
-    let s1=0, s2=0, timerInterval=null, secs=0;
-    function addPoint(t) { t===1?s1++:s2++; document.getElementById('s'+t).innerText = t===1?s1:s2; }
+    // Controle de Pontos e Sets
+    function addPoint(t) {
+      if(t === 1) s1++; else s2++;
+      updateScoreboard();
+    }
+
+    function removePoint(t) {
+      if(t === 1 && s1 > 0) s1--;
+      if(t === 2 && s2 > 0) s2--;
+      updateScoreboard();
+    }
+
+    function updateScoreboard() {
+      document.getElementById('s1').innerText = s1;
+      document.getElementById('s2').innerText = s2;
+      document.getElementById('sets1').innerText = sets1;
+      document.getElementById('sets2').innerText = sets2;
+    }
+
+    function finishSet() {
+      if(s1 === s2) return alert("O set está empatado! Marque mais um ponto para definir o vencedor do set.");
+
+      if(s1 > s2) {
+        sets1++;
+        alert(`Set finalizado! Vencedor do Set: ${document.getElementById('labelTeamA').innerText}`);
+      } else {
+        sets2++;
+        alert(`Set finalizado! Vencedor do Set: ${document.getElementById('labelTeamB').innerText}`);
+      }
+
+      s1 = 0; s2 = 0;
+      updateScoreboard();
+    }
+
+    function finishMatch() {
+      const nameA = document.getElementById('selectTeamA').value;
+      const nameB = document.getElementById('selectTeamB').value;
+
+      if(!nameA || !nameB) return alert("Selecione os dois times antes de finalizar a partida!");
+
+      let winnerName = "";
+      if(sets1 > sets2) {
+        winnerName = nameA;
+      } else if(sets2 > sets1) {
+        winnerName = nameB;
+      } else {
+        if(s1 > s2) winnerName = nameA;
+        else if(s2 > s1) winnerName = nameB;
+        else return alert("A partida está empatada! Defina o vencedor do último set ou ponto.");
+      }
+
+      // Adiciona a vitória automaticamente ao Ranking
+      let winnerObj = teams.find(t => t.name === winnerName);
+      if(winnerObj) {
+        winnerObj.wins++;
+        localStorage.setItem('teams', JSON.stringify(teams));
+      }
+
+      alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\n1 Vitória adicionada ao Ranking com sucesso!`);
+
+      resetMatch();
+    }
+
+    // Cronômetro
     function startTimer() { if(!timerInterval) timerInterval = setInterval(()=>{secs++; document.getElementById('timer').innerText = new Date(secs*1000).toISOString().substr(14,5);}, 1000); }
     function pauseTimer() { clearInterval(timerInterval); timerInterval=null; }
     function resetTimer() { pauseTimer(); secs=0; document.getElementById('timer').innerText="00:00"; }
-    function resetMatch() { s1=0; s2=0; document.getElementById('s1').innerText=0; document.getElementById('s2').innerText=0; resetTimer(); }
+    
+    function resetMatch() { 
+      s1 = 0; s2 = 0; sets1 = 0; sets2 = 0;
+      updateScoreboard();
+      resetTimer(); 
+    }
 
     // Gestão de Duplas
     function saveTeam() {
@@ -187,6 +283,7 @@
             document.getElementById('timeName').value = t.name;
             document.getElementById('p1Name').value = t.p1 || '';
             document.getElementById('p2Name').value = t.p2 || '';
+            show('tab-times');
         }
     }
 
@@ -199,18 +296,12 @@
         }
     }
 
-    function addWin(id) {
-        let t = teams.find(item => item.id == id);
-        if(t) { t.wins++; localStorage.setItem('teams', JSON.stringify(teams)); renderTeams(); }
-    }
-
     function renderTeams() {
         let h = "";
         teams.forEach(t => {
             h += `<div style="border-bottom:1px solid #334155; padding:8px 0; text-align:left;">
                     <strong>${t.name}</strong> (${t.p1 || '-'} & ${t.p2 || '-'})<br>
-                    <small>Vitórias: ${t.wins}</small><br>
-                    <button onclick="addWin(${t.id})" style="background:#22c55e; color:white;">+1 Vitória</button>
+                    <small>Vitórias no Ranking: ${t.wins}</small><br>
                     <button onclick="editTeam(${t.id})" style="background:#3b82f6; color:white;">Editar</button>
                     <button onclick="deleteTeam(${t.id})" style="background:var(--danger); color:white;">Excluir</button>
                   </div>`;

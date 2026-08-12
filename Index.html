@@ -3,115 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Vôlei Completo</title>
+  <title>App Vôlei Pro</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
+      --bg: #0b1329;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
       --accent: #facc15;
+      --accent-glow: rgba(250, 204, 21, 0.25);
       --text: #f8fafc;
+      --text-muted: #94a3b8;
       --danger: #ef4444;
-      --success: #22c55e;
+      --success: #10b981;
       --action: #3b82f6;
     }
 
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      background: var(--bg);
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 60%, #0b1329 100%);
+      background-attachment: fixed;
       color: var(--text);
-      padding-bottom: 90px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding-bottom: 100px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
+      min-height: 100vh;
+    }
+
+    /* Cabeçalho Fixo */
+    .app-header {
+      text-align: center;
+      padding: 18px 16px 10px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .tab-content {
       display: none;
-      padding: 1rem;
+      padding: 0 1rem 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+      animation: fadeIn 0.25s ease-out;
     }
 
     .tab-content.active {
       display: block;
     }
 
-    .card {
-      background: var(--card-bg);
-      padding: 1.2rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      text-align: center;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Cards com Glassmorphism */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      padding: 1.25rem;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+      text-align: center;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Inputs e Selects */
     input, select {
-      padding: 12px;
-      margin: 6px 0;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background: #0f172a;
+      width: 100%;
+      padding: 14px;
+      margin: 6px 0 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.8);
       color: #fff;
-      font-size: 1rem;
-      box-sizing: border-box;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
     .search-inputs {
       display: flex;
       gap: 8px;
-      justify-content: center;
     }
 
-    .search-inputs input {
-      flex: 3;
-    }
+    .search-inputs input { flex: 3; }
+    .search-inputs select { flex: 1; }
 
-    .search-inputs select {
-      flex: 1;
-    }
-
+    /* Botões Modernos */
     button {
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 12px 18px;
+      border-radius: 12px;
       border: none;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 700;
       margin: 4px;
       font-size: 0.95rem;
+      transition: transform 0.1s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    button:active {
+      transform: scale(0.97);
     }
 
     .btn-main {
-      background: var(--accent);
-      color: #000;
+      background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+      color: #0f172a;
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       font-size: 1rem;
+      box-shadow: 0 4px 15px var(--accent-glow);
     }
 
     .btn-add {
-      background: var(--success);
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
-      padding: 10px 18px;
+      padding: 12px 20px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
     }
 
     .btn-sub {
-      background: #64748b;
+      background: rgba(255, 255, 255, 0.1);
       color: white;
-      padding: 10px 14px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .btn-action {
-      background: var(--action);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       color: white;
-      padding: 10px;
+      padding: 12px;
       margin-top: 8px;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
     }
 
     .team-select-container {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       justify-content: space-between;
-      margin-bottom: 10px;
     }
 
     .team-select-box {
       flex: 1;
+      text-align: left;
+    }
+
+    .team-select-box label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-left: 2px;
+    }
+
+    /* Placar Estilizado */
+    .score-display-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .team-name-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .score-number {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      margin: 6px 0;
+      text-shadow: 0 0 20px var(--accent-glow);
     }
 
     .score-control {
@@ -119,7 +217,12 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
-      margin: 10px 0;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 16px 0;
     }
 
     .grid-weather {
@@ -130,28 +233,39 @@
     }
 
     .weather-item {
-      background: #0f172a;
-      padding: 10px;
-      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .weather-item strong {
+      color: var(--text);
+      font-size: 1.05rem;
+      display: block;
+      margin-top: 2px;
     }
 
     .volley-alert {
       margin-top: 15px;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
       line-height: 1.4;
     }
 
     /* CONTAINER DA QUADRA ILUSTRADA */
     .court-illustration-container {
       margin-top: 15px;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
       background: #0f172a;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
       position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .court-svg {
@@ -160,27 +274,12 @@
       display: block;
     }
 
-    /* ANIMAÇÕES DO CLIMA (ESTILO CLIMATEMPO) */
-    .anim-cloud-slow {
-      animation: moveCloud 22s linear infinite;
-    }
-
-    .anim-cloud-fast {
-      animation: moveCloud 14s linear infinite;
-    }
-
-    .anim-rain-drop {
-      animation: fallRain 0.8s linear infinite;
-    }
-
-    .anim-sun-pulse {
-      transform-origin: center;
-      animation: pulseSun 4s ease-in-out infinite alternate;
-    }
-
-    .anim-wind-line {
-      animation: blowWind 2s ease-in-out infinite;
-    }
+    /* ANIMAÇÕES DO CLIMA */
+    .anim-cloud-slow { animation: moveCloud 22s linear infinite; }
+    .anim-cloud-fast { animation: moveCloud 14s linear infinite; }
+    .anim-rain-drop { animation: fallRain 0.8s linear infinite; }
+    .anim-sun-pulse { transform-origin: center; animation: pulseSun 4s ease-in-out infinite alternate; }
+    .anim-wind-line { animation: blowWind 2s ease-in-out infinite; }
 
     @keyframes moveCloud {
       0% { transform: translateX(-150px); }
@@ -203,133 +302,200 @@
       100% { transform: translateX(400px); opacity: 0; }
     }
 
+    /* Tabela de Ranking Modernizada */
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
 
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #334155;
-      text-align: center;
-    }
-
     th {
-      color: var(--accent);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+    td {
+      padding: 14px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .rank-badge {
+      display: inline-block;
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .rank-1 .rank-badge { background: #facc15; color: #000; }
+    .rank-2 .rank-badge { background: #cbd5e1; color: #000; }
+    .rank-3 .rank-badge { background: #b45309; color: #fff; }
+
+    /* MENU DE NAVEGAÇÃO FLUTUANTE (DOCK) */
     nav {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #000;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 450px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       display: flex;
       justify-content: space-around;
-      padding: 12px 0;
-      border-top: 2px solid var(--accent);
+      padding: 8px 12px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
       z-index: 1000;
     }
 
     nav button {
-      background: none;
-      color: white;
-      font-size: 1.4rem;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 1.3rem;
       margin: 0;
-      padding: 4px 12px;
+      padding: 10px;
+      border-radius: 16px;
+      transition: all 0.25s ease;
+      position: relative;
+      width: 52px;
+      height: 52px;
+    }
+
+    nav button.active-nav {
+      color: var(--accent);
+      background: rgba(250, 204, 21, 0.12);
+      transform: translateY(-2px);
+    }
+
+    nav button.active-nav::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
     }
   </style>
 </head>
 <body>
 
+  <div class="app-header">
+    🏐 Vôlei Arena Pro
+  </div>
+
   <!-- ABA: PLACAR -->
   <div id="tab-placar" class="tab-content active">
     <div class="card">
-      <h3>🏐 Seleção do Confronto</h3>
+      <h3>👥 Confronto</h3>
       <div class="team-select-container">
         <div class="team-select-box">
-          <label><small>Time A (Esquerda)</small></label>
-          <select id="selectTeamA" style="width: 100%;" onchange="updateMatchTeams()"></select>
+          <label>Time A (Esq)</label>
+          <select id="selectTeamA" onchange="updateMatchTeams()"></select>
         </div>
         <div class="team-select-box">
-          <label><small>Time B (Direita)</small></label>
-          <select id="selectTeamB" style="width: 100%;" onchange="updateMatchTeams()"></select>
+          <label>Time B (Dir)</label>
+          <select id="selectTeamB" onchange="updateMatchTeams()"></select>
         </div>
       </div>
     </div>
 
     <!-- Cronômetro -->
     <div class="card">
-      <div id="timer" style="font-size: 2.5rem; font-weight: bold; margin-bottom: 8px;">00:00</div>
-      <button onclick="startTimer()">▶ Iniciar</button>
-      <button onclick="pauseTimer()">⏸ Pausar</button>
-      <button onclick="resetTimer()">⏹ Zerar Tempo</button>
+      <div id="timer" style="font-size: 2.8rem; font-weight: 800; font-family: monospace; letter-spacing: 2px; color: #38bdf8; margin-bottom: 8px;">00:00</div>
+      <div style="display: flex; justify-content: center; gap: 4px;">
+        <button onclick="startTimer()" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">▶ Iniciar</button>
+        <button onclick="pauseTimer()" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">⏸ Pausar</button>
+        <button onclick="resetTimer()" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">⏹ Zerar</button>
+      </div>
     </div>
 
     <!-- Placar Principal -->
     <div class="card">
-      <h3>
-        <span id="labelTeamA">Time A</span> 
-        <small style="color: var(--accent);">(Sets: <span id="sets1">0</span>)</small>: 
-        <span id="s1" style="font-size: 2.2rem; color: var(--accent);">0</span>
-      </h3>
-      <div class="score-control">
-        <button class="btn-sub" onclick="removePoint(1)">-1</button>
-        <button class="btn-add" onclick="addPoint(1)">+1 Ponto (A)</button>
+      <!-- TIME A -->
+      <div class="score-display-box">
+        <div class="team-name-title"><span id="labelTeamA">Time A</span></div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">Sets Vencidos: <strong id="sets1" style="color: var(--accent);">0</strong></div>
+        <div class="score-number" id="s1">0</div>
+        <div class="score-control">
+          <button class="btn-sub" onclick="removePoint(1)">-1</button>
+          <button class="btn-add" onclick="addPoint(1)">+1 Ponto</button>
+        </div>
       </div>
 
-      <hr style="border-color: #334155; margin: 15px 0;">
+      <div class="divider"></div>
 
-      <h3>
-        <span id="labelTeamB">Time B</span> 
-        <small style="color: var(--accent);">(Sets: <span id="sets2">0</span>)</small>: 
-        <span id="s2" style="font-size: 2.2rem; color: var(--accent);">0</span>
-      </h3>
-      <div class="score-control">
-        <button class="btn-sub" onclick="removePoint(2)">-1</button>
-        <button class="btn-add" onclick="addPoint(2)">+1 Ponto (B)</button>
+      <!-- TIME B -->
+      <div class="score-display-box">
+        <div class="team-name-title"><span id="labelTeamB">Time B</span></div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">Sets Vencidos: <strong id="sets2" style="color: var(--accent);">0</strong></div>
+        <div class="score-number" id="s2">0</div>
+        <div class="score-control">
+          <button class="btn-sub" onclick="removePoint(2)">-1</button>
+          <button class="btn-add" onclick="addPoint(2)">+1 Ponto</button>
+        </div>
       </div>
 
-      <hr style="border-color: #334155; margin: 15px 0;">
+      <div class="divider"></div>
 
       <button class="btn-action" onclick="finishSet()">🏁 Finalizar Set</button>
-      <button class="btn-action" style="background: #8b5cf6;" onclick="finishMatch()">🏆 Finalizar Partida</button>
+      <button class="btn-action" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);" onclick="finishMatch()">🏆 Finalizar Partida</button>
       <br>
-      <button onclick="resetMatch()" style="background: var(--danger); color: white; margin-top: 10px;">Reiniciar Partida</button>
+      <button onclick="resetMatch()" style="background: transparent; color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Reiniciar Placar</button>
     </div>
   </div>
 
   <!-- ABA: DUPLAS -->
   <div id="tab-times" class="tab-content">
     <div class="card">
-      <h3>➕ Cadastrar / Editar Dupla</h3>
+      <h3>➕ Cadastrar Dupla</h3>
       <input type="hidden" id="edit-id">
-      <input type="text" id="timeName" style="width: 90%;" placeholder="Nome da Dupla">
-      <input type="text" id="p1Name" style="width: 90%;" placeholder="Jogador 1">
-      <input type="text" id="p2Name" style="width: 90%;" placeholder="Jogador 2">
+      <input type="text" id="timeName" placeholder="Nome da Dupla (ex: Os Feras)">
+      <input type="text" id="p1Name" placeholder="Jogador 1">
+      <input type="text" id="p2Name" placeholder="Jogador 2">
       <button class="btn-main" onclick="saveTeam()">Salvar Dupla</button>
     </div>
     <div class="card">
       <h3>📋 Duplas Cadastradas</h3>
-      <div id="teamsList"></div>
+      <div id="teamsList" style="text-align: left;"></div>
     </div>
   </div>
 
   <!-- ABA: RANKING -->
   <div id="tab-ranking" class="tab-content">
     <div class="card">
-      <h3>🏆 Ranking Geral</h3>
+      <h3>🏆 Ranking de Vitórias</h3>
       <table id="rankingTable"></table>
-      <button onclick="resetRanking()" style="background: var(--danger); color: white; margin-top: 20px; width: 100%; padding: 12px;">🔄 Zerar Vitórias do Ranking</button>
+      <button onclick="resetRanking()" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); margin-top: 20px; width: 100%;">🔄 Zerar Vitórias do Ranking</button>
     </div>
   </div>
 
   <!-- ABA: DICAS -->
   <div id="tab-dicas" class="tab-content">
     <div class="card">
-      <h3>💡 Dicas & Táticas</h3>
-      <p>Use esta área para anotar estratégias do seu time ou rever vídeos dos treinos.</p>
+      <h3>💡 Dicas & Táticas de Arena</h3>
+      <div style="text-align: left; font-size: 0.95rem; line-height: 1.6; color: var(--text-muted);">
+        <p>🏐 <strong>Comunicação:</strong> Chame a bola sempre ("Minha!") para evitar colisões na quadra.</p>
+        <p>💨 <strong>Ajuste ao Vento:</strong> Em dias ventosos, prefira saques flutuantes e passes mais baixos e controlados.</p>
+        <p>☀️ <strong>Visibilidade:</strong> Use óculos de sol com proteção UV e ajuste a recepção para cobrir o sol.</p>
+      </div>
     </div>
   </div>
 
@@ -339,7 +505,7 @@
       <h3>☀️ Previsão do Tempo</h3>
       
       <div class="search-inputs">
-        <input type="text" id="cityName" placeholder="Cidade (ex: Carlópolis ou Ibaiti)">
+        <input type="text" id="cityName" placeholder="Cidade (ex: Carlópolis)">
         <select id="stateSelect">
           <option value="">UF</option>
           <option value="PR" selected>PR</option>
@@ -372,20 +538,20 @@
         </select>
       </div>
 
-      <button onclick="getWeather()" class="btn-main" style="margin-top: 8px;">Buscar Previsão</button>
-      <button onclick="getWeatherByGPS()" style="background: #475569; color: white; width: 100%; margin-top: 5px;">📍 Usar Minha Localização Atual</button>
+      <button onclick="getWeather()" class="btn-main">Buscar Previsão</button>
+      <button onclick="getWeatherByGPS()" style="background: rgba(255, 255, 255, 0.08); color: white; width: 100%; margin-top: 6px;">📍 Minha Localização Atual</button>
 
-      <div id="weather-display" style="margin-top: 20px;"></div>
+      <div id="weather-display" style="margin-top: 15px;"></div>
     </div>
   </div>
 
-  <!-- NAVEGAÇÃO INFERIOR -->
-  <nav>
-    <button onclick="show('tab-placar')">🏐</button>
-    <button onclick="show('tab-times')">👥</button>
-    <button onclick="show('tab-ranking')">🏆</button>
-    <button onclick="show('tab-dicas')">💡</button>
-    <button onclick="show('tab-tempo')">☀️</button>
+  <!-- NAVEGAÇÃO INFERIOR DOCK -->
+  <nav id="appNav">
+    <button onclick="show('tab-placar', this)" class="active-nav">🏐</button>
+    <button onclick="show('tab-times', this)">👥</button>
+    <button onclick="show('tab-ranking', this)">🏆</button>
+    <button onclick="show('tab-dicas', this)">💡</button>
+    <button onclick="show('tab-tempo', this)">☀️</button>
   </nav>
 
   <!-- LÓGICA DO APLICATIVO -->
@@ -395,9 +561,15 @@
     let sets1 = 0, sets2 = 0;
     let timerInterval = null, secs = 0;
 
-    function show(id) {
+    function show(id, btnEl) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+
+      if (btnEl) {
+        document.querySelectorAll('#appNav button').forEach(b => b.classList.remove('active-nav'));
+        btnEl.classList.add('active-nav');
+      }
+
       if (id === 'tab-ranking') renderRanking();
       if (id === 'tab-placar') populateTeamSelectors();
     }
@@ -486,7 +658,7 @@
         localStorage.setItem('teams', JSON.stringify(teams));
       }
 
-      alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\n1 Vitória somada no Ranking com sucesso!`);
+      alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\n1 Vitória somada no Ranking!`);
       resetMatch();
     }
 
@@ -551,7 +723,7 @@
         document.getElementById('timeName').value = t.name;
         document.getElementById('p1Name').value = t.p1 || '';
         document.getElementById('p2Name').value = t.p2 || '';
-        show('tab-times');
+        show('tab-times', document.querySelectorAll('#appNav button')[1]);
       }
     }
 
@@ -568,27 +740,37 @@
       let html = "";
       teams.forEach(t => {
         html += `
-          <div style="border-bottom: 1px solid #334155; padding: 10px 0; text-align: left;">
-            <strong>${t.name}</strong> (${t.p1 || '-'} & ${t.p2 || '-'})<br>
-            <small>Vitórias no Ranking: ${t.wins}</small><br>
-            <button onclick="editTeam(${t.id})" style="background: #3b82f6; color: white;">Editar</button>
-            <button onclick="deleteTeam(${t.id})" style="background: var(--danger); color: white;">Excluir</button>
+          <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong style="color: var(--accent); font-size: 1rem;">${t.name}</strong>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">${t.p1 || '-'} & ${t.p2 || '-'}</div>
+              <small style="color: #64748b;">Vitórias: ${t.wins}</small>
+            </div>
+            <div>
+              <button onclick="editTeam(${t.id})" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 6px 10px; font-size: 0.8rem;">Editar</button>
+              <button onclick="deleteTeam(${t.id})" style="background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 6px 10px; font-size: 0.8rem;">Excluir</button>
+            </div>
           </div>`;
       });
-      document.getElementById('teamsList').innerHTML = html || "<p>Nenhuma dupla cadastrada.</p>";
+      document.getElementById('teamsList').innerHTML = html || "<p style='color: var(--text-muted); text-align: center;'>Nenhuma dupla cadastrada.</p>";
     }
 
     function renderRanking() {
       let sorted = [...teams].sort((a, b) => b.wins - a.wins);
       let html = "<tr><th>Pos</th><th>Dupla</th><th>Vitórias</th></tr>";
       sorted.forEach((t, i) => {
-        html += `<tr><td>${i + 1}º</td><td><strong>${t.name}</strong></td><td>${t.wins}</td></tr>`;
+        let rankClass = i === 0 ? 'rank-1' : (i === 1 ? 'rank-2' : (i === 2 ? 'rank-3' : ''));
+        html += `<tr class="${rankClass}">
+          <td style="width: 50px;"><span class="rank-badge">${i + 1}</span></td>
+          <td><strong>${t.name}</strong></td>
+          <td><strong style="color: var(--accent); font-size: 1.1rem;">${t.wins}</strong></td>
+        </tr>`;
       });
       document.getElementById('rankingTable').innerHTML = html;
     }
 
     function resetRanking() {
-      if (confirm("⚠️ Tem certeza que deseja zerar todas as vitórias do ranking?\n\nAs duplas cadastradas serão mantidas, mas o placar de vitórias voltará a ZERO.")) {
+      if (confirm("⚠️ Deseja zerar todas as vitórias do ranking?")) {
         teams.forEach(t => t.wins = 0);
         localStorage.setItem('teams', JSON.stringify(teams));
         renderRanking();
@@ -596,8 +778,8 @@
       }
     }
 
-    // SISTEMA DE PREVISÃO DO TEMPO E ILUSTRAÇÃO COM ANIMAÇÃO DINÂMICA
-    const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather entre as aspas
+    // SISTEMA DE PREVISÃO DO TEMPO
+    const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather aqui
 
     async function getWeather() {
       let city = document.getElementById('cityName').value.trim();
@@ -606,7 +788,7 @@
       if (!city) return alert("Por favor, digite o nome de uma cidade!");
 
       const display = document.getElementById('weather-display');
-      display.innerHTML = "⏳ Buscando previsão...";
+      display.innerHTML = "<p style='color: var(--text-muted);'>⏳ Buscando previsão...</p>";
 
       city = city.replace(/paraná|parana|são paulo|sao paulo|santa catarina|rio grande do sul|minas gerais/gi, '').trim();
 
@@ -627,17 +809,17 @@
           if (retryData.cod === 200) {
             renderWeatherData(retryData, state);
           } else {
-            display.innerHTML = "❌ Cidade não encontrada. Verifique a ortografia do nome.";
+            display.innerHTML = "❌ Cidade não encontrada.";
           }
         }
       } catch (e) {
-        display.innerHTML = "❌ Erro ao buscar previsão. Verifique a conexão com a internet.";
+        display.innerHTML = "❌ Erro ao buscar previsão.";
       }
     }
 
     function getWeatherByGPS() {
       const display = document.getElementById('weather-display');
-      display.innerHTML = "📍 Buscando localização do GPS...";
+      display.innerHTML = "<p style='color: var(--text-muted);'>📍 Buscando GPS...</p>";
       if (!navigator.geolocation) return alert("Geolocalização não suportada.");
 
       navigator.geolocation.getCurrentPosition(
@@ -664,12 +846,10 @@
       let alertMsg = "";
       let alertStyle = "";
       
-      // Cores e Iluminação do Céu
       let cStop1 = "#38bdf8";
       let cStop2 = "#bae6fd";
       let weatherAnimationElements = "";
 
-      // SOL PADRÃO
       let sunElement = `
         <g class="anim-sun-pulse">
           <circle cx="330" cy="40" r="26" fill="#facc15" />
@@ -678,19 +858,13 @@
       `;
 
       if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) {
-        alertMsg = "🌧️ Ops, marcando chuva! Voleizinho em dúvida ☔";
-        alertStyle = "background: #7f1d1d; color: #fca5a5;";
+        alertMsg = "🌧️ Ops, chuva na área! Voleizinho sob risco ☔";
+        alertStyle = "background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);";
         cStop1 = "#1e293b"; cStop2 = "#475569";
         
         weatherAnimationElements = `
-          <!-- Nuvens de Chuva Escuras em Movimento -->
-          <g class="anim-cloud-slow">
-            <path d="M 10 35 Q 25 15 50 20 Q 75 10 100 25 Q 120 25 125 40 Z" fill="#64748b" opacity="0.95"/>
-          </g>
-          <g class="anim-cloud-fast">
-            <path d="M 180 30 Q 195 10 220 15 Q 245 5 270 20 Q 290 20 295 35 Z" fill="#475569" opacity="0.9"/>
-          </g>
-          <!-- Chuva Animada Caindo em Loop -->
+          <g class="anim-cloud-slow"><path d="M 10 35 Q 25 15 50 20 Q 75 10 100 25 Q 120 25 125 40 Z" fill="#64748b" opacity="0.95"/></g>
+          <g class="anim-cloud-fast"><path d="M 180 30 Q 195 10 220 15 Q 245 5 270 20 Q 290 20 295 35 Z" fill="#475569" opacity="0.9"/></g>
           <g class="anim-rain-drop">
             <line x1="60" y1="50" x2="50" y2="70" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
             <line x1="110" y1="55" x2="100" y2="75" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
@@ -700,49 +874,39 @@
           </g>
         `;
       } else if (mainWeather.includes("clouds")) {
-        alertMsg = "☁️ Tempo nublado! Bom para jogar sem sol no olho.";
-        alertStyle = "background: #334155; color: #cbd5e1;";
+        alertMsg = "☁️ Tempo nublado! Excelente para jogar sem sol incômodo.";
+        alertStyle = "background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3);";
         cStop1 = "#475569"; cStop2 = "#94a3b8";
         
         weatherAnimationElements = `
-          <!-- Nuvens Deslizantes em Camadas -->
-          <g class="anim-cloud-slow">
-            <path d="M -20 30 Q 0 10 30 15 Q 55 5 80 20 Q 100 20 105 35 Z" fill="#ffffff" opacity="0.85"/>
-          </g>
-          <g class="anim-cloud-fast">
-            <path d="M 150 25 Q 170 5 195 10 Q 220 0 245 15 Q 265 15 270 30 Z" fill="#e2e8f0" opacity="0.95"/>
-          </g>
+          <g class="anim-cloud-slow"><path d="M -20 30 Q 0 10 30 15 Q 55 5 80 20 Q 100 20 105 35 Z" fill="#ffffff" opacity="0.85"/></g>
+          <g class="anim-cloud-fast"><path d="M 150 25 Q 170 5 195 10 Q 220 0 245 15 Q 265 15 270 30 Z" fill="#e2e8f0" opacity="0.95"/></g>
         `;
       } else if (windSpeed > 5) {
-        alertMsg = "💨 Vento acima da média, a bola pode sofrer desvios!";
-        alertStyle = "background: #78350f; color: #fde68a;";
+        alertMsg = "💨 Vento forte! A bola pode variar bastante de trajetória.";
+        alertStyle = "background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3);";
         weatherAnimationElements = sunElement + `
-          <!-- Linhas de Vento Animadas -->
           <g class="anim-wind-line">
             <path d="M 10 30 Q 60 20 120 35 T 200 25" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.6" stroke-dasharray="8"/>
             <path d="M 50 50 Q 110 40 180 55 T 260 45" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.5" stroke-dasharray="6"/>
           </g>
         `;
       } else {
-        alertMsg = temp >= 30 ? "🔥 Calor acima da média, o voleizinho vai ser quente ☀️" : "☀️ Condição ideal para um voleizinho!";
-        alertStyle = temp >= 30 ? "background: #9a3412; color: #fed7aa;" : "background: #14532d; color: #86efac;";
+        alertMsg = temp >= 30 ? "🔥 Muito quente! Lembre-se de se hidratar ☀️" : "☀️ Condição perfeita para o jogo!";
+        alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.2); color: #fdba74; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3);";
         
         weatherAnimationElements = sunElement + `
-          <!-- Pequena nuvem leve e graciosa -->
-          <g class="anim-cloud-slow">
-            <path d="M 20 25 Q 35 10 55 15 Q 75 5 95 20 Q 110 20 115 30 Z" fill="#ffffff" opacity="0.6"/>
-          </g>
+          <g class="anim-cloud-slow"><path d="M 20 25 Q 35 10 55 15 Q 75 5 95 20 Q 110 20 115 30 Z" fill="#ffffff" opacity="0.6"/></g>
         `;
       }
 
       let locationText = data.name + (stateHint ? `, ${stateHint}` : '') + ` - ${data.sys.country}`;
 
       display.innerHTML = `
-        <div style="font-size: 1.4rem; font-weight: bold;">${locationText}</div>
-        <div style="font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 5px 0;">${Math.round(temp)}°C</div>
-        <div style="text-transform: capitalize; font-size: 1.1rem;">${data.weather[0].description}</div>
+        <div style="font-size: 1.2rem; font-weight: 700;">${locationText}</div>
+        <div style="font-size: 3rem; font-weight: 900; color: var(--accent); margin: 2px 0;">${Math.round(temp)}°C</div>
+        <div style="text-transform: capitalize; font-size: 1rem; color: var(--text-muted);">${data.weather[0].description}</div>
 
-        <!-- QUADRA DE VÔLEI COM PERSPECTIVA 3D E ANIMAÇÕES -->
         <div class="court-illustration-container">
           <svg class="court-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -756,39 +920,26 @@
               </linearGradient>
             </defs>
 
-            <!-- Céu de Fundo -->
             <rect width="400" height="130" fill="url(#skyGrad)"/>
-
-            <!-- Elementos Climáticos Animados -->
             ${weatherAnimationElements}
-
-            <!-- Chão de Areia -->
             <rect y="125" width="400" height="75" fill="url(#sandGrad)"/>
 
-            <!-- QUADRA EM PERSPECTIVA 3D (Trapezoidal) -->
             <polygon points="30,190 370,190 320,135 80,135" fill="#eab308" stroke="#fef08a" stroke-width="3" />
-            <!-- Linha Central da Quadra -->
             <line x1="200" y1="135" x2="200" y2="190" stroke="#ffffff" stroke-width="2" stroke-dasharray="4"/>
 
-            <!-- POSTES LATERAIS DA REDE (Lado Esquerdo e Direito) -->
             <line x1="75" y1="85" x2="75" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
             <line x1="325" y1="85" x2="325" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
 
-            <!-- REDE DE VÔLEI (De ponta a ponta entre os postes) -->
             <polygon points="75,90 325,90 325,120 75,120" fill="rgba(0,0,0,0.15)"/>
             
-            <!-- Malha de Linhas da Rede -->
             <path d="M 75 100 L 325 100 M 75 110 L 325 110" stroke="#ffffff" stroke-width="1" opacity="0.7"/>
             <path d="M 100 90 L 100 120 M 125 90 L 125 120 M 150 90 L 150 120 M 175 90 L 175 120 M 200 90 L 200 120 M 225 90 L 225 120 M 250 90 L 250 120 M 275 90 L 275 120 M 300 90 L 300 120" stroke="#ffffff" stroke-width="1" opacity="0.7"/>
 
-            <!-- Fita Superior Branca da Rede -->
             <line x1="73" y1="90" x2="327" y2="90" stroke="#ffffff" stroke-width="4"/>
 
-            <!-- Antenas Oficiais Vermelha/Branca -->
             <line x1="85" y1="65" x2="85" y2="120" stroke="#ef4444" stroke-width="2"/>
             <line x1="315" y1="65" x2="315" y2="120" stroke="#ef4444" stroke-width="2"/>
 
-            <!-- BOLA DE VÔLEI DE PRAIA EM AÇÃO (Estilo Tricolor) -->
             <g transform="translate(230, 68)">
               <circle cx="0" cy="0" r="12" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
               <path d="M -10 -4 Q 0 4 10 -4" stroke="#facc15" stroke-width="2.5" fill="none"/>
@@ -802,10 +953,10 @@
         </div>
 
         <div class="grid-weather">
-          <div class="weather-item"><strong>Sensação</strong><br>${Math.round(data.main.feels_like)}°C</div>
-          <div class="weather-item"><strong>Umidade</strong><br>${data.main.humidity}%</div>
-          <div class="weather-item"><strong>Vento</strong><br>${windSpeed} m/s</div>
-          <div class="weather-item"><strong>Mín / Máx</strong><br>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</div>
+          <div class="weather-item">Sensação<strong>${Math.round(data.main.feels_like)}°C</strong></div>
+          <div class="weather-item">Umidade<strong>${data.main.humidity}%</strong></div>
+          <div class="weather-item">Vento<strong>${windSpeed} m/s</strong></div>
+          <div class="weather-item">Mín / Máx<strong>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</strong></div>
         </div>
       `;
     }

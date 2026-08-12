@@ -266,6 +266,7 @@
     <div class="card">
       <h3>🏆 Ranking Geral</h3>
       <table id="rankingTable"></table>
+      <button onclick="resetRanking()" style="background: var(--danger); color: white; margin-top: 20px; width: 100%; padding: 12px;">🔄 Zerar Vitórias do Ranking</button>
     </div>
   </div>
 
@@ -536,6 +537,15 @@
       document.getElementById('rankingTable').innerHTML = html;
     }
 
+    function resetRanking() {
+      if (confirm("⚠️ Tem certeza que deseja zerar todas as vitórias do ranking?\n\nAs duplas cadastradas serão mantidas, mas o placar de vitórias voltará a ZERO.")) {
+        teams.forEach(t => t.wins = 0);
+        localStorage.setItem('teams', JSON.stringify(teams));
+        renderRanking();
+        alert("🏆 Ranking zerado com sucesso!");
+      }
+    }
+
     // Previsão do Tempo Personalizada
     const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather entre as aspas
 
@@ -549,7 +559,6 @@
       display.innerHTML = "⏳ Buscando previsão...";
 
       try {
-        // Busca com precisão por Geocoding API usando Cidade, Estado, Brasil
         let query = state ? `${city},${state},BR` : `${city},BR`;
         let geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=1&appid=${key}`;
         

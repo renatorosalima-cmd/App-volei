@@ -144,88 +144,19 @@
       line-height: 1.4;
     }
 
-    /* ESTILOS DA QUADRA TEMÁTICA */
-    .court-card {
-      position: relative;
-      height: 160px;
-      border-radius: 12px;
+    /* ESTILO DA ILUSTRAÇÃO DA QUADRA SVG */
+    .court-illustration-container {
       margin-top: 15px;
+      border-radius: 12px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      padding-bottom: 10px;
-      box-shadow: inset 0 -40px 50px rgba(0,0,0,0.5);
-      border: 2px solid rgba(255,255,255,0.1);
+      background: #0f172a;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    /* Areia e Rede da Quadra */
-    .sand-ground {
-      position: absolute;
-      bottom: 0;
+    .court-svg {
       width: 100%;
-      height: 45px;
-      background: #eab308;
-      border-top: 3px solid #ca8a04;
-    }
-
-    .volley-net {
-      position: absolute;
-      bottom: 45px;
-      width: 80%;
-      height: 35px;
-      border: 2px dashed #ffffff;
-      border-bottom: none;
-      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.2) 0, rgba(255,255,255,0.2) 5px, transparent 5px, transparent 10px);
-    }
-
-    /* Variações do Céu e Animações */
-    .sky-sunny {
-      background: linear-gradient(to bottom, #38bdf8, #bae6fd);
-    }
-    .sun-rays {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 3.5rem;
-      animation: pulseRays 2s infinite alternate;
-    }
-
-    .sky-cloudy {
-      background: linear-gradient(to bottom, #64748b, #94a3b8);
-    }
-    .clouds {
-      position: absolute;
-      top: 15px;
-      font-size: 2.2rem;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      opacity: 0.9;
-    }
-
-    .sky-rainy {
-      background: linear-gradient(to bottom, #1e293b, #475569);
-    }
-    .rain-drops {
-      position: absolute;
-      top: 10px;
-      font-size: 1.8rem;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      animation: dropRain 1s infinite linear;
-    }
-
-    @keyframes pulseRays {
-      0% { transform: scale(1); filter: drop-shadow(0 0 5px #facc15); }
-      100% { transform: scale(1.15); filter: drop-shadow(0 0 18px #fef08a); }
-    }
-
-    @keyframes dropRain {
-      0% { transform: translateY(-5px); opacity: 1; }
-      100% { transform: translateY(20px); opacity: 0.3; }
+      height: 180px;
+      display: block;
     }
 
     table {
@@ -364,7 +295,7 @@
       <h3>☀️ Previsão do Tempo</h3>
       
       <div class="search-inputs">
-        <input type="text" id="cityName" placeholder="Cidade (ex: Ibaiti)">
+        <input type="text" id="cityName" placeholder="Cidade (ex: Ibaiti ou Joaquim Távora)">
         <select id="stateSelect">
           <option value="">UF</option>
           <option value="PR" selected>PR</option>
@@ -621,7 +552,7 @@
       }
     }
 
-    // PREVISÃO DO TEMPO COM QUADRA ILUSTRADA DINÂMICA
+    // SISTEMA DE PREVISÃO DO TEMPO COM BUSCA ROBUTA E ILUSTRAÇÃO SVG DE QUALIDADE
     const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather entre as aspas
 
     async function getWeather() {
@@ -633,25 +564,32 @@
       const display = document.getElementById('weather-display');
       display.innerHTML = "⏳ Buscando previsão...";
 
-      try {
-        let query = state ? `${city},${state},BR` : `${city},BR`;
-        let geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=1&appid=${key}`;
-        
-        let geoRes = await fetch(geoUrl);
-        let geoData = await geoRes.json();
+      // Trata nome da cidade removendo o estado por extenso caso o usuário digite
+      city = city.replace(/paraná|parana|são paulo|sao paulo|santa catarina|rio grande do sul|minas gerais/gi, '').trim();
 
-        if (geoData && geoData.length > 0) {
-          let lat = geoData[0].lat;
-          let lon = geoData[0].lon;
-          let stateFound = geoData[0].state || state || "";
-          
-          let weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric&lang=pt_br`;
-          fetchWeatherData(weatherUrl, stateFound);
+      try {
+        let searchQuery = state ? `${city},${state},BR` : `${city},BR`;
+        let url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(searchQuery)}&appid=${key}&units=metric&lang=pt_br`;
+        
+        let res = await fetch(url);
+        let data = await res.json();
+
+        if (data.cod === 200) {
+          renderWeatherData(data, state);
         } else {
-          display.innerHTML = "❌ Cidade não encontrada. Verifique o nome e o estado selecionado.";
+          // Tenta segunda busca sem o estado na query caso a primeira falhe
+          let retryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)},BR&appid=${key}&units=metric&lang=pt_br`;
+          let retryRes = await fetch(retryUrl);
+          let retryData = await retryRes.json();
+
+          if (retryData.cod === 200) {
+            renderWeatherData(retryData, state);
+          } else {
+            display.innerHTML = "❌ Cidade não encontrada. Verifique a ortografia do nome.";
+          }
         }
       } catch (e) {
-        display.innerHTML = "❌ Erro ao buscar previsão. Verifique a conexão ou a API key.";
+        display.innerHTML = "❌ Erro ao buscar previsão. Verifique a conexão com a internet.";
       }
     }
 
@@ -661,87 +599,126 @@
       if (!navigator.geolocation) return alert("Geolocalização não suportada.");
 
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          fetchWeatherData(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${key}&units=metric&lang=pt_br`);
+        async (pos) => {
+          let url = `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${key}&units=metric&lang=pt_br`;
+          try {
+            let res = await fetch(url);
+            let data = await res.json();
+            if (data.cod === 200) renderWeatherData(data);
+          } catch(e) {
+            display.innerHTML = "Erro ao carregar clima via GPS.";
+          }
         },
         () => alert("Permissão de localização negada.")
       );
     }
 
-    async function fetchWeatherData(url, customState = "") {
+    function renderWeatherData(data, stateHint = "") {
       const display = document.getElementById('weather-display');
-      if (key === "SUA_API_KEY_AQUI") return alert("Insira sua chave do OpenWeather no código!");
+      const mainWeather = data.weather[0].main.toLowerCase();
+      const windSpeed = data.wind.speed;
+      const temp = data.main.temp;
+      
+      let alertMsg = "";
+      let alertStyle = "";
+      
+      // Definição das cores do céu conforme o clima
+      let skyGradient = "linear-gradient(to bottom, #38bdf8, #bae6fd)"; // Sol
+      let weatherElementsSvg = `
+        <circle cx="320" cy="45" r="28" fill="#facc15" />
+        <line x1="320" y1="5" x2="320" y2="12" stroke="#facc15" stroke-width="3"/>
+        <line x1="320" y1="78" x2="320" y2="85" stroke="#facc15" stroke-width="3"/>
+        <line x1="280" y1="45" x2="287" y2="45" stroke="#facc15" stroke-width="3"/>
+        <line x1="353" y1="45" x2="360" y2="45" stroke="#facc15" stroke-width="3"/>
+      `;
 
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        if (data.cod !== 200) {
-          display.innerHTML = "❌ Cidade não encontrada ou erro na chave de API.";
-          return;
-        }
-
-        const mainWeather = data.weather[0].main.toLowerCase();
-        const windSpeed = data.wind.speed;
-        const temp = data.main.temp;
-        let alertMsg = "";
-        let alertStyle = "";
-        
-        // Elementos visuais da quadra
-        let courtSkyClass = "sky-sunny";
-        let courtWeatherOverlay = '<div class="sun-rays">☀️</div>';
-
-        // Lógica das condições e montagem do cenário da quadra
-        if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) {
-          alertMsg = "🌧️ Ops, marcando chuva! Voleizinho em dúvida ☔";
-          alertStyle = "background: #7f1d1d; color: #fca5a5;";
-          courtSkyClass = "sky-rainy";
-          courtWeatherOverlay = '<div class="rain-drops">💧 🌧️ 💧 🌧️ 💧</div>';
-        } else if (mainWeather.includes("clouds")) {
-          alertMsg = "☁️ Tempo nublado! Bom para jogar sem sol no olho.";
-          alertStyle = "background: #334155; color: #cbd5e1;";
-          courtSkyClass = "sky-cloudy";
-          courtWeatherOverlay = '<div class="clouds">☁️ ☁️ ☁️</div>';
-        } else if (temp >= 30) {
-          alertMsg = "🔥 Calor acima da média, o voleizinho vai ser quente ☀️";
-          alertStyle = "background: #9a3412; color: #fed7aa;";
-        } else if (windSpeed > 5) {
-          alertMsg = "💨 Vento acima da média, a bola pode sofrer desvios!";
-          alertStyle = "background: #78350f; color: #fde68a;";
-          courtWeatherOverlay += '<div class="clouds" style="top:30px;">💨 💨</div>';
-        } else {
-          alertMsg = "☀️ Condição ideal para um voleizinho!";
-          alertStyle = "background: #14532d; color: #86efac;";
-        }
-
-        let stateLabel = customState ? `, ${customState}` : "";
-
-        display.innerHTML = `
-          <div style="font-size: 1.4rem; font-weight: bold;">${data.name}${stateLabel} - ${data.sys.country}</div>
-          <div style="font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 5px 0;">${Math.round(temp)}°C</div>
-          <div style="text-transform: capitalize; font-size: 1.1rem;">${data.weather[0].description}</div>
-
-          <!-- ILUSTRAÇÃO DA QUADRA DINÂMICA -->
-          <div class="court-card ${courtSkyClass}">
-            ${courtWeatherOverlay}
-            <div class="volley-net"></div>
-            <div class="sand-ground"></div>
-          </div>
-
-          <div class="volley-alert" style="${alertStyle}">
-            ${alertMsg}
-          </div>
-
-          <div class="grid-weather">
-            <div class="weather-item"><strong>Sensação</strong><br>${Math.round(data.main.feels_like)}°C</div>
-            <div class="weather-item"><strong>Umidade</strong><br>${data.main.humidity}%</div>
-            <div class="weather-item"><strong>Vento</strong><br>${windSpeed} m/s</div>
-            <div class="weather-item"><strong>Mín / Máx</strong><br>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</div>
-          </div>
+      if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) {
+        alertMsg = "🌧️ Ops, marcando chuva! Voleizinho em dúvida ☔";
+        alertStyle = "background: #7f1d1d; color: #fca5a5;";
+        skyGradient = "linear-gradient(to bottom, #1e293b, #475569)";
+        weatherElementsSvg = `
+          <path d="M 80 40 Q 95 20 120 25 Q 145 15 170 30 Q 190 30 195 45 Z" fill="#94a3b8" />
+          <path d="M 230 45 Q 245 25 270 30 Q 295 20 320 35 Q 340 35 345 50 Z" fill="#64748b" />
+          <!-- Gotas de Chuva -->
+          <line x1="100" y1="60" x2="95" y2="75" stroke="#60a5fa" stroke-width="2" stroke-dasharray="4"/>
+          <line x1="140" y1="65" x2="135" y2="80" stroke="#60a5fa" stroke-width="2" stroke-dasharray="4"/>
+          <line x1="260" y1="65" x2="255" y2="80" stroke="#60a5fa" stroke-width="2" stroke-dasharray="4"/>
+          <line x1="300" y1="70" x2="295" y2="85" stroke="#60a5fa" stroke-width="2" stroke-dasharray="4"/>
         `;
-      } catch (e) {
-        display.innerHTML = "Erro de conexão ao buscar clima.";
+      } else if (mainWeather.includes("clouds")) {
+        alertMsg = "☁️ Tempo nublado! Bom para jogar sem sol no olho.";
+        alertStyle = "background: #334155; color: #cbd5e1;";
+        skyGradient = "linear-gradient(to bottom, #64748b, #cbd5e1)";
+        weatherElementsSvg = `
+          <path d="M 100 50 Q 115 30 140 35 Q 165 25 190 40 Q 210 40 215 55 Z" fill="#ffffff" opacity="0.8"/>
+          <path d="M 240 40 Q 255 20 280 25 Q 305 15 330 30 Q 350 30 355 45 Z" fill="#f1f5f9" opacity="0.9"/>
+        `;
+      } else if (temp >= 30) {
+        alertMsg = "🔥 Calor acima da média, o voleizinho vai ser quente ☀️";
+        alertStyle = "background: #9a3412; color: #fed7aa;";
+      } else if (windSpeed > 5) {
+        alertMsg = "💨 Vento acima da média, a bola pode sofrer desvios!";
+        alertStyle = "background: #78350f; color: #fde68a;";
+      } else {
+        alertMsg = "☀️ Condição ideal para um voleizinho!";
+        alertStyle = "background: #14532d; color: #86efac;";
       }
+
+      let locationText = data.name + (stateHint ? `, ${stateHint}` : '') + ` - ${data.sys.country}`;
+
+      display.innerHTML = `
+        <div style="font-size: 1.4rem; font-weight: bold;">${locationText}</div>
+        <div style="font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 5px 0;">${Math.round(temp)}°C</div>
+        <div style="text-transform: capitalize; font-size: 1.1rem;">${data.weather[0].description}</div>
+
+        <!-- QUADRA DE VÔLEI EM VETOR SVG -->
+        <div class="court-illustration-container">
+          <svg class="court-svg" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Céu Temático -->
+            <rect width="400" height="120" fill="url(#skyGrad)"/>
+            <defs>
+              <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="${skyGradient.split(',')[1].trim()}" />
+                <stop offset="100%" stop-color="${skyGradient.split(',')[2].replace(')','').trim()}" />
+              </linearGradient>
+            </defs>
+
+            <!-- Elementos Climáticos (Sol / Nuvens / Chuva) -->
+            ${weatherElementsSvg}
+
+            <!-- Areia da Quadra de Vôlei -->
+            <polygon points="0,120 400,120 400,180 0,180" fill="#eab308" />
+            <polygon points="20,135 380,135 390,175 10,175" fill="#f59e0b" stroke="#fef08a" stroke-width="2" />
+
+            <!-- Postes da Rede de Vôlei -->
+            <line x1="200" y1="75" x2="200" y2="155" stroke="#475569" stroke-width="6" stroke-linecap="round"/>
+
+            <!-- Rede de Vôlei de Praia detalhada -->
+            <rect x="50" y="80" width="300" height="30" fill="rgba(255,255,255,0.15)" stroke="#ffffff" stroke-width="2"/>
+            <!-- Linhas da malha da rede -->
+            <path d="M 50 90 L 350 90 M 50 100 L 350 100" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+            <path d="M 80 80 L 80 110 M 110 80 L 110 110 M 140 80 L 140 110 M 170 80 L 170 110 M 230 80 L 230 110 M 260 80 L 260 110 M 290 80 L 290 110 M 320 80 L 320 110" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+            <!-- Borda Superior Amarela da Rede -->
+            <line x1="48" y1="80" x2="352" y2="80" stroke="#facc15" stroke-width="4"/>
+
+            <!-- Bola de Vôlei de Praia em Jogo -->
+            <circle cx="140" cy="65" r="11" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+            <path d="M 132 62 Q 140 68 148 62" stroke="#facc15" stroke-width="2" fill="none"/>
+            <path d="M 135 72 Q 140 65 145 72" stroke="#facc15" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+
+        <div class="volley-alert" style="${alertStyle}">
+          ${alertMsg}
+        </div>
+
+        <div class="grid-weather">
+          <div class="weather-item"><strong>Sensação</strong><br>${Math.round(data.main.feels_like)}°C</div>
+          <div class="weather-item"><strong>Umidade</strong><br>${data.main.humidity}%</div>
+          <div class="weather-item"><strong>Vento</strong><br>${windSpeed} m/s</div>
+          <div class="weather-item"><strong>Mín / Máx</strong><br>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</div>
+        </div>
+      `;
     }
 
     // Inicialização

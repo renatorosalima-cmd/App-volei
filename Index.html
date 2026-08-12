@@ -320,7 +320,7 @@
 
     // Previsão do Tempo
     async function getWeather() {
-        const key = "SUA_API_KEY_AQUI";
+        const key = "4b84b68fcde6831bfc64ed1767626433";
         if(key === "SUA_API_KEY_AQUI") return alert("Insira sua API Key do OpenWeather no código.");
         navigator.geolocation.getCurrentPosition(async (p) => {
             const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${p.coords.latitude}&lon=${p.coords.longitude}&appid=${key}&units=metric&lang=pt_br`);

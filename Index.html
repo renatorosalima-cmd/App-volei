@@ -5,29 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Vôlei Completo</title>
   <style>
-    :root { --bg: #0f172a; --card-bg: #1e293b; --accent: #facc15; --text: #f8fafc; --danger: #ef4444; --success: #22c55e; }
-    body { background: var(--bg); color: var(--text); padding-bottom: 80px; font-family: sans-serif; margin: 0; }
-    .tab-content { display: none; padding: 1rem; }
-    .tab-content.active { display: block; }
-    .card { background: var(--card-bg); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center; }
-    input, select { width: 90%; padding: 10px; margin: 5px 0; border-radius: 6px; border: none; background: #0f172a; color: #fff; font-size: 1rem; }
-    button { padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; margin: 4px; }
-    .btn-main { background: var(--accent); color: #000; width: 100%; }
-    .btn-add { background: var(--success); color: white; padding: 10px 18px; font-size: 1rem; }
-    .btn-sub { background: #64748b; color: white; padding: 10px 14px; font-size: 1rem; }
-    .btn-action { background: #3b82f6; color: white; padding: 10px; font-size: 0.95rem; margin-top: 8px; }
-    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; justify-content: space-around; padding: 12px 0; border-top: 2px solid var(--accent); }
-    nav button { background: none; color: white; font-size: 1.2rem; }
-    .team-select-container { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 10px; }
-    .team-select-box { flex: 1; }
-    .score-control { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0; }
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #facc15;
+      --text: #f8fafc;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --action: #3b82f6;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 1rem;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.2rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    input, select {
+      width: 90%;
+      padding: 12px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #fff;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 4px;
+      font-size: 0.95rem;
+    }
+
+    .btn-main {
+      background: var(--accent);
+      color: #000;
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+    }
+
+    .btn-add {
+      background: var(--success);
+      color: white;
+      padding: 10px 18px;
+    }
+
+    .btn-sub {
+      background: #64748b;
+      color: white;
+      padding: 10px 14px;
+    }
+
+    .btn-action {
+      background: var(--action);
+      color: white;
+      padding: 10px;
+      margin-top: 8px;
+    }
+
+    .team-select-container {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .team-select-box {
+      flex: 1;
+    }
+
+    .score-control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .grid-weather {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .weather-item {
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #334155;
+      text-align: center;
+    }
+
+    th {
+      color: var(--accent);
+    }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #000;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      border-top: 2px solid var(--accent);
+      z-index: 1000;
+    }
+
+    nav button {
+      background: none;
+      color: white;
+      font-size: 1.4rem;
+      margin: 0;
+      padding: 4px 12px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- PLACAR -->
+  <!-- ABA: PLACAR -->
   <div id="tab-placar" class="tab-content active">
-    <!-- SELEÇÃO DE DUPLAS -->
+    <!-- Seleção de Times -->
     <div class="card">
       <h3>🏐 Seleção do Confronto</h3>
       <div class="team-select-container">
@@ -42,51 +179,51 @@
       </div>
     </div>
 
-    <!-- CRONÔMETRO -->
+    <!-- Cronômetro -->
     <div class="card">
-        <div id="timer" style="font-size: 2.5rem; font-weight:bold;">00:00</div>
-        <button onclick="startTimer()">▶ Iniciar</button>
-        <button onclick="pauseTimer()">⏸ Pausar</button>
-        <button onclick="resetTimer()">⏹ Zerar Tempo</button>
+      <div id="timer" style="font-size: 2.5rem; font-weight: bold; margin-bottom: 8px;">00:00</div>
+      <button onclick="startTimer()">▶ Iniciar</button>
+      <button onclick="pauseTimer()">⏸ Pausar</button>
+      <button onclick="resetTimer()">⏹ Zerar Tempo</button>
     </div>
 
-    <!-- PLACAR PRINCIPAL -->
+    <!-- Placar Principal -->
     <div class="card">
-        <!-- TIME A -->
-        <h3>
-          <span id="labelTeamA">Time A</span> 
-          <small style="color:var(--accent);">(Sets: <span id="sets1">0</span>)</small>: 
-          <span id="s1" style="font-size:2rem; color:var(--accent);">0</span>
-        </h3>
-        <div class="score-control">
-          <button class="btn-sub" onclick="removePoint(1)">-1</button>
-          <button class="btn-add" onclick="addPoint(1)">+1 Ponto (A)</button>
-        </div>
+      <!-- Time A -->
+      <h3>
+        <span id="labelTeamA">Time A</span> 
+        <small style="color: var(--accent);">(Sets: <span id="sets1">0</span>)</small>: 
+        <span id="s1" style="font-size: 2.2rem; color: var(--accent);">0</span>
+      </h3>
+      <div class="score-control">
+        <button class="btn-sub" onclick="removePoint(1)">-1</button>
+        <button class="btn-add" onclick="addPoint(1)">+1 Ponto (A)</button>
+      </div>
 
-        <hr style="border-color: #334155; margin: 15px 0;">
+      <hr style="border-color: #334155; margin: 15px 0;">
 
-        <!-- TIME B -->
-        <h3>
-          <span id="labelTeamB">Time B</span> 
-          <small style="color:var(--accent);">(Sets: <span id="sets2">0</span>)</small>: 
-          <span id="s2" style="font-size:2rem; color:var(--accent);">0</span>
-        </h3>
-        <div class="score-control">
-          <button class="btn-sub" onclick="removePoint(2)">-1</button>
-          <button class="btn-add" onclick="addPoint(2)">+1 Ponto (B)</button>
-        </div>
+      <!-- Time B -->
+      <h3>
+        <span id="labelTeamB">Time B</span> 
+        <small style="color: var(--accent);">(Sets: <span id="sets2">0</span>)</small>: 
+        <span id="s2" style="font-size: 2.2rem; color: var(--accent);">0</span>
+      </h3>
+      <div class="score-control">
+        <button class="btn-sub" onclick="removePoint(2)">-1</button>
+        <button class="btn-add" onclick="addPoint(2)">+1 Ponto (B)</button>
+      </div>
 
-        <hr style="border-color: #334155; margin: 15px 0;">
+      <hr style="border-color: #334155; margin: 15px 0;">
 
-        <!-- AÇÕES DO JOGO -->
-        <button class="btn-action" onclick="finishSet()">🏁 Finalizar Set</button>
-        <button class="btn-action" style="background:#8b5cf6;" onclick="finishMatch()">🏆 Finalizar Partida</button>
-        <br>
-        <button onclick="resetMatch()" style="background:var(--danger); color:white; margin-top:10px;">Reiniciar Partida</button>
+      <!-- Botões de Ação do Jogo -->
+      <button class="btn-action" onclick="finishSet()">🏁 Finalizar Set</button>
+      <button class="btn-action" style="background: #8b5cf6;" onclick="finishMatch()">🏆 Finalizar Partida</button>
+      <br>
+      <button onclick="resetMatch()" style="background: var(--danger); color: white; margin-top: 10px;">Reiniciar Partida</button>
     </div>
   </div>
 
-  <!-- TIMES -->
+  <!-- ABA: DUPLAS -->
   <div id="tab-times" class="tab-content">
     <div class="card">
       <h3>➕ Cadastrar / Editar Dupla</h3>
@@ -96,32 +233,38 @@
       <input type="text" id="p2Name" placeholder="Jogador 2">
       <button class="btn-main" onclick="saveTeam()">Salvar Dupla</button>
     </div>
-    <div id="teamsList" class="card"></div>
+    <div class="card">
+      <h3>📋 Duplas Cadastradas</h3>
+      <div id="teamsList"></div>
+    </div>
   </div>
 
-  <!-- RANKING -->
+  <!-- ABA: RANKING -->
   <div id="tab-ranking" class="tab-content">
     <div class="card">
       <h3>🏆 Ranking Geral</h3>
-      <table id="rankingTable" width="100%"></table>
+      <table id="rankingTable"></table>
     </div>
   </div>
 
-  <!-- DICAS -->
+  <!-- ABA: DICAS -->
   <div id="tab-dicas" class="tab-content">
     <div class="card">
-      <h3>💡 Dicas</h3>
-      <p>Consulte suas táticas e vídeos aqui.</p>
+      <h3>💡 Dicas & Táticas</h3>
+      <p>Use esta área para anotar estratégias do seu time ou rever vídeos dos treinos.</p>
     </div>
   </div>
 
-  <!-- TEMPO -->
+  <!-- ABA: PREVISÃO DO TEMPO -->
   <div id="tab-tempo" class="tab-content">
-    <div class="card" id="weather">Clique abaixo para ver a previsão do tempo</div>
-    <button onclick="getWeather()" class="btn-main">Obter Previsão</button>
+    <div class="card">
+      <h3>☀️ Previsão do Tempo</h3>
+      <div id="weather-display" style="margin: 15px 0;">Clique no botão abaixo para buscar o clima da sua localização.</div>
+      <button onclick="getWeather()" class="btn-main">Atualizar Previsão</button>
+    </div>
   </div>
 
-  <!-- NAVEGAÇÃO -->
+  <!-- NAVEGAÇÃO INFERIOR -->
   <nav>
     <button onclick="show('tab-placar')">🏐</button>
     <button onclick="show('tab-times')">👥</button>
@@ -130,58 +273,59 @@
     <button onclick="show('tab-tempo')">☀️</button>
   </nav>
 
+  <!-- LÓGICA DO APLICATIVO -->
   <script>
     let teams = JSON.parse(localStorage.getItem('teams')) || [];
     let s1 = 0, s2 = 0;
     let sets1 = 0, sets2 = 0;
     let timerInterval = null, secs = 0;
 
-    // Navegação
+    // Navegação entre abas
     function show(id) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(id === 'tab-ranking') renderRanking();
-        if(id === 'tab-placar') populateTeamSelectors();
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'tab-ranking') renderRanking();
+      if (id === 'tab-placar') populateTeamSelectors();
     }
 
-    // Preencher Seletores de Times no Placar
+    // Gerenciamento de Seletores de Dupla no Placar
     function populateTeamSelectors() {
-        const selectA = document.getElementById('selectTeamA');
-        const selectB = document.getElementById('selectTeamB');
+      const selectA = document.getElementById('selectTeamA');
+      const selectB = document.getElementById('selectTeamB');
 
-        const currentA = selectA.value;
-        const currentB = selectB.value;
+      const currentA = selectA.value;
+      const currentB = selectB.value;
 
-        selectA.innerHTML = '<option value="">Selecione Time A</option>';
-        selectB.innerHTML = '<option value="">Selecione Time B</option>';
+      selectA.innerHTML = '<option value="">Selecione Time A</option>';
+      selectB.innerHTML = '<option value="">Selecione Time B</option>';
 
-        teams.forEach(t => {
-            selectA.innerHTML += `<option value="${t.name}">${t.name}</option>`;
-            selectB.innerHTML += `<option value="${t.name}">${t.name}</option>`;
-        });
+      teams.forEach(t => {
+        selectA.innerHTML += `<option value="${t.name}">${t.name}</option>`;
+        selectB.innerHTML += `<option value="${t.name}">${t.name}</option>`;
+      });
 
-        selectA.value = currentA;
-        selectB.value = currentB;
-        updateMatchTeams();
+      selectA.value = currentA;
+      selectB.value = currentB;
+      updateMatchTeams();
     }
 
     function updateMatchTeams() {
-        const nameA = document.getElementById('selectTeamA').value;
-        const nameB = document.getElementById('selectTeamB').value;
+      const nameA = document.getElementById('selectTeamA').value;
+      const nameB = document.getElementById('selectTeamB').value;
 
-        document.getElementById('labelTeamA').innerText = nameA || "Time A";
-        document.getElementById('labelTeamB').innerText = nameB || "Time B";
+      document.getElementById('labelTeamA').innerText = nameA || "Time A";
+      document.getElementById('labelTeamB').innerText = nameB || "Time B";
     }
 
-    // Controle de Pontos e Sets
-    function addPoint(t) {
-      if(t === 1) s1++; else s2++;
+    // Controles do Placar e Sets
+    function addPoint(team) {
+      if (team === 1) s1++; else s2++;
       updateScoreboard();
     }
 
-    function removePoint(t) {
-      if(t === 1 && s1 > 0) s1--;
-      if(t === 2 && s2 > 0) s2--;
+    function removePoint(team) {
+      if (team === 1 && s1 > 0) s1--;
+      if (team === 2 && s2 > 0) s2--;
       updateScoreboard();
     }
 
@@ -193,14 +337,14 @@
     }
 
     function finishSet() {
-      if(s1 === s2) return alert("O set está empatado! Marque mais um ponto para definir o vencedor do set.");
+      if (s1 === s2) return alert("O set está empatado! Marque o ponto de desempate.");
 
-      if(s1 > s2) {
+      if (s1 > s2) {
         sets1++;
-        alert(`Set finalizado! Vencedor do Set: ${document.getElementById('labelTeamA').innerText}`);
+        alert(`Set Finalizado!\nVencedor: ${document.getElementById('labelTeamA').innerText}`);
       } else {
         sets2++;
-        alert(`Set finalizado! Vencedor do Set: ${document.getElementById('labelTeamB').innerText}`);
+        alert(`Set Finalizado!\nVencedor: ${document.getElementById('labelTeamB').innerText}`);
       }
 
       s1 = 0; s2 = 0;
@@ -211,124 +355,180 @@
       const nameA = document.getElementById('selectTeamA').value;
       const nameB = document.getElementById('selectTeamB').value;
 
-      if(!nameA || !nameB) return alert("Selecione os dois times antes de finalizar a partida!");
+      if (!nameA || !nameB) return alert("Selecione ambas as duplas antes de finalizar a partida!");
 
       let winnerName = "";
-      if(sets1 > sets2) {
+      if (sets1 > sets2) {
         winnerName = nameA;
-      } else if(sets2 > sets1) {
+      } else if (sets2 > sets1) {
         winnerName = nameB;
       } else {
-        if(s1 > s2) winnerName = nameA;
-        else if(s2 > s1) winnerName = nameB;
-        else return alert("A partida está empatada! Defina o vencedor do último set ou ponto.");
+        if (s1 > s2) winnerName = nameA;
+        else if (s2 > s1) winnerName = nameB;
+        else return alert("A partida está empatada! Defina o vencedor no placar antes de encerrar.");
       }
 
-      // Adiciona a vitória automaticamente ao Ranking
+      // Adiciona a vitória automaticamente no ranking
       let winnerObj = teams.find(t => t.name === winnerName);
-      if(winnerObj) {
+      if (winnerObj) {
         winnerObj.wins++;
         localStorage.setItem('teams', JSON.stringify(teams));
       }
 
-      alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\n1 Vitória adicionada ao Ranking com sucesso!`);
-
+      alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\n1 Vitória somada no Ranking com sucesso!`);
       resetMatch();
     }
 
     // Cronômetro
-    function startTimer() { if(!timerInterval) timerInterval = setInterval(()=>{secs++; document.getElementById('timer').innerText = new Date(secs*1000).toISOString().substr(14,5);}, 1000); }
-    function pauseTimer() { clearInterval(timerInterval); timerInterval=null; }
-    function resetTimer() { pauseTimer(); secs=0; document.getElementById('timer').innerText="00:00"; }
-    
-    function resetMatch() { 
+    function startTimer() {
+      if (!timerInterval) {
+        timerInterval = setInterval(() => {
+          secs++;
+          document.getElementById('timer').innerText = new Date(secs * 1000).toISOString().substr(14, 5);
+        }, 1000);
+      }
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      secs = 0;
+      document.getElementById('timer').innerText = "00:00";
+    }
+
+    function resetMatch() {
       s1 = 0; s2 = 0; sets1 = 0; sets2 = 0;
       updateScoreboard();
-      resetTimer(); 
+      resetTimer();
     }
 
     // Gestão de Duplas
     function saveTeam() {
-        let name = document.getElementById('timeName').value;
-        let p1 = document.getElementById('p1Name').value;
-        let p2 = document.getElementById('p2Name').value;
-        let editId = document.getElementById('edit-id').value;
+      let name = document.getElementById('timeName').value;
+      let p1 = document.getElementById('p1Name').value;
+      let p2 = document.getElementById('p2Name').value;
+      let editId = document.getElementById('edit-id').value;
 
-        if(!name) return alert("Digite o nome da dupla!");
+      if (!name) return alert("Digite o nome da dupla!");
 
-        if(editId) {
-            let t = teams.find(item => item.id == editId);
-            if(t) { t.name = name; t.p1 = p1; t.p2 = p2; }
-        } else {
-            teams.push({id: Date.now(), name, p1, p2, wins: 0});
-        }
+      if (editId) {
+        let t = teams.find(item => item.id == editId);
+        if (t) { t.name = name; t.p1 = p1; t.p2 = p2; }
+      } else {
+        teams.push({ id: Date.now(), name, p1, p2, wins: 0 });
+      }
 
-        localStorage.setItem('teams', JSON.stringify(teams));
-        resetForm();
-        renderTeams();
-        populateTeamSelectors();
+      localStorage.setItem('teams', JSON.stringify(teams));
+      resetForm();
+      renderTeams();
+      populateTeamSelectors();
     }
 
     function resetForm() {
-        document.getElementById('edit-id').value = '';
-        document.getElementById('timeName').value = '';
-        document.getElementById('p1Name').value = '';
-        document.getElementById('p2Name').value = '';
+      document.getElementById('edit-id').value = '';
+      document.getElementById('timeName').value = '';
+      document.getElementById('p1Name').value = '';
+      document.getElementById('p2Name').value = '';
     }
 
     function editTeam(id) {
-        let t = teams.find(item => item.id == id);
-        if(t) {
-            document.getElementById('edit-id').value = t.id;
-            document.getElementById('timeName').value = t.name;
-            document.getElementById('p1Name').value = t.p1 || '';
-            document.getElementById('p2Name').value = t.p2 || '';
-            show('tab-times');
-        }
+      let t = teams.find(item => item.id == id);
+      if (t) {
+        document.getElementById('edit-id').value = t.id;
+        document.getElementById('timeName').value = t.name;
+        document.getElementById('p1Name').value = t.p1 || '';
+        document.getElementById('p2Name').value = t.p2 || '';
+        show('tab-times');
+      }
     }
 
     function deleteTeam(id) {
-        if(confirm("Apagar esta dupla?")) {
-            teams = teams.filter(item => item.id != id);
-            localStorage.setItem('teams', JSON.stringify(teams));
-            renderTeams();
-            populateTeamSelectors();
-        }
+      if (confirm("Deseja apagar esta dupla?")) {
+        teams = teams.filter(item => item.id != id);
+        localStorage.setItem('teams', JSON.stringify(teams));
+        renderTeams();
+        populateTeamSelectors();
+      }
     }
 
     function renderTeams() {
-        let h = "";
-        teams.forEach(t => {
-            h += `<div style="border-bottom:1px solid #334155; padding:8px 0; text-align:left;">
-                    <strong>${t.name}</strong> (${t.p1 || '-'} & ${t.p2 || '-'})<br>
-                    <small>Vitórias no Ranking: ${t.wins}</small><br>
-                    <button onclick="editTeam(${t.id})" style="background:#3b82f6; color:white;">Editar</button>
-                    <button onclick="deleteTeam(${t.id})" style="background:var(--danger); color:white;">Excluir</button>
-                  </div>`;
-        });
-        document.getElementById('teamsList').innerHTML = h || "<p>Nenhuma dupla cadastrada.</p>";
+      let html = "";
+      teams.forEach(t => {
+        html += `
+          <div style="border-bottom: 1px solid #334155; padding: 10px 0; text-align: left;">
+            <strong>${t.name}</strong> (${t.p1 || '-'} & ${t.p2 || '-'})<br>
+            <small>Vitórias no Ranking: ${t.wins}</small><br>
+            <button onclick="editTeam(${t.id})" style="background: #3b82f6; color: white;">Editar</button>
+            <button onclick="deleteTeam(${t.id})" style="background: var(--danger); color: white;">Excluir</button>
+          </div>`;
+      });
+      document.getElementById('teamsList').innerHTML = html || "<p>Nenhuma dupla cadastrada.</p>";
     }
 
     function renderRanking() {
-        let sorted = [...teams].sort((a,b) => b.wins - a.wins);
-        let h = "<tr><th>Pos</th><th>Dupla</th><th>Vitórias</th></tr>";
-        sorted.forEach((t, i) => {
-            h += `<tr><td>${i+1}º</td><td><strong>${t.name}</strong></td><td>${t.wins}</td></tr>`;
-        });
-        document.getElementById('rankingTable').innerHTML = h;
+      let sorted = [...teams].sort((a, b) => b.wins - a.wins);
+      let html = "<tr><th>Pos</th><th>Dupla</th><th>Vitórias</th></tr>";
+      sorted.forEach((t, i) => {
+        html += `<tr><td>${i + 1}º</td><td><strong>${t.name}</strong></td><td>${t.wins}</td></tr>`;
+      });
+      document.getElementById('rankingTable').innerHTML = html;
     }
 
-    // Previsão do Tempo
+    // Previsão do Tempo Detalhada
     async function getWeather() {
-        const key = "4b84b68fcde6831bfc64ed1767626433";
-        if(key === "SUA_API_KEY_AQUI") return alert("Insira sua API Key do OpenWeather no código.");
-        navigator.geolocation.getCurrentPosition(async (p) => {
-            const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${p.coords.latitude}&lon=${p.coords.longitude}&appid=${key}&units=metric&lang=pt_br`);
+      const key = "4b84b68fcde6831bfc64ed1767626433"; // Cole sua chave OpenWeather entre as aspas
+      const display = document.getElementById('weather-display');
+
+      if (key === "SUA_API_KEY_AQUI") {
+        return alert("Por favor, cole sua chave do OpenWeather na linha 'const key' no código.");
+      }
+
+      display.innerHTML = "📍 Buscando localização do dispositivo...";
+
+      if (!navigator.geolocation) {
+        display.innerHTML = "Geolocalização não é suportada pelo seu navegador.";
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric&lang=pt_br`);
             const data = await res.json();
-            document.getElementById('weather').innerHTML = `<h3>${data.name}</h3><p>${data.main.temp}°C - ${data.weather[0].description}</p>`;
-        });
+
+            if (data.cod !== 200) {
+              display.innerHTML = "Erro ao buscar dados do tempo. Verifique sua chave de API.";
+              return;
+            }
+
+            display.innerHTML = `
+              <div style="font-size: 1.4rem; font-weight: bold;">${data.name}</div>
+              <div style="font-size: 2.8rem; font-weight: bold; color: var(--accent); margin: 5px 0;">${Math.round(data.main.temp)}°C</div>
+              <div style="text-transform: capitalize; font-size: 1.1rem; margin-bottom: 10px;">${data.weather[0].description}</div>
+              <div class="grid-weather">
+                <div class="weather-item"><strong>Sensação</strong><br>${Math.round(data.main.feels_like)}°C</div>
+                <div class="weather-item"><strong>Umidade</strong><br>${data.main.humidity}%</div>
+                <div class="weather-item"><strong>Vento</strong><br>${data.wind.speed} m/s</div>
+                <div class="weather-item"><strong>Mín / Máx</strong><br>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</div>
+              </div>
+            `;
+          } catch (e) {
+            display.innerHTML = "Erro de conexão ao buscar clima.";
+          }
+        },
+        () => {
+          display.innerHTML = "Permissão de localização negada pelo dispositivo.";
+        }
+      );
     }
 
+    // Inicialização do app
     renderTeams();
     populateTeamSelectors();
   </script>

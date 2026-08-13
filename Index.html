@@ -202,6 +202,50 @@ tr:last-child td { border-bottom: none; }
 .rank-1 .rank-badge { background: #facc15; color: #78350f; } 
 .rank-2 .rank-badge { background: #cbd5e1; color: #334155; } 
 .rank-3 .rank-badge { background: #f97316; color: #fff; } 
+
+/* ESTILOS DA ABA DICAS & MÍDIA */
+.media-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 12px 0;
+  background: #000;
+}
+.media-container iframe, .media-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+.tip-item {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.tip-item h4 {
+  margin: 0 0 6px 0;
+  color: #0369a1;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tip-item p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
 nav { 
   position: fixed; 
   bottom: 16px; 
@@ -357,15 +401,55 @@ nav button.active-nav::after {
   </div> 
 </div> 
 
-<!-- ABA: DICAS --> 
+<!-- ABA: DICAS & MÍDIA --> 
 <div id="tab-dicas" class="tab-content"> 
+  <!-- Central Mídia -->
   <div class="card"> 
-    <h3>💡 Dicas & Táticas de Arena</h3> 
-    <div style="text-align: left; font-size: 0.95rem; line-height: 1.6; color: var(--text-muted);"> 
-      <p>🏐 <strong>Comunicação:</strong> Chame a bola sempre ("Minha!") para evitar colisões na quadra.</p> 
-      <p>💨 <strong>Ajuste ao Vento:</strong> Em dias ventosos, prefira saques flutuantes e passes mais baixos e controlados.</p> 
-      <p>☀️ <strong>Visibilidade:</strong> Use óculos de sol com proteção UV e ajuste a recepção para cobrir o sol.</p> 
-    </div> 
+    <h3>🎬 Central Visual & Vídeos</h3> 
+    <div class="media-container" id="mediaBox">
+      <!-- Mídia renderizada por JS -->
+    </div>
+    <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;">
+      <button onclick="loadMedia('vid1')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(2, 132, 199, 0.15); color: #0284c7;">🎥 Vídeo: Saque</button>
+      <button onclick="loadMedia('vid2')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(2, 132, 199, 0.15); color: #0284c7;">🎥 Vídeo: Ataque</button>
+      <button onclick="loadMedia('img1')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(245, 158, 11, 0.15); color: #b45309;">🖼️ Img: Bloqueio</button>
+      <button onclick="loadMedia('img2')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(245, 158, 11, 0.15); color: #b45309;">🖼️ Img: Posicionamento</button>
+    </div>
+  </div>
+
+  <!-- Lista Completa de Dicas -->
+  <div class="card"> 
+    <h3>💡 Táticas & Dicas Avançadas</h3> 
+    
+    <div class="tip-item">
+      <h4>🗣️ Comunicação em Quadra</h4>
+      <p>Chame a bola sempre pelo nome ou gritando "Minha!" no momento da decisão para evitar colisões e saques caindo no meio da dupla.</p>
+    </div>
+
+    <div class="tip-item">
+      <h4>💨 Leitura e Ajuste ao Vento</h4>
+      <p>A favor do vento: prefira ataques com margem de segurança e saques flutuantes. Contra o vento: force o saque e acelere o passe baixo.</p>
+    </div>
+
+    <div class="tip-item">
+      <h4>🏐 Domínio da Recepção</h4>
+      <p>Na areia, não tente dar passos rápidos após o saque adversário. Firme os pés, flexione os joelhos e direcione o quadril para a rede.</p>
+    </div>
+
+    <div class="tip-item">
+      <h4>🤚 Sinais de Mão na Defesa</h4>
+      <p>1 Dedo estendido = Bloqueia a paralela. 2 Dedos estendidos = Bloqueia a diagonal. Mão aberta = Bloqueia a bola no meio.</p>
+    </div>
+
+    <div class="tip-item">
+      <h4>☀️ Posicionamento em Relação ao Sol</h4>
+      <p>Ajuste o ângulo de recepção para não olhar diretamente para o sol ao levantar a cabeça. Use óculos esportivos com proteção UV.</p>
+    </div>
+
+    <div class="tip-item">
+      <h4>🎯 Estratégia de Saque</h4>
+      <p>Busque o jogador mais cansado ou o recebedor que está cobrindo a maior parte da quadra. Varie com saques curtos de largada (poking).</p>
+    </div>
   </div> 
 </div> 
 
@@ -439,7 +523,22 @@ function show(id, btnEl) {
   } 
   if (id === 'tab-ranking') renderRanking(); 
   if (id === 'tab-placar') populateTeamSelectors(); 
+  if (id === 'tab-dicas') loadMedia('vid1');
 } 
+
+/* Mídia da Aba Dicas */
+function loadMedia(type) {
+  const box = document.getElementById('mediaBox');
+  if (type === 'vid1') {
+    box.innerHTML = `<iframe src="https://www.youtube.com/embed/9G6xPInL_A0?rel=0" allowfullscreen></iframe>`;
+  } else if (type === 'vid2') {
+    box.innerHTML = `<iframe src="https://www.youtube.com/embed/S2pS3H0jH80?rel=0" allowfullscreen></iframe>`;
+  } else if (type === 'img1') {
+    box.innerHTML = `<img src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=800&q=80" alt="Bloqueio Vôlei">`;
+  } else if (type === 'img2') {
+    box.innerHTML = `<img src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=800&q=80" alt="Quadra Vôlei de Praia">`;
+  }
+}
 
 function populateTeamSelectors() { 
   const selectA = document.getElementById('selectTeamA'); 
@@ -622,7 +721,6 @@ function renderTeams() {
   document.getElementById('teamsList').innerHTML = html || "<p style='color: var(--text-muted); text-align: center;'>Nenhuma dupla cadastrada.</p>"; 
 } 
 
-/* FUNÇÃO DO SORTEIO DE DUPLAS */
 function drawnTeams() {
   const input = document.getElementById('playersInput').value;
   const players = input.split('\n').map(p => p.trim()).filter(p => p.length > 0);
@@ -631,7 +729,6 @@ function drawnTeams() {
     return alert("Insira pelo menos 2 jogadores para realizar o sorteio!");
   }
 
-  // Embaralhar jogadores (Fisher-Yates)
   for (let i = players.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [players[i], players[j]] = [players[j], players[i]];
@@ -654,7 +751,6 @@ function drawnTeams() {
         </div>`;
       pairCount++;
     } else {
-      // Jogador sobressalente se for número ímpar
       html += `
         <div style="background: rgba(245, 158, 11, 0.15); padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(245, 158, 11, 0.3); color: #b45309;">
           <strong>⚠️ Sobrou sem dupla:</strong> ${players[i]}

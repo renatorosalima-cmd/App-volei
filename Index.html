@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#38bdf8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Nosso Vôlei</title> 
+<title>Nosso volei</title> 
 <style> 
 :root { 
   --bg-sky: #38bdf8; 
@@ -178,12 +178,12 @@ button:active { transform: scale(0.96); }
   border: 2px solid #ffffff; 
 } 
 .court-svg { width: 100%; height: 200px; display: block; } 
-.anim-cloud-slow { animation: moveCloud 22s linear infinite; } 
-.anim-cloud-fast { animation: moveCloud 14s linear infinite; } 
+.anim-cloud-slow { animation: moveCloud 28s linear infinite; } 
+.anim-cloud-fast { animation: moveCloud 18s linear infinite; } 
 .anim-rain-drop { animation: fallRain 0.8s linear infinite; } 
 .anim-sun-pulse { transform-origin: center; animation: pulseSun 4s ease-in-out infinite alternate; } 
 .anim-wind-line { animation: blowWind 2s ease-in-out infinite; } 
-@keyframes moveCloud { 0% { transform: translateX(-150px); } 100% { transform: translateX(450px); } } 
+@keyframes moveCloud { 0% { transform: translateX(-180px); } 100% { transform: translateX(450px); } } 
 @keyframes fallRain { 0% { transform: translate(0, 0); opacity: 1; } 100% { transform: translate(-20px, 60px); opacity: 0.1; } } 
 @keyframes pulseSun { 0% { transform: scale(0.95); opacity: 0.85; } 100% { transform: scale(1.08); opacity: 1; } } 
 @keyframes blowWind { 0% { transform: translateX(-100px); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateX(400px); opacity: 0; } } 
@@ -683,7 +683,6 @@ function finishMatch() {
     localStorage.setItem('teams', JSON.stringify(teams)); 
   } 
 
-  // Grava no Histórico
   const matchData = {
     date: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
     teamA: nameA,
@@ -921,7 +920,7 @@ function resetRanking() {
   } 
 } 
 
-// SISTEMA DE PREVISÃO DO TEMPO 
+// PREVISÃO DO TEMPO COM DETECÇÃO NOTURNA E NUVENS REALISTAS
 const key = "4b84b68fcde6831bfc64ed1767626433";
 
 async function getWeather() { 
@@ -977,54 +976,97 @@ function renderWeatherData(data, stateHint = "") {
   const mainWeather = data.weather[0].main.toLowerCase(); 
   const windSpeed = data.wind.speed; 
   const temp = data.main.temp; 
+  
+  // Detecção Noturna via Timestamp Unix (Sunrise/Sunset) da API
+  const now = data.dt || Math.floor(Date.now() / 1000);
+  const isNight = data.sys && (now < data.sys.sunrise || now > data.sys.sunset);
+
   let alertMsg = ""; 
   let alertStyle = ""; 
   let cStop1 = "#38bdf8"; 
   let cStop2 = "#bae6fd"; 
   let weatherAnimationElements = ""; 
-  let sunElement = ` 
+
+  // Astro (Sol ou Lua)
+  let astroElement = isNight ? `
+    <g class="anim-sun-pulse">
+      <circle cx="330" cy="35" r="18" fill="#fef08a" />
+      <circle cx="338" cy="30" r="15" fill="#0f172a" />
+      <!-- Estrelas no céu noturno -->
+      <circle cx="50" cy="20" r="1.5" fill="#ffffff" opacity="0.8"/>
+      <circle cx="120" cy="40" r="2" fill="#ffffff" opacity="0.9"/>
+      <circle cx="220" cy="15" r="1.5" fill="#ffffff" opacity="0.7"/>
+      <circle cx="280" cy="45" r="1.2" fill="#ffffff" opacity="0.8"/>
+    </g>` : `
     <g class="anim-sun-pulse"> 
       <circle cx="330" cy="40" r="26" fill="#facc15" /> 
       <circle cx="330" cy="40" r="32" fill="#fef08a" opacity="0.4" /> 
-    </g> 
-  `; 
+    </g>`;
+
+  // Nuvens Realistas SVG (Organic Cloud Paths)
+  const realisticCloudsDay = `
+    <g class="anim-cloud-slow" style="filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));">
+      <path d="M 20,45 C 20,32 32,22 46,22 C 50,14 62,8 74,12 C 84,6 98,10 104,20 C 114,18 126,24 128,34 C 136,36 142,44 140,52 C 140,60 130,65 120,65 L 25,65 C 12,65 5,55 20,45 Z" fill="#ffffff" opacity="0.92"/>
+      <path d="M 35,50 C 40,40 55,38 65,45 C 75,35 95,38 100,48 C 110,48 118,55 115,62 L 30,62 Z" fill="#f1f5f9" opacity="0.6"/>
+    </g>
+    <g class="anim-cloud-fast" style="filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.08));">
+      <path d="M 180,38 C 180,28 190,20 202,20 C 206,12 216,8 226,11 C 234,6 246,9 251,18 C 260,16 270,22 272,30 C 279,32 284,38 282,45 C 282,52 273,56 265,56 L 185,56 C 174,56 168,48 180,38 Z" fill="#ffffff" opacity="0.85"/>
+    </g>`;
+
+  const realisticCloudsNight = `
+    <g class="anim-cloud-slow" style="filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.4));">
+      <path d="M 20,45 C 20,32 32,22 46,22 C 50,14 62,8 74,12 C 84,6 98,10 104,20 C 114,18 126,24 128,34 C 136,36 142,44 140,52 C 140,60 130,65 120,65 L 25,65 C 12,65 5,55 20,45 Z" fill="#475569" opacity="0.85"/>
+      <path d="M 35,50 C 40,40 55,38 65,45 C 75,35 95,38 100,48 C 110,48 118,55 115,62 L 30,62 Z" fill="#334155" opacity="0.7"/>
+    </g>
+    <g class="anim-cloud-fast" style="filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.3));">
+      <path d="M 180,38 C 180,28 190,20 202,20 C 206,12 216,8 226,11 C 234,6 246,9 251,18 C 260,16 270,22 272,30 C 279,32 284,38 282,45 C 282,52 273,56 265,56 L 185,56 C 174,56 168,48 180,38 Z" fill="#64748b" opacity="0.75"/>
+    </g>`;
+
+  // Configuração visual de Céu Dia vs Noite
+  if (isNight) {
+    cStop1 = "#0f172a";
+    cStop2 = "#1e293b";
+  } else {
+    cStop1 = "#38bdf8";
+    cStop2 = "#bae6fd";
+  }
+
+  // Lógica de Mensagens e Clima Noturno/Diurno
   if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) { 
-    alertMsg = "🌧️ Chuva na área! Cuidado com a quadra molhada ☔"; 
+    alertMsg = isNight ? "🌧️ Noite com chuva! Cuidado com a quadra molhada ☔" : "🌧️ Chuva na área! Cuidado com a quadra molhada ☔"; 
     alertStyle = "background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3);"; 
-    cStop1 = "#475569"; 
-    cStop2 = "#94a3b8"; 
-    weatherAnimationElements = ` 
-      <g class="anim-cloud-slow"><path d="M 10 35 Q 25 15 50 20 Q 75 10 100 25 Q 120 25 125 40 Z" fill="#64748b" opacity="0.95"/></g> 
-      <g class="anim-cloud-fast"><path d="M 180 30 Q 195 10 220 15 Q 245 5 270 20 Q 290 20 295 35 Z" fill="#475569" opacity="0.9"/></g> 
+    cStop1 = "#1e293b"; 
+    cStop2 = "#475569"; 
+    weatherAnimationElements = (isNight ? realisticCloudsNight : realisticCloudsDay) + ` 
       <g class="anim-rain-drop"> 
         <line x1="60" y1="50" x2="50" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
         <line x1="110" y1="55" x2="100" y2="75" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
         <line x1="210" y1="45" x2="200" y2="65" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
         <line x1="270" y1="50" x2="260" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="330" y1="40" x2="320" y2="60" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
       </g> `; 
   } else if (mainWeather.includes("clouds")) { 
-    alertMsg = "☁️ Tempo nublado! Ótimo para jogar sem o sol queimando."; 
-    alertStyle = "background: rgba(100, 116, 139, 0.15); color: #334155; border: 1px solid rgba(100, 116, 139, 0.3);"; 
-    cStop1 = "#64748b"; 
-    cStop2 = "#cbd5e1"; 
-    weatherAnimationElements = ` 
-      <g class="anim-cloud-slow"><path d="M -20 30 Q 0 10 30 15 Q 55 5 80 20 Q 100 20 105 35 Z" fill="#ffffff" opacity="0.85"/></g> 
-      <g class="anim-cloud-fast"><path d="M 150 25 Q 170 5 195 10 Q 220 0 245 15 Q 265 15 270 30 Z" fill="#f1f5f9" opacity="0.95"/></g> `; 
+    alertMsg = isNight ? "🌙 Noite nublada! Clima agradável para jogar sob os refletores." : "☁️ Tempo nublado! Ótimo para jogar sem o sol queimando."; 
+    alertStyle = isNight ? "background: rgba(30, 41, 59, 0.4); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);" : "background: rgba(100, 116, 139, 0.15); color: #334155; border: 1px solid rgba(100, 116, 139, 0.3);"; 
+    weatherAnimationElements = astroElement + (isNight ? realisticCloudsNight : realisticCloudsDay); 
   } else if (windSpeed > 5) { 
-    alertMsg = "💨 Vento forte! Bola pode mudar de trajeto no ar."; 
+    alertMsg = "💨 Vento forte! A bola pode mudar de trajeto no ar."; 
     alertStyle = "background: rgba(245, 158, 11, 0.15); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.3);"; 
-    weatherAnimationElements = sunElement + ` 
+    weatherAnimationElements = astroElement + ` 
       <g class="anim-wind-line"> 
         <path d="M 10 30 Q 60 20 120 35 T 200 25" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8" stroke-dasharray="8"/> 
         <path d="M 50 50 Q 110 40 180 55 T 260 45" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.7" stroke-dasharray="6"/> 
       </g> `; 
   } else { 
-    alertMsg = temp >= 30 ? "🔥 Dia quente! Beba bastante água na arena ☀️" : "☀️ Dia de sol perfeito para o vôlei de praia!"; 
-    alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.15); color: #c2410c; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);"; 
-    weatherAnimationElements = sunElement + ` 
-      <g class="anim-cloud-slow"><path d="M 20 25 Q 35 10 55 15 Q 75 5 95 20 Q 110 20 115 30 Z" fill="#ffffff" opacity="0.7"/></g> `; 
+    if (isNight) {
+      alertMsg = "🌙 Noite limpa e agradável! Ótimo momento para uma partida noturna.";
+      alertStyle = "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);";
+    } else {
+      alertMsg = temp >= 30 ? "🔥 Dia quente! Beba bastante água na arena ☀️" : "☀️ Dia de sol perfeito para o vôlei de praia!"; 
+      alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.15); color: #c2410c; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);"; 
+    }
+    weatherAnimationElements = astroElement + (isNight ? realisticCloudsNight : realisticCloudsDay); 
   } 
+
   let locationText = data.name + (stateHint ? `, ${stateHint}` : '') + ` - ${data.sys.country}`; 
   display.innerHTML = ` 
     <div style="font-size: 1.2rem; font-weight: 800; color: #0369a1;">${locationText}</div> 
@@ -1038,14 +1080,14 @@ function renderWeatherData(data, stateHint = "") {
             <stop offset="100%" stop-color="${cStop2}" /> 
           </linearGradient> 
           <linearGradient id="sandGrad" x1="0%" y1="0%" x2="0%" y2="100%"> 
-            <stop offset="0%" stop-color="#f59e0b" /> 
-            <stop offset="100%" stop-color="#d97706" /> 
+            <stop offset="0%" stop-color="${isNight ? '#b45309' : '#f59e0b'}" /> 
+            <stop offset="100%" stop-color="${isNight ? '#78350f' : '#d97706'}" /> 
           </linearGradient> 
         </defs> 
         <rect width="400" height="130" fill="url(#skyGrad)"/> 
         ${weatherAnimationElements} 
         <rect y="125" width="400" height="75" fill="url(#sandGrad)"/> 
-        <polygon points="30,190 370,190 320,135 80,135" fill="#eab308" stroke="#fef08a" stroke-width="3" /> 
+        <polygon points="30,190 370,190 320,135 80,135" fill="${isNight ? '#ca8a04' : '#eab308'}" stroke="#fef08a" stroke-width="3" /> 
         <line x1="200" y1="135" x2="200" y2="190" stroke="#ffffff" stroke-width="2" stroke-dasharray="4"/> 
         <line x1="75" y1="85" x2="75" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/> 
         <line x1="325" y1="85" x2="325" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/> 

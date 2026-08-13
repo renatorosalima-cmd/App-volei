@@ -1,865 +1,819 @@
-<!DOCTYPE html> 
-<html lang="pt-BR"> 
-<head> 
-<meta charset="UTF-8"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-<title>App Vôlei Pro</title> 
-<style> 
-:root { 
-  --bg-sky: #38bdf8; 
-  --bg-sand: #fef08a; 
-  --card-bg: rgba(255, 255, 255, 0.82); 
-  --card-border: rgba(255, 255, 255, 0.6); 
-  --accent: #d97706; 
-  --accent-glow: rgba(217, 119, 6, 0.25); 
-  --primary: #0284c7; 
-  --text: #0f172a; 
-  --text-muted: #475569; 
-  --danger: #ef4444; 
-  --success: #10b981; 
-} 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; } 
-body { 
-  background: linear-gradient(180deg, #7dd3fc 0%, #fef08a 60%, #fde047 100%); 
-  background-attachment: fixed; 
-  color: var(--text); 
-  padding-bottom: 100px; 
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-  margin: 0; 
-  min-height: 100vh; 
-} 
-.app-header { 
-  text-align: center; 
-  padding: 18px 16px 10px; 
-  font-size: 1.3rem; 
-  font-weight: 900; 
-  letter-spacing: 0.5px; 
-  color: #0369a1; 
-  text-transform: uppercase; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 8px; 
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); 
-} 
-.tab-content { 
-  display: none; 
-  padding: 0 1rem 1rem; 
-  max-width: 500px; 
-  margin: 0 auto; 
-  animation: fadeIn 0.25s ease-out; 
-} 
-.tab-content.active { display: block; } 
-@keyframes fadeIn { 
-  from { opacity: 0; transform: translateY(6px); } 
-  to { opacity: 1; transform: translateY(0); } 
-} 
-.card { 
-  background: var(--card-bg); 
-  backdrop-filter: blur(16px); 
-  -webkit-backdrop-filter: blur(16px); 
-  border: 1px solid var(--card-border); 
-  padding: 1.25rem; 
-  border-radius: 20px; 
-  margin-bottom: 1.25rem; 
-  text-align: center; 
-  box-shadow: 0 10px 25px -5px rgba(180, 83, 9, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.05); 
-} 
-.card h3 { 
-  margin-top: 0; 
-  margin-bottom: 1rem; 
-  font-size: 1.15rem; 
-  font-weight: 800; 
-  color: #0c4a6e; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 6px; 
-} 
-input, select, textarea { 
-  width: 100%; 
-  padding: 14px; 
-  margin: 6px 0 12px; 
-  border-radius: 12px; 
-  border: 1px solid rgba(2, 132, 199, 0.2); 
-  background: rgba(255, 255, 255, 0.9); 
-  color: var(--text); 
-  font-size: 0.95rem; 
-  font-weight: 600; 
-  outline: none; 
-  transition: all 0.2s ease; 
-} 
-textarea { resize: vertical; min-height: 80px; font-family: inherit; }
-input:focus, select:focus, textarea:focus { 
-  border-color: var(--primary); 
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25); 
-} 
-.search-inputs { display: flex; gap: 8px; } 
-.search-inputs input { flex: 3; } 
-.search-inputs select { flex: 1; } 
-button { 
-  padding: 12px 18px; 
-  border-radius: 12px; 
-  border: none; 
-  cursor: pointer; 
-  font-weight: 800; 
-  margin: 4px; 
-  font-size: 0.95rem; 
-  transition: transform 0.1s ease, box-shadow 0.2s ease; 
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 6px; 
-} 
-button:active { transform: scale(0.97); } 
-.btn-main { 
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); 
-  color: white; 
-  width: 100%; 
-  padding: 14px; 
-  font-size: 1rem; 
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); 
-} 
-.btn-add { 
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-  color: white; 
-  padding: 12px 20px; 
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); 
-} 
-.btn-sub { 
-  background: rgba(15, 23, 42, 0.06); 
-  color: var(--text); 
-  padding: 12px 16px; 
-  border: 1px solid rgba(0, 0, 0, 0.08); 
-} 
-.btn-action { 
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); 
-  color: white; 
-  padding: 12px; 
-  margin-top: 8px; 
-  width: 100%; 
-  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); 
-} 
-.team-select-container { display: flex; gap: 12px; justify-content: space-between; } 
-.team-select-box { flex: 1; text-align: left; } 
-.team-select-box label { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-left: 2px; } 
-.score-display-box { 
-  background: rgba(255, 255, 255, 0.65); 
-  border-radius: 16px; 
-  padding: 12px; 
-  margin-bottom: 12px; 
-  border: 1px solid rgba(255, 255, 255, 0.8); 
-} 
-.team-name-title { font-size: 1.15rem; font-weight: 800; color: #0369a1; } 
-.score-number { font-size: 3.2rem; font-weight: 900; color: #d97706; line-height: 1; margin: 6px 0; text-shadow: 0 2px 4px rgba(217, 119, 6, 0.15); } 
-.score-control { display: flex; justify-content: center; align-items: center; gap: 10px; } 
-.divider { height: 1px; background: rgba(0, 0, 0, 0.08); margin: 16px 0; } 
-.grid-weather { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; } 
-.weather-item { 
-  background: rgba(255, 255, 255, 0.6); 
-  padding: 12px; 
-  border-radius: 12px; 
-  border: 1px solid rgba(255, 255, 255, 0.8); 
-  font-size: 0.9rem; 
-  color: var(--text-muted); 
-} 
-.weather-item strong { color: var(--text); font-size: 1.05rem; display: block; margin-top: 2px; } 
-.volley-alert { margin-top: 15px; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; line-height: 1.4; } 
-.court-illustration-container { 
-  margin-top: 15px; 
-  border-radius: 16px; 
-  overflow: hidden; 
-  background: #7dd3fc; 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
-  position: relative; 
-  border: 2px solid #ffffff; 
-} 
-.court-svg { width: 100%; height: 200px; display: block; } 
-.anim-cloud-slow { animation: moveCloud 22s linear infinite; } 
-.anim-cloud-fast { animation: moveCloud 14s linear infinite; } 
-.anim-rain-drop { animation: fallRain 0.8s linear infinite; } 
-.anim-sun-pulse { transform-origin: center; animation: pulseSun 4s ease-in-out infinite alternate; } 
-.anim-wind-line { animation: blowWind 2s ease-in-out infinite; } 
-@keyframes moveCloud { 0% { transform: translateX(-150px); } 100% { transform: translateX(450px); } } 
-@keyframes fallRain { 0% { transform: translate(0, 0); opacity: 1; } 100% { transform: translate(-20px, 60px); opacity: 0.1; } } 
-@keyframes pulseSun { 0% { transform: scale(0.95); opacity: 0.85; } 100% { transform: scale(1.08); opacity: 1; } } 
-@keyframes blowWind { 0% { transform: translateX(-100px); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateX(400px); opacity: 0; } } 
-table { width: 100%; border-collapse: collapse; margin-top: 10px; } 
-th { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px; border-bottom: 2px solid rgba(0, 0, 0, 0.06); } 
-td { padding: 14px 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-size: 0.95rem; } 
-tr:last-child td { border-bottom: none; } 
-.rank-badge { 
-  display: inline-block; 
-  width: 26px; 
-  height: 26px; 
-  line-height: 26px; 
-  border-radius: 50%; 
-  background: rgba(0, 0, 0, 0.08); 
-  font-weight: 800; 
-  font-size: 0.85rem; 
-  color: var(--text); 
-} 
-.rank-1 .rank-badge { background: #facc15; color: #78350f; } 
-.rank-2 .rank-badge { background: #cbd5e1; color: #334155; } 
-.rank-3 .rank-badge { background: #f97316; color: #fff; } 
-nav { 
-  position: fixed; 
-  bottom: 16px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  width: calc(100% - 32px); 
-  max-width: 450px; 
-  background: rgba(255, 255, 255, 0.88); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  display: flex; 
-  justify-content: space-around; 
-  padding: 8px 12px; 
-  border-radius: 24px; 
-  border: 1px solid rgba(255, 255, 255, 0.9); 
-  box-shadow: 0 12px 30px rgba(180, 83, 9, 0.18); 
-  z-index: 1000; 
-} 
-nav button { 
-  background: transparent; 
-  color: #64748b; 
-  font-size: 1.2rem; 
-  margin: 0; 
-  padding: 10px; 
-  border-radius: 16px; 
-  transition: all 0.25s ease; 
-  position: relative; 
-  width: 46px; 
-  height: 46px; 
-} 
-nav button.active-nav { 
-  color: #0284c7; 
-  background: rgba(2, 132, 199, 0.12); 
-  transform: translateY(-2px); 
-} 
-nav button.active-nav::after { 
-  content: ''; 
-  position: absolute; 
-  bottom: 4px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  width: 5px; 
-  height: 5px; 
-  background: #0284c7; 
-  border-radius: 50%; 
-} 
-</style> 
-</head> 
-<body> 
-
-<div class="app-header"> 🏐 Vôlei Arena Pro </div> 
-
-<!-- ABA: PLACAR --> 
-<div id="tab-placar" class="tab-content active"> 
-  <div class="card"> 
-    <h3>👥 Confronto</h3> 
-    <div class="team-select-container"> 
-      <div class="team-select-box"> 
-        <label>Time A (Esq)</label> 
-        <select id="selectTeamA" onchange="updateMatchTeams()"></select> 
-      </div> 
-      <div class="team-select-box"> 
-        <label>Time B (Dir)</label> 
-        <select id="selectTeamB" onchange="updateMatchTeams()"></select> 
-      </div> 
-    </div> 
-  </div> 
-
-  <!-- Cronômetro --> 
-  <div class="card"> 
-    <div id="timer" style="font-size: 2.8rem; font-weight: 900; font-family: monospace; letter-spacing: 2px; color: #0284c7; margin-bottom: 8px;">00:00</div> 
-    <div style="display: flex; justify-content: center; gap: 4px;"> 
-      <button onclick="startTimer()" style="background: rgba(16, 185, 129, 0.15); color: #047857;">▶ Iniciar</button> 
-      <button onclick="pauseTimer()" style="background: rgba(245, 158, 11, 0.15); color: #b45309;">⏸ Pausar</button> 
-      <button onclick="resetTimer()" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c;">⏹ Zerar</button> 
-    </div> 
-  </div> 
-
-  <!-- Placar Principal --> 
-  <div class="card"> 
-    <!-- TIME A --> 
-    <div class="score-display-box"> 
-      <div class="team-name-title"><span id="labelTeamA">Time A</span></div> 
-      <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sets Vencidos: <strong id="sets1" style="color: #0284c7;">0</strong></div> 
-      <div class="score-number" id="s1">0</div> 
-      <div class="score-control"> 
-        <button class="btn-sub" onclick="removePoint(1)">-1</button> 
-        <button class="btn-add" onclick="addPoint(1)">+1 Ponto</button> 
-      </div> 
-    </div> 
-
-    <div class="divider"></div> 
-
-    <!-- TIME B --> 
-    <div class="score-display-box"> 
-      <div class="team-name-title"><span id="labelTeamB">Time B</span></div> 
-      <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sets Vencidos: <strong id="sets2" style="color: #0284c7;">0</strong></div> 
-      <div class="score-number" id="s2">0</div> 
-      <div class="score-control"> 
-        <button class="btn-sub" onclick="removePoint(2)">-1</button> 
-        <button class="btn-add" onclick="addPoint(2)">+1 Ponto</button> 
-      </div> 
-    </div> 
-
-    <div class="divider"></div> 
-    <button class="btn-action" onclick="finishSet()">🏁 Finalizar Set</button> 
-    <button class="btn-action" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);" onclick="finishMatch()">🏆 Finalizar Partida</button> 
-    <br> 
-    <button onclick="resetMatch()" style="background: transparent; color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Reiniciar Placar</button> 
-  </div> 
-</div> 
-
-<!-- ABA: DUPLAS --> 
-<div id="tab-times" class="tab-content"> 
-  <div class="card"> 
-    <h3>➕ Cadastrar Dupla</h3> 
-    <input type="hidden" id="edit-id"> 
-    <input type="text" id="timeName" placeholder="Nome da Dupla (ex: Os Feras)"> 
-    <input type="text" id="p1Name" placeholder="Jogador 1"> 
-    <input type="text" id="p2Name" placeholder="Jogador 2"> 
-    <button class="btn-main" onclick="saveTeam()">Salvar Dupla</button> 
-  </div> 
-  <div class="card"> 
-    <h3>📋 Duplas Cadastradas</h3> 
-    <div id="teamsList" style="text-align: left;"></div> 
-  </div> 
-</div> 
-
-<!-- ABA: SORTEIO --> 
-<div id="tab-sorteio" class="tab-content"> 
-  <div class="card"> 
-    <h3>🎲 Sorteio de Duplas</h3> 
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;"> 
-      Digite um nome por linha para sortear duplas aleatórias. 
-    </p> 
-    <textarea id="playersInput" placeholder="Renato&#10;Carlos&#10;Lucas&#10;Marcos"></textarea> 
-    <button class="btn-main" onclick="drawnTeams()">🎰 Formar Duplas</button> 
-  </div> 
-
-  <div class="card" id="drawnResultsCard" style="display: none;"> 
-    <h3>✨ Duplas Sorteadas</h3> 
-    <div id="drawnResultsList" style="text-align: left; margin-bottom: 15px;"></div> 
-    <button class="btn-add" style="width: 100%;" onclick="saveDrawnTeams()">💾 Cadastrar Duplas no App</button> 
-  </div> 
-</div> 
-
-<!-- ABA: RANKING --> 
-<div id="tab-ranking" class="tab-content"> 
-  <div class="card"> 
-    <h3>🏆 Ranking de Vitórias</h3> 
-    <table id="rankingTable"></table> 
-    <button onclick="resetRanking()" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3); margin-top: 20px; width: 100%;">🔄 Zerar Vitórias do Ranking</button> 
-  </div> 
-</div> 
-
-<!-- ABA: DICAS --> 
-<div id="tab-dicas" class="tab-content"> 
-  <div class="card"> 
-    <h3>💡 Dicas & Táticas de Arena</h3> 
-    <div style="text-align: left; font-size: 0.95rem; line-height: 1.6; color: var(--text-muted);"> 
-      <p>🏐 <strong>Comunicação:</strong> Chame a bola sempre ("Minha!") para evitar colisões na quadra.</p> 
-      <p>💨 <strong>Ajuste ao Vento:</strong> Em dias ventosos, prefira saques flutuantes e passes mais baixos e controlados.</p> 
-      <p>☀️ <strong>Visibilidade:</strong> Use óculos de sol com proteção UV e ajuste a recepção para cobrir o sol.</p> 
-    </div> 
-  </div> 
-</div> 
-
-<!-- ABA: PREVISÃO DO TEMPO --> 
-<div id="tab-tempo" class="tab-content"> 
-  <div class="card"> 
-    <h3>☀️ Previsão do Tempo</h3> 
-    <div class="search-inputs"> 
-      <input type="text" id="cityName" placeholder="Cidade (ex: Carlópolis)"> 
-      <select id="stateSelect"> 
-        <option value="">UF</option> 
-        <option value="PR" selected>PR</option> 
-        <option value="SP">SP</option> 
-        <option value="SC">SC</option> 
-        <option value="RS">RS</option> 
-        <option value="MG">MG</option> 
-        <option value="RJ">RJ</option> 
-        <option value="AC">AC</option> 
-        <option value="AL">AL</option> 
-        <option value="AP">AP</option> 
-        <option value="AM">AM</option> 
-        <option value="BA">BA</option> 
-        <option value="CE">CE</option> 
-        <option value="DF">DF</option> 
-        <option value="ES">ES</option> 
-        <option value="GO">GO</option> 
-        <option value="MA">MA</option> 
-        <option value="MT">MT</option> 
-        <option value="MS">MS</option> 
-        <option value="PA">PA</option> 
-        <option value="PB">PB</option> 
-        <option value="PE">PE</option> 
-        <option value="PI">PI</option> 
-        <option value="RN">RN</option> 
-        <option value="RO">RO</option> 
-        <option value="RR">RR</option> 
-        <option value="SE">SE</option> 
-        <option value="TO">TO</option> 
-      </select> 
-    </div> 
-    <button onclick="getWeather()" class="btn-main">Buscar Previsão</button> 
-    <button onclick="getWeatherByGPS()" style="background: rgba(2, 132, 199, 0.1); color: #0284c7; width: 100%; margin-top: 6px;">📍 Minha Localização Atual</button> 
-    <div id="weather-display" style="margin-top: 15px;"></div> 
-  </div> 
-</div> 
-
-<!-- NAVEGAÇÃO INFERIOR DOCK --> 
-<nav id="appNav"> 
-  <button onclick="show('tab-placar', this)" class="active-nav">🏐</button> 
-  <button onclick="show('tab-times', this)">👥</button> 
-  <button onclick="show('tab-sorteio', this)">🎲</button> 
-  <button onclick="show('tab-ranking', this)">🏆</button> 
-  <button onclick="show('tab-dicas', this)">💡</button> 
-  <button onclick="show('tab-tempo', this)">☀️</button> 
-</nav> 
-
-<!-- LÓGICA DO APLICATIVO --> 
-<script> 
-let teams = JSON.parse(localStorage.getItem('teams')) || []; 
-let lastDrawnPairs = [];
-let s1 = 0, s2 = 0; 
-let sets1 = 0, sets2 = 0; 
-let timerInterval = null, secs = 0; 
-
-function show(id, btnEl) { 
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); 
-  document.getElementById(id).classList.add('active'); 
-  if (btnEl) { 
-    document.querySelectorAll('#appNav button').forEach(b => b.classList.remove('active-nav')); 
-    btnEl.classList.add('active-nav'); 
-  } 
-  if (id === 'tab-ranking') renderRanking(); 
-  if (id === 'tab-placar') populateTeamSelectors(); 
-} 
-
-function populateTeamSelectors() { 
-  const selectA = document.getElementById('selectTeamA'); 
-  const selectB = document.getElementById('selectTeamB'); 
-  const currentA = selectA.value; 
-  const currentB = selectB.value; 
-  selectA.innerHTML = '<option value="">Selecione Time A</option>'; 
-  selectB.innerHTML = '<option value="">Selecione Time B</option>'; 
-  teams.forEach(t => { 
-    selectA.innerHTML += `<option value="${t.name}">${t.name}</option>`; 
-    selectB.innerHTML += `<option value="${t.name}">${t.name}</option>`; 
-  }); 
-  selectA.value = currentA; 
-  selectB.value = currentB; 
-  updateMatchTeams(); 
-} 
-
-function updateMatchTeams() { 
-  const nameA = document.getElementById('selectTeamA').value; 
-  const nameB = document.getElementById('selectTeamB').value; 
-  document.getElementById('labelTeamA').innerText = nameA || "Time A"; 
-  document.getElementById('labelTeamB').innerText = nameB || "Time B"; 
-} 
-
-function addPoint(team) { 
-  if (team === 1) s1++; 
-  else s2++; 
-  updateScoreboard(); 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vôlei de Praia - Sistema Completo</title>
   
-  const total = s1 + s2;
-  if (total > 0 && total % 7 === 0) {
-    alert("🔄 Troca de Lados! (Soma de pontos: " + total + ")");
-  }
-} 
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-function removePoint(team) { 
-  if (team === 1 && s1 > 0) s1--; 
-  if (team === 2 && s2 > 0) s2--; 
-  updateScoreboard(); 
-} 
-
-function updateScoreboard() { 
-  document.getElementById('s1').innerText = s1; 
-  document.getElementById('s2').innerText = s2; 
-  document.getElementById('sets1').innerText = sets1; 
-  document.getElementById('sets2').innerText = sets2; 
-} 
-
-function finishSet() { 
-  if (s1 === s2) return alert("O set está empatado! Marque o ponto de desempate."); 
-  if (s1 > s2) { 
-    sets1++; 
-    alert(`Set Finalizado!\nVencedor: ${document.getElementById('labelTeamA').innerText}`); 
-  } else { 
-    sets2++; 
-    alert(`Set Finalizado!\nVencedor: ${document.getElementById('labelTeamB').innerText}`); 
-  } 
-  s1 = 0; 
-  s2 = 0; 
-  updateScoreboard(); 
-} 
-
-function finishMatch() { 
-  const nameA = document.getElementById('selectTeamA').value; 
-  const nameB = document.getElementById('selectTeamB').value; 
-  if (!nameA || !nameB) return alert("Selecione ambas as duplas antes de finalizar a partida!"); 
-  let winnerName = ""; 
-  if (sets1 > sets2) { 
-    winnerName = nameA; 
-  } else if (sets2 > sets1) { 
-    winnerName = nameB; 
-  } else { 
-    if (s1 > s2) winnerName = nameA; 
-    else if (s2 > s1) winnerName = nameB; 
-    else return alert("A partida está empatada!"); 
-  } 
-  let winnerObj = teams.find(t => t.name === winnerName); 
-  if (winnerObj) { 
-    winnerObj.wins++; 
-    localStorage.setItem('teams', JSON.stringify(teams)); 
-  } 
-  alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\n1 Vitória somada no Ranking!`); 
-  resetMatch(); 
-} 
-
-function startTimer() { 
-  if (!timerInterval) { 
-    timerInterval = setInterval(() => { 
-      secs++; 
-      document.getElementById('timer').innerText = new Date(secs * 1000).toISOString().substr(14, 5); 
-    }, 1000); 
-  } 
-} 
-
-function pauseTimer() { 
-  clearInterval(timerInterval); 
-  timerInterval = null; 
-} 
-
-function resetTimer() { 
-  pauseTimer(); 
-  secs = 0; 
-  document.getElementById('timer').innerText = "00:00"; 
-} 
-
-function resetMatch() { 
-  s1 = 0; 
-  s2 = 0; 
-  sets1 = 0; 
-  sets2 = 0; 
-  updateScoreboard(); 
-  resetTimer(); 
-} 
-
-function saveTeam() { 
-  let name = document.getElementById('timeName').value; 
-  let p1 = document.getElementById('p1Name').value; 
-  let p2 = document.getElementById('p2Name').value; 
-  let editId = document.getElementById('edit-id').value; 
-  if (!name) return alert("Digite o nome da dupla!"); 
-  if (editId) { 
-    let t = teams.find(item => item.id == editId); 
-    if (t) { 
-      t.name = name; 
-      t.p1 = p1; 
-      t.p2 = p2; 
-    } 
-  } else { 
-    teams.push({ id: Date.now(), name, p1, p2, wins: 0 }); 
-  } 
-  localStorage.setItem('teams', JSON.stringify(teams)); 
-  resetForm(); 
-  renderTeams(); 
-  populateTeamSelectors(); 
-} 
-
-function resetForm() { 
-  document.getElementById('edit-id').value = ''; 
-  document.getElementById('timeName').value = ''; 
-  document.getElementById('p1Name').value = ''; 
-  document.getElementById('p2Name').value = ''; 
-} 
-
-function editTeam(id) { 
-  let t = teams.find(item => item.id == id); 
-  if (t) { 
-    document.getElementById('edit-id').value = t.id; 
-    document.getElementById('timeName').value = t.name; 
-    document.getElementById('p1Name').value = t.p1 || ''; 
-    document.getElementById('p2Name').value = t.p2 || ''; 
-    show('tab-times', document.querySelectorAll('#appNav button')[1]); 
-  } 
-} 
-
-function deleteTeam(id) { 
-  if (confirm("Deseja apagar esta dupla?")) { 
-    teams = teams.filter(item => item.id != id); 
-    localStorage.setItem('teams', JSON.stringify(teams)); 
-    renderTeams(); 
-    populateTeamSelectors(); 
-  } 
-} 
-
-function renderTeams() { 
-  let html = ""; 
-  teams.forEach(t => { 
-    html += ` 
-    <div style="background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255,255,255,0.9); padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;"> 
-      <div> 
-        <strong style="color: #0369a1; font-size: 1rem;">${t.name}</strong> 
-        <div style="font-size: 0.85rem; color: var(--text-muted);">${t.p1 || '-'} & ${t.p2 || '-'}</div> 
-        <small style="color: #64748b; font-weight: 600;">Vitórias: ${t.wins}</small> 
-      </div> 
-      <div> 
-        <button onclick="editTeam(${t.id})" style="background: rgba(2, 132, 199, 0.15); color: #0284c7; padding: 6px 10px; font-size: 0.8rem;">Editar</button> 
-        <button onclick="deleteTeam(${t.id})" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c; padding: 6px 10px; font-size: 0.8rem;">Excluir</button> 
-      </div> 
-    </div>`; 
-  }); 
-  document.getElementById('teamsList').innerHTML = html || "<p style='color: var(--text-muted); text-align: center;'>Nenhuma dupla cadastrada.</p>"; 
-} 
-
-/* FUNÇÃO DO SORTEIO DE DUPLAS */
-function drawnTeams() {
-  const input = document.getElementById('playersInput').value;
-  const players = input.split('\n').map(p => p.trim()).filter(p => p.length > 0);
-
-  if (players.length < 2) {
-    return alert("Insira pelo menos 2 jogadores para realizar o sorteio!");
-  }
-
-  // Embaralhar jogadores (Fisher-Yates)
-  for (let i = players.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [players[i], players[j]] = [players[j], players[i]];
-  }
-
-  lastDrawnPairs = [];
-  let html = "";
-  let pairCount = 1;
-
-  for (let i = 0; i < players.length; i += 2) {
-    if (i + 1 < players.length) {
-      const p1 = players[i];
-      const p2 = players[i + 1];
-      const name = `Dupla ${pairCount}`;
-      lastDrawnPairs.push({ name, p1, p2 });
-
-      html += `
-        <div style="background: rgba(255, 255, 255, 0.7); padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.9);">
-          <strong style="color: #0369a1;">${name}:</strong> ${p1} & ${p2}
-        </div>`;
-      pairCount++;
-    } else {
-      // Jogador sobressalente se for número ímpar
-      html += `
-        <div style="background: rgba(245, 158, 11, 0.15); padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(245, 158, 11, 0.3); color: #b45309;">
-          <strong>⚠️ Sobrou sem dupla:</strong> ${players[i]}
-        </div>`;
+  <style>
+    /* ==================== ESTILOS GERAIS ==================== */
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --secondary: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --bg-body: #f1f5f9;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
-  }
 
-  document.getElementById('drawnResultsList').innerHTML = html;
-  document.getElementById('drawnResultsCard').style.display = 'block';
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-function saveDrawnTeams() {
-  if (!lastDrawnPairs.length) return;
-  
-  lastDrawnPairs.forEach(pair => {
-    teams.push({
-      id: Date.now() + Math.random(),
-      name: pair.name,
-      p1: pair.p1,
-      p2: pair.p2,
-      wins: 0
-    });
-  });
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
 
-  localStorage.setItem('teams', JSON.stringify(teams));
-  renderTeams();
-  populateTeamSelectors();
-  alert("🎉 Duplas sorteadas salvas com sucesso no app!");
-}
+    /* Cabeçalho da Aplicação */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      padding: 14px 20px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-function renderRanking() { 
-  let sorted = [...teams].sort((a, b) => b.wins - a.wins); 
-  let html = "<tr><th>Pos</th><th>Dupla</th><th>Vitórias</th></tr>"; 
-  sorted.forEach((t, i) => { 
-    let rankClass = i === 0 ? 'rank-1' : (i === 1 ? 'rank-2' : (i === 2 ? 'rank-3' : '')); 
-    html += `<tr class="${rankClass}"> 
-      <td style="width: 50px;"><span class="rank-badge">${i + 1}</span></td> 
-      <td><strong>${t.name}</strong></td> 
-      <td><strong style="color: #d97706; font-size: 1.1rem;">${t.wins}</strong></td> 
-    </tr>`; 
-  }); 
-  document.getElementById('rankingTable').innerHTML = html; 
-} 
+    header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-function resetRanking() { 
-  if (confirm("⚠️ Deseja zerar todas as vitórias do ranking?")) { 
-    teams.forEach(t => t.wins = 0); 
-    localStorage.setItem('teams', JSON.stringify(teams)); 
-    renderRanking(); 
-    alert("🏆 Ranking zerado com sucesso!"); 
-  } 
-} 
+    /* Área de Conteúdo Scrollável */
+    main.conteudo {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-// SISTEMA DE PREVISÃO DO TEMPO 
-const key = "4b84b68fcde6831bfc64ed1767626433";
+    .secao {
+      display: none;
+      width: 100%;
+      max-width: 600px;
+      animation: fadeIn 0.2s ease-in-out;
+    }
 
-async function getWeather() { 
-  let city = document.getElementById('cityName').value.trim(); 
-  let state = document.getElementById('stateSelect').value; 
-  if (!city) return alert("Por favor, digite o nome de uma cidade!"); 
-  const display = document.getElementById('weather-display'); 
-  display.innerHTML = "<p style='color: var(--text-muted);'>⏳ Buscando previsão...</p>"; 
-  city = city.replace(/paraná|parana|são paulo|sao paulo|santa catarina|rio grande do sul|minas gerais/gi, '').trim(); 
-  try { 
-    let searchQuery = state ? `${city},${state},BR` : `${city},BR`; 
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(searchQuery)}&appid=${key}&units=metric&lang=pt_br`; 
-    let res = await fetch(url); 
-    let data = await res.json(); 
-    if (data.cod === 200) { 
-      renderWeatherData(data, state); 
-    } else { 
-      let retryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)},BR&appid=${key}&units=metric&lang=pt_br`; 
-      let retryRes = await fetch(retryUrl); 
-      let retryData = await retryRes.json(); 
-      if (retryData.cod === 200) { 
-        renderWeatherData(retryData, state); 
-      } else { 
-        display.innerHTML = "❌ Cidade não encontrada."; 
-      } 
-    } 
-  } catch (e) { 
-    display.innerHTML = "❌ Erro ao buscar previsão."; 
-  } 
-} 
+    .secao.ativa {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-function getWeatherByGPS() { 
-  const display = document.getElementById('weather-display'); 
-  display.innerHTML = "<p style='color: var(--text-muted);'>📍 Buscando GPS...</p>"; 
-  if (!navigator.geolocation) return alert("Geolocalização não suportada."); 
-  navigator.geolocation.getCurrentPosition( 
-    async (pos) => { 
-      let url = `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${key}&units=metric&lang=pt_br`; 
-      try { 
-        let res = await fetch(url); 
-        let data = await res.json(); 
-        if (data.cod === 200) renderWeatherData(data); 
-      } catch(e) { 
-        display.innerHTML = "Erro ao carregar clima via GPS."; 
-      } 
-    }, 
-    () => alert("Permissão de localização negada.") 
-  ); 
-} 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-function renderWeatherData(data, stateHint = "") { 
-  const display = document.getElementById('weather-display'); 
-  const mainWeather = data.weather[0].main.toLowerCase(); 
-  const windSpeed = data.wind.speed; 
-  const temp = data.main.temp; 
-  let alertMsg = ""; 
-  let alertStyle = ""; 
-  let cStop1 = "#38bdf8"; 
-  let cStop2 = "#bae6fd"; 
-  let weatherAnimationElements = ""; 
-  let sunElement = ` 
-    <g class="anim-sun-pulse"> 
-      <circle cx="330" cy="40" r="26" fill="#facc15" /> 
-      <circle cx="330" cy="40" r="32" fill="#fef08a" opacity="0.4" /> 
-    </g> 
-  `; 
-  if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) { 
-    alertMsg = "🌧️ Chuva na área! Cuidado com a quadra molhada ☔"; 
-    alertStyle = "background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3);"; 
-    cStop1 = "#475569"; 
-    cStop2 = "#94a3b8"; 
-    weatherAnimationElements = ` 
-      <g class="anim-cloud-slow"><path d="M 10 35 Q 25 15 50 20 Q 75 10 100 25 Q 120 25 125 40 Z" fill="#64748b" opacity="0.95"/></g> 
-      <g class="anim-cloud-fast"><path d="M 180 30 Q 195 10 220 15 Q 245 5 270 20 Q 290 20 295 35 Z" fill="#475569" opacity="0.9"/></g> 
-      <g class="anim-rain-drop"> 
-        <line x1="60" y1="50" x2="50" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="110" y1="55" x2="100" y2="75" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="210" y1="45" x2="200" y2="65" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="270" y1="50" x2="260" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="330" y1="40" x2="320" y2="60" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-      </g> `; 
-  } else if (mainWeather.includes("clouds")) { 
-    alertMsg = "☁️ Tempo nublado! Ótimo para jogar sem o sol queimando."; 
-    alertStyle = "background: rgba(100, 116, 139, 0.15); color: #334155; border: 1px solid rgba(100, 116, 139, 0.3);"; 
-    cStop1 = "#64748b"; 
-    cStop2 = "#cbd5e1"; 
-    weatherAnimationElements = ` 
-      <g class="anim-cloud-slow"><path d="M -20 30 Q 0 10 30 15 Q 55 5 80 20 Q 100 20 105 35 Z" fill="#ffffff" opacity="0.85"/></g> 
-      <g class="anim-cloud-fast"><path d="M 150 25 Q 170 5 195 10 Q 220 0 245 15 Q 265 15 270 30 Z" fill="#f1f5f9" opacity="0.95"/></g> `; 
-  } else if (windSpeed > 5) { 
-    alertMsg = "💨 Vento forte! Bola pode mudar de trajeto no ar."; 
-    alertStyle = "background: rgba(245, 158, 11, 0.15); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.3);"; 
-    weatherAnimationElements = sunElement + ` 
-      <g class="anim-wind-line"> 
-        <path d="M 10 30 Q 60 20 120 35 T 200 25" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8" stroke-dasharray="8"/> 
-        <path d="M 50 50 Q 110 40 180 55 T 260 45" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.7" stroke-dasharray="6"/> 
-      </g> `; 
-  } else { 
-    alertMsg = temp >= 30 ? "🔥 Dia quente! Beba bastante água na arena ☀️" : "☀️ Dia de sol perfeito para o vôlei de praia!"; 
-    alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.15); color: #c2410c; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);"; 
-    weatherAnimationElements = sunElement + ` 
-      <g class="anim-cloud-slow"><path d="M 20 25 Q 35 10 55 15 Q 75 5 95 20 Q 110 20 115 30 Z" fill="#ffffff" opacity="0.7"/></g> `; 
-  } 
-  let locationText = data.name + (stateHint ? `, ${stateHint}` : '') + ` - ${data.sys.country}`; 
-  display.innerHTML = ` 
-    <div style="font-size: 1.2rem; font-weight: 800; color: #0369a1;">${locationText}</div> 
-    <div style="font-size: 3.2rem; font-weight: 900; color: #d97706; margin: 2px 0;">${Math.round(temp)}°C</div> 
-    <div style="text-transform: capitalize; font-size: 1rem; color: var(--text-muted); font-weight: 600;">${data.weather[0].description}</div> 
-    <div class="court-illustration-container"> 
-      <svg class="court-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"> 
-        <defs> 
-          <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%"> 
-            <stop offset="0%" stop-color="${cStop1}" /> 
-            <stop offset="100%" stop-color="${cStop2}" /> 
-          </linearGradient> 
-          <linearGradient id="sandGrad" x1="0%" y1="0%" x2="0%" y2="100%"> 
-            <stop offset="0%" stop-color="#f59e0b" /> 
-            <stop offset="100%" stop-color="#d97706" /> 
-          </linearGradient> 
-        </defs> 
-        <rect width="400" height="130" fill="url(#skyGrad)"/> 
-        ${weatherAnimationElements} 
-        <rect y="125" width="400" height="75" fill="url(#sandGrad)"/> 
-        <polygon points="30,190 370,190 320,135 80,135" fill="#eab308" stroke="#fef08a" stroke-width="3" /> 
-        <line x1="200" y1="135" x2="200" y2="190" stroke="#ffffff" stroke-width="2" stroke-dasharray="4"/> 
-        <line x1="75" y1="85" x2="75" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/> 
-        <line x1="325" y1="85" x2="325" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/> 
-        <polygon points="75,90 325,90 325,120 75,120" fill="rgba(0,0,0,0.15)"/> 
-        <path d="M 75 100 L 325 100 M 75 110 L 325 110" stroke="#ffffff" stroke-width="1" opacity="0.7"/> 
-        <path d="M 100 90 L 100 120 M 125 90 L 125 120 M 150 90 L 150 120 M 175 90 L 175 120 M 200 90 L 200 120 M 225 90 L 225 120 M 250 90 L 250 120 M 275 90 L 275 120 M 300 90 L 300 120" stroke="#ffffff" stroke-width="1" opacity="0.7"/> 
-        <line x1="73" y1="90" x2="327" y2="90" stroke="#ffffff" stroke-width="4"/> 
-        <line x1="85" y1="65" x2="85" y2="120" stroke="#ef4444" stroke-width="2"/> 
-        <line x1="315" y1="65" x2="315" y2="120" stroke="#ef4444" stroke-width="2"/> 
-        <g transform="translate(230, 68)"> 
-          <circle cx="0" cy="0" r="12" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/> 
-          <path d="M -10 -4 Q 0 4 10 -4" stroke="#facc15" stroke-width="2.5" fill="none"/> 
-          <path d="M -8 6 Q 0 -2 8 6" stroke="#0284c7" stroke-width="2.5" fill="none"/> 
-        </g> 
-      </svg> 
-    </div> 
-    <div class="volley-alert" style="${alertStyle}"> ${alertMsg} </div> 
-    <div class="grid-weather"> 
-      <div class="weather-item">Sensação<strong>${Math.round(data.main.feels_like)}°C</strong></div> 
-      <div class="weather-item">Umidade<strong>${data.main.humidity}%</strong></div> 
-      <div class="weather-item">Vento<strong>${windSpeed} m/s</strong></div> 
-      <div class="weather-item">Mín / Máx<strong>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</strong></div> 
-    </div> `; 
-} 
+    /* Componente de Card */
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      width: 100%;
+    }
 
-renderTeams(); 
-populateTeamSelectors(); 
-</script> 
-</body> 
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--bg-body);
+      padding-bottom: 8px;
+    }
+
+    /* Formulários e Inputs */
+    .input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    input, select {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-danger { background-color: var(--danger); }
+    .btn-success { background-color: var(--success); }
+    .btn-secondary { background-color: var(--secondary); color: #fff; }
+
+    /* ==================== ABA 1: PLACAR ==================== */
+    .placar-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+      margin: 12px 0;
+    }
+
+    .time-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .time-nome-input {
+      font-weight: 700;
+      text-align: center;
+      font-size: 15px;
+      width: 100%;
+    }
+
+    .score-box {
+      background: var(--bg-body);
+      border-radius: 12px;
+      padding: 16px 12px;
+      width: 100%;
+      text-align: center;
+      border: 2px solid var(--border-color);
+    }
+
+    .score-valor {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1;
+    }
+
+    .btn-ponto-group {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .btn-ponto-group .btn {
+      flex: 1;
+      padding: 12px 0;
+    }
+
+    .vs-divider {
+      font-weight: 800;
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    .set-status {
+      text-align: center;
+      background: #e0f2fe;
+      color: var(--primary-dark);
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .sets-historico {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      font-weight: 700;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    /* ==================== TABELAS E LISTAS ==================== */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background-color: var(--bg-body);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--bg-body);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* ==================== BARRA DE ABAS (NAVBAR) ==================== */
+    nav.menu-abas {
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
+      z-index: 100;
+    }
+
+    .aba-item {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column; /* Coloca o texto DEBAIXO do ícone */
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: var(--text-muted);
+      cursor: pointer;
+      flex: 1;
+      padding: 6px 0;
+      transition: color 0.2s;
+    }
+
+    .aba-item i {
+      font-size: 18px;
+    }
+
+    .aba-label {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .aba-item.ativa {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABEÇALHO -->
+  <header>
+    <h1><i class="fa-solid fa-volleyball"></i> Arena Vôlei de Praia</h1>
+  </header>
+
+  <!-- ÁREA PRINCIPAL -->
+  <main class="conteudo">
+
+    <!-- 1. PLACAR -->
+    <section id="aba-placar" class="secao ativa">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-scoreboard"></i> Controlar Partida
+        </div>
+
+        <div class="set-status" id="set-info-header">
+          SET 1 (Até 21 pontos - Troca de lado a cada 7 pts)
+        </div>
+
+        <div class="sets-historico">
+          <span>Sets Vencidos:</span>
+          <span id="display-sets-a">Dupla A: 0</span>
+          <span>|</span>
+          <span id="display-sets-b">Dupla B: 0</span>
+        </div>
+
+        <div class="placar-grid">
+          <!-- TIME A -->
+          <div class="time-col">
+            <input type="text" id="nome-time-a" class="time-nome-input" value="Dupla 1" onchange="salvarNomesTime()">
+            <div class="score-box">
+              <div class="score-valor" id="pts-a">0</div>
+            </div>
+            <div class="btn-ponto-group">
+              <button class="btn btn-danger" onclick="alterarPontos(1, -1)">-1</button>
+              <button class="btn btn-success" onclick="alterarPontos(1, 1)">+1</button>
+            </div>
+          </div>
+
+          <div class="vs-divider">VS</div>
+
+          <!-- TIME B -->
+          <div class="time-col">
+            <input type="text" id="nome-time-b" class="time-nome-input" value="Dupla 2" onchange="salvarNomesTime()">
+            <div class="score-box">
+              <div class="score-valor" id="pts-b">0</div>
+            </div>
+            <div class="btn-ponto-group">
+              <button class="btn btn-danger" onclick="alterarPontos(2, -1)">-1</button>
+              <button class="btn btn-success" onclick="alterarPontos(2, 1)">+1</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="finalizarSet()">
+          <i class="fa-solid fa-flag-checkered"></i> Finalizar Set Atual
+        </button>
+        
+        <button class="btn btn-danger" style="width: 100%; margin-top: 8px; background: transparent; color: var(--danger); border: 1px solid var(--danger);" onclick="reiniciarPartida()">
+          <i class="fa-solid fa-rotate-left"></i> Reiniciar Partida Inteira
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. DUPLAS -->
+    <section id="aba-duplas" class="secao">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-user-plus"></i> Cadastrar Dupla
+        </div>
+        <div class="input-group">
+          <input type="text" id="input-jogador1" placeholder="Nome do Jogador 1">
+          <input type="text" id="input-jogador2" placeholder="Nome do Jogador 2">
+        </div>
+        <button class="btn btn-success" style="width: 100%;" onclick="adicionarDupla()">
+          <i class="fa-solid fa-plus"></i> Adicionar Dupla
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-users"></i> Duplas Cadastradas
+        </div>
+        <div id="lista-duplas">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SORTEIO -->
+    <section id="aba-sorteio" class="secao">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-dice"></i> Gerar Chaves / Confrontos
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+          Gera os confrontos automaticamente com base nas duplas cadastradas.
+        </p>
+        <button class="btn btn-primary" style="width: 100%;" onclick="gerarSorteio()">
+          <i class="fa-solid fa-shuffle"></i> Realizar Sorteio Automático
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-sitemap"></i> Confrontos Gerados
+        </div>
+        <div id="lista-confrontos">
+          <p style="text-align: center; color: var(--text-muted); font-size: 13px;">Nenhum sorteio realizado ainda.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. RANKING -->
+    <section id="aba-ranking" class="secao">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-trophy"></i> Tabela do Torneio
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Dupla</th>
+                <th>Vitórias</th>
+                <th>Derrotas</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-ranking-body">
+              <!-- Renderizado via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. PREVISÃO -->
+    <section id="aba-previsao" class="secao">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-chart-line"></i> Simulação & Previsão de Vitória
+        </div>
+        
+        <div class="input-group" style="flex-direction: column;">
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Escolha a Dupla A:</label>
+          <select id="select-prev-a"></select>
+
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 8px;">Escolha a Dupla B:</label>
+          <select id="select-prev-b"></select>
+        </div>
+
+        <button class="btn btn-secondary" style="width: 100%;" onclick="calcularPrevisao()">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Calcular Probabilidade
+        </button>
+      </div>
+
+      <div class="card" id="card-resultado-previsao" style="display: none;">
+        <div class="card-title">
+          <i class="fa-solid fa-square-poll-vertical"></i> Resultado da Análise
+        </div>
+        <div id="conteudo-previsao" style="text-align: center; line-height: 1.6;">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- NAVEGAÇÃO INFERIOR COM TEXTO DEBAIXO DOS ÍCONES -->
+  <nav class="menu-abas">
+    <button class="aba-item ativa" onclick="mudarAba(this, 'aba-placar')">
+      <i class="fa-solid fa-clipboard-list"></i>
+      <span class="aba-label">Placar</span>
+    </button>
+
+    <button class="aba-item" onclick="mudarAba(this, 'aba-duplas')">
+      <i class="fa-solid fa-user-group"></i>
+      <span class="aba-label">Duplas</span>
+    </button>
+
+    <button class="aba-item" onclick="mudarAba(this, 'aba-sorteio')">
+      <i class="fa-solid fa-dice"></i>
+      <span class="aba-label">Sorteio</span>
+    </button>
+
+    <button class="aba-item" onclick="mudarAba(this, 'aba-ranking')">
+      <i class="fa-solid fa-trophy"></i>
+      <span class="aba-label">Ranking</span>
+    </button>
+
+    <button class="aba-item" onclick="mudarAba(this, 'aba-previsao')">
+      <i class="fa-solid fa-chart-line"></i>
+      <span class="aba-label">Previsão</span>
+    </button>
+  </nav>
+
+  <!-- LÓGICA JAVASCRIPT INTEGRADA -->
+  <script>
+    /* ================= ESTADO GLOBAL DA APLICAÇÃO ================= */
+    let estadoApp = {
+      placar: {
+        ptsA: 0,
+        ptsB: 0,
+        setsA: 0,
+        setsB: 0,
+        setAtual: 1,
+        timeA: "Dupla 1",
+        timeB: "Dupla 2"
+      },
+      duplas: [
+        { id: 1, nome: "Renato / Gabriel", vitorias: 2, derrotas: 0, pontosGerais: 84 },
+        { id: 2, nome: "Lucas / Matheus", vitorias: 1, derrotas: 1, pontosGerais: 65 },
+        { id: 3, nome: "Bruno / Felipe", vitorias: 0, derrotas: 2, pontosGerais: 40 }
+      ],
+      confrontos: []
+    };
+
+    /* ================= 1. NAVEGAÇÃO ENTRE ABAS ================= */
+    function mudarAba(btnElemento, idAba) {
+      document.querySelectorAll('.aba-item').forEach(b => b.classList.remove('ativa'));
+      document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
+
+      btnElemento.classList.add('ativa');
+      document.getElementById(idAba).classList.add('ativa');
+
+      // Atualiza visualizações específicas se necessário
+      if(idAba === 'aba-duplas') renderizarDuplas();
+      if(idAba === 'aba-ranking') renderizarRanking();
+      if(idAba === 'aba-previsao') carregarSelectsPrevisao();
+    }
+
+    /* ================= 2. LÓGICA DO PLACAR ================= */
+    function atualizarPlacarUI() {
+      document.getElementById('pts-a').innerText = estadoApp.placar.ptsA;
+      document.getElementById('pts-b').innerText = estadoApp.placar.ptsB;
+      document.getElementById('display-sets-a').innerText = `${estadoApp.placar.timeA}: ${estadoApp.placar.setsA}`;
+      document.getElementById('display-sets-b').innerText = `${estadoApp.placar.timeB}: ${estadoApp.placar.setsB}`;
+
+      const metaPontos = estadoApp.placar.setAtual === 3 ? 15 : 21;
+      const freqTroca = estadoApp.placar.setAtual === 3 ? 5 : 7;
+      
+      document.getElementById('set-info-header').innerText = 
+        `SET ${estadoApp.placar.setAtual} (Até ${metaPontos} pts - Troca de lado a cada ${freqTroca} pts)`;
+    }
+
+    function salvarNomesTime() {
+      estadoApp.placar.timeA = document.getElementById('nome-time-a').value || "Dupla 1";
+      estadoApp.placar.timeB = document.getElementById('nome-time-b').value || "Dupla 2";
+      atualizarPlacarUI();
+    }
+
+    function alterarPontos(time, delta) {
+      if (time === 1) {
+        estadoApp.placar.ptsA = Math.max(0, estadoApp.placar.ptsA + delta);
+      } else {
+        estadoApp.placar.ptsB = Math.max(0, estadoApp.placar.ptsB + delta);
+      }
+
+      atualizarPlacarUI();
+
+      // Regra de Troca de Lado (Vôlei de Praia)
+      const soma = estadoApp.placar.ptsA + estadoApp.placar.ptsB;
+      const freqTroca = estadoApp.placar.setAtual === 3 ? 5 : 7;
+
+      if (delta > 0 && soma > 0 && soma % freqTroca === 0) {
+        setTimeout(() => {
+          alert(`🔄 TROCA DE LADO!\nSoma de pontos atual: ${soma} pts.`);
+        }, 50);
+      }
+    }
+
+    function finalizarSet() {
+      const pA = estadoApp.placar.ptsA;
+      const pB = estadoApp.placar.ptsB;
+      const meta = estadoApp.placar.setAtual === 3 ? 15 : 21;
+
+      if (Math.abs(pA - pB) < 2 || (pA < meta && pB < meta)) {
+        if(!confirm("A pontuação atual não atinge a diferença de 2 pontos mínima do Vôlei de Praia. Deseja encerrar o set mesmo assim?")) {
+          return;
+        }
+      }
+
+      let vencedor = pA > pB ? estadoApp.placar.timeA : estadoApp.placar.timeB;
+      
+      if (pA > pB) estadoApp.placar.setsA++;
+      else estadoApp.placar.setsB++;
+
+      alert(`🎉 Set Finalizado!\nVencedor do Set: ${vencedor}`);
+
+      if (estadoApp.placar.setsA === 2 || estadoApp.placar.setsB === 2) {
+        let campeao = estadoApp.placar.setsA === 2 ? estadoApp.placar.timeA : estadoApp.placar.timeB;
+        alert(`🏆 FIM DE JOGO!\n${campeao} venceu a partida por ${estadoApp.placar.setsA} x ${estadoApp.placar.setsB}!`);
+        
+        // Atualizar estatísticas se existirem no cadastro
+        registrarResultadoTorneio(campeao);
+        reiniciarPartida();
+        return;
+      }
+
+      estadoApp.placar.setAtual++;
+      estadoApp.placar.ptsA = 0;
+      estadoApp.placar.ptsB = 0;
+      atualizarPlacarUI();
+    }
+
+    function reiniciarPartida() {
+      estadoApp.placar.ptsA = 0;
+      estadoApp.placar.ptsB = 0;
+      estadoApp.placar.setsA = 0;
+      estadoApp.placar.setsB = 0;
+      estadoApp.placar.setAtual = 1;
+      atualizarPlacarUI();
+    }
+
+    /* ================= 3. LÓGICA DAS DUPLAS ================= */
+    function renderizarDuplas() {
+      const container = document.getElementById('lista-duplas');
+      container.innerHTML = '';
+
+      if (estadoApp.duplas.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Nenhuma dupla cadastrada.</p>';
+        return;
+      }
+
+      estadoApp.duplas.forEach(d => {
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        item.innerHTML = `
+          <span><strong>${d.nome}</strong></span>
+          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 12px;" onclick="removerDupla(${d.id})">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function adicionarDupla() {
+      const j1 = document.getElementById('input-jogador1').value.trim();
+      const j2 = document.getElementById('input-jogador2').value.trim();
+
+      if (!j1 || !j2) {
+        alert("Preencha o nome de ambos os jogadores!");
+        return;
+      }
+
+      const novaDupla = {
+        id: Date.now(),
+        nome: `${j1} / ${j2}`,
+        vitorias: 0,
+        derrotas: 0,
+        pontosGerais: 0
+      };
+
+      estadoApp.duplas.push(novaDupla);
+      document.getElementById('input-jogador1').value = '';
+      document.getElementById('input-jogador2').value = '';
+      renderizarDuplas();
+    }
+
+    function removerDupla(id) {
+      estadoApp.duplas = estadoApp.duplas.filter(d => d.id !== id);
+      renderizarDuplas();
+    }
+
+    /* ================= 4. SORTEIO DE CHAVES ================= */
+    function gerarSorteio() {
+      if (estadoApp.duplas.length < 2) {
+        alert("Cadastre pelo menos 2 duplas para realizar o sorteio!");
+        return;
+      }
+
+      let embaralhadas = [...estadoApp.duplas].sort(() => Math.random() - 0.5);
+      estadoApp.confrontos = [];
+
+      for (let i = 0; i < embaralhadas.length; i += 2) {
+        if (i + 1 < embaralhadas.length) {
+          estadoApp.confrontos.push({
+            dupla1: embaralhadas[i].nome,
+            dupla2: embaralhadas[i + 1].nome
+          });
+        } else {
+          estadoApp.confrontos.push({
+            dupla1: embaralhadas[i].nome,
+            dupla2: "Aguardando Vencedor (BYE)"
+          });
+        }
+      }
+
+      renderizarSorteio();
+    }
+
+    function renderizarSorteio() {
+      const container = document.getElementById('lista-confrontos');
+      container.innerHTML = '';
+
+      estadoApp.confrontos.forEach((c, idx) => {
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        item.style.flexDirection = 'column';
+        item.style.alignItems = 'flex-start';
+        item.innerHTML = `
+          <small style="color: var(--primary); font-weight: bold;">Jogo ${idx + 1}</small>
+          <div style="margin-top: 4px;"><strong>${c.dupla1}</strong> <span style="color:var(--text-muted)">VS</span> <strong>${c.dupla2}</strong></div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    /* ================= 5. RANKING ================= */
+    function renderizarRanking() {
+      const tbody = document.getElementById('tabela-ranking-body');
+      tbody.innerHTML = '';
+
+      // Ordena por número de vitórias e depois por pontos gerais
+      let ordenado = [...estadoApp.duplas].sort((a, b) => {
+        if (b.vitorias !== a.vitorias) return b.vitorias - a.vitorias;
+        return b.pontosGerais - a.pontosGerais;
+      });
+
+      ordenado.forEach((d, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${idx + 1}</strong></td>
+          <td>${d.nome}</td>
+          <td style="color: var(--success); font-weight: bold;">${d.vitorias}</td>
+          <td style="color: var(--danger); font-weight: bold;">${d.derrotas}</td>
+          <td>${d.pontosGerais}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function registrarResultadoTorneio(nomeCampeao) {
+      estadoApp.duplas.forEach(d => {
+        if (d.nome === nomeCampeao) {
+          d.vitorias += 1;
+          d.pontosGerais += 21;
+        } else if (d.nome === estadoApp.placar.timeA || d.nome === estadoApp.placar.timeB) {
+          d.derrotas += 1;
+          d.pontosGerais += 10;
+        }
+      });
+    }
+
+    /* ================= 6. PREVISÃO DE RESULTADO ================= */
+    function carregarSelectsPrevisao() {
+      const selA = document.getElementById('select-prev-a');
+      const selB = document.getElementById('select-prev-b');
+      selA.innerHTML = '';
+      selB.innerHTML = '';
+
+      estadoApp.duplas.forEach(d => {
+        selA.innerHTML += `<option value="${d.id}">${d.nome}</option>`;
+        selB.innerHTML += `<option value="${d.id}">${d.nome}</option>`;
+      });
+
+      if(estadoApp.duplas.length >= 2) {
+        selB.selectedIndex = 1;
+      }
+    }
+
+    function calcularPrevisao() {
+      const idA = parseInt(document.getElementById('select-prev-a').value);
+      const idB = parseInt(document.getElementById('select-prev-b').value);
+
+      if (idA === idB) {
+        alert("Escolha duas duplas diferentes para calcular a previsão!");
+        return;
+      }
+
+      const dA = estadoApp.duplas.find(d => d.id === idA);
+      const dB = estadoApp.duplas.find(d => d.id === idB);
+
+      const scoreA = (dA.vitorias * 2) + (dA.pontosGerais * 0.1) + 1;
+      const scoreB = (dB.vitorias * 2) + (dB.pontosGerais * 0.1) + 1;
+
+      const probA = Math.round((scoreA / (scoreA + scoreB)) * 100);
+      const probB = 100 - probA;
+
+      const resCard = document.getElementById('card-resultado-previsao');
+      const resCont = document.getElementById('conteudo-previsao');
+      
+      resCard.style.display = 'block';
+      resCont.innerHTML = `
+        <p style="font-size: 15px; margin-bottom: 8px;">Confronto: <strong>${dA.nome}</strong> vs <strong>${dB.nome}</strong></p>
+        <div style="display: flex; justify-content: space-around; margin: 12px 0;">
+          <div>
+            <div style="font-size: 24px; font-weight: 800; color: var(--primary);">${probA}%</div>
+            <small>${dA.nome}</small>
+          </div>
+          <div>
+            <div style="font-size: 24px; font-weight: 800; color: var(--secondary);">${probB}%</div>
+            <small>${dB.nome}</small>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted);">Cálculo baseado no histórico de vitórias e saldo de pontos no campeonato.</p>
+      `;
+    }
+
+    // Inicialização ao carregar
+    window.onload = () => {
+      atualizarPlacarUI();
+    };
+  </script>
+</body>
 </html>

@@ -47,16 +47,80 @@ body {
 } 
 .tab-content { 
   display: none; 
-  padding: 0 1rem 1rem; 
+  padding: 1rem; 
   max-width: 500px; 
   margin: 0 auto; 
   animation: fadeIn 0.25s ease-out; 
 } 
 .tab-content.active { display: block; } 
+
+/* CUSTOMIZAÇÃO DA ABA PLACAR COM IMAGEM DE FUNDO */
+#tab-placar {
+  background: url('79968.png') no-repeat center center fixed;
+  background-size: cover;
+  border-radius: 24px;
+  min-height: calc(100vh - 120px);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.3);
+}
+
+/* CARDS TRANSLÚCIDOS COM ESTILO VIDRO FOSCO PARA MELHOR LEITURA NO PLACAR */
+#tab-placar .card {
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+#tab-placar .card h3 {
+  color: #7dd3fc;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#tab-placar label {
+  color: #e2e8f0 !important;
+}
+
+#tab-placar select {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+}
+
+#tab-placar .score-display-box {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+#tab-placar .team-name-title {
+  color: #38bdf8;
+  font-size: 1.3rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+#tab-placar .score-number {
+  color: #fbbf24;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+#tab-placar #timer {
+  color: #38bdf8 !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+#tab-placar .divider {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 @keyframes fadeIn { 
   from { opacity: 0; transform: translateY(6px); } 
   to { opacity: 1; transform: translateY(0); } 
 } 
+
 .card { 
   background: var(--card-bg); 
   backdrop-filter: blur(16px); 
@@ -130,10 +194,10 @@ button:active { transform: scale(0.96); }
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); 
 } 
 .btn-sub { 
-  background: rgba(15, 23, 42, 0.08); 
-  color: var(--text); 
+  background: rgba(255, 255, 255, 0.2); 
+  color: #ffffff; 
   padding: 12px 16px; 
-  border: 1px solid rgba(0, 0, 0, 0.08); 
+  border: 1px solid rgba(255, 255, 255, 0.3); 
 } 
 .btn-action { 
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); 
@@ -318,7 +382,7 @@ nav button.active-nav::after {
 
 <div class="app-header"> 🏐 Arena Pro </div> 
 
-<!-- ABA: PLACAR --> 
+<!-- ABA: PLACAR COM IMAGEM DE FUNDO DA QUADRA --> 
 <div id="tab-placar" class="tab-content active"> 
   <div class="card"> 
     <h3>👥 Confronto</h3> 
@@ -332,16 +396,16 @@ nav button.active-nav::after {
         <select id="selectTeamB" onchange="updateMatchTeams()"></select> 
       </div> 
     </div> 
-    <button onclick="swapTeams()" style="background: rgba(2, 132, 199, 0.1); color: #0284c7; width: 100%; margin-top: 10px; font-size: 0.85rem;">🔁 Inverter Lados de Quadra</button>
+    <button onclick="swapTeams()" style="background: rgba(255, 255, 255, 0.2); color: #7dd3fc; border: 1px solid rgba(255, 255, 255, 0.3); width: 100%; margin-top: 10px; font-size: 0.85rem;">🔁 Inverter Lados de Quadra</button>
   </div> 
 
   <!-- Cronômetro --> 
   <div class="card"> 
-    <div id="timer" style="font-size: 2.8rem; font-weight: 900; font-family: monospace; letter-spacing: 2px; color: #0284c7; margin-bottom: 8px;">00:00</div> 
+    <div id="timer" style="font-size: 2.8rem; font-weight: 900; font-family: monospace; letter-spacing: 2px; color: #38bdf8; margin-bottom: 8px;">00:00</div> 
     <div style="display: flex; justify-content: center; gap: 4px;"> 
-      <button onclick="startTimer()" style="background: rgba(16, 185, 129, 0.15); color: #047857;">▶ Iniciar</button> 
-      <button onclick="pauseTimer()" style="background: rgba(245, 158, 11, 0.15); color: #b45309;">⏸ Pausar</button> 
-      <button onclick="resetTimer()" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c;">⏹ Zerar</button> 
+      <button onclick="startTimer()" style="background: rgba(16, 185, 129, 0.25); color: #34d399;">▶ Iniciar</button> 
+      <button onclick="pauseTimer()" style="background: rgba(245, 158, 11, 0.25); color: #fbbf24;">⏸ Pausar</button> 
+      <button onclick="resetTimer()" style="background: rgba(239, 68, 68, 0.25); color: #f87171;">⏹ Zerar</button> 
     </div> 
   </div> 
 
@@ -350,7 +414,7 @@ nav button.active-nav::after {
     <!-- TIME A --> 
     <div class="score-display-box"> 
       <div class="team-name-title"><span id="labelTeamA">Time A</span></div> 
-      <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sets Vencidos: <strong id="sets1" style="color: #0284c7;">0</strong></div> 
+      <div style="font-size: 0.85rem; color: #cbd5e1; font-weight: 600;">Sets Vencidos: <strong id="sets1" style="color: #38bdf8;">0</strong></div> 
       <div class="score-number" id="s1">0</div> 
       <div class="score-control"> 
         <button class="btn-sub" onclick="removePoint(1)">-1</button> 
@@ -363,7 +427,7 @@ nav button.active-nav::after {
     <!-- TIME B --> 
     <div class="score-display-box"> 
       <div class="team-name-title"><span id="labelTeamB">Time B</span></div> 
-      <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sets Vencidos: <strong id="sets2" style="color: #0284c7;">0</strong></div> 
+      <div style="font-size: 0.85rem; color: #cbd5e1; font-weight: 600;">Sets Vencidos: <strong id="sets2" style="color: #38bdf8;">0</strong></div> 
       <div class="score-number" id="s2">0</div> 
       <div class="score-control"> 
         <button class="btn-sub" onclick="removePoint(2)">-1</button> 
@@ -375,7 +439,7 @@ nav button.active-nav::after {
     <button class="btn-action" onclick="finishSet()">🏁 Finalizar Set</button> 
     <button class="btn-action" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);" onclick="finishMatch()">🏆 Finalizar Partida</button> 
     <br> 
-    <button onclick="resetMatch()" style="background: transparent; color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Reiniciar Placar</button> 
+    <button onclick="resetMatch()" style="background: transparent; color: #94a3b8; font-size: 0.85rem; margin-top: 10px;">Reiniciar Placar</button> 
   </div> 
 </div> 
 
@@ -623,7 +687,6 @@ function updateMatchTeams() {
   document.getElementById('labelTeamB').innerText = nameB || "Time B"; 
 } 
 
-// PONTUAÇÃO LIVRE SEM AVISO DE TROCA AUTOMÁTICA
 function addPoint(team) { 
   if (team === 1) s1++; 
   else s2++; 
@@ -916,7 +979,6 @@ function resetRanking() {
   } 
 } 
 
-// PREVISÃO DO TEMPO COM DETECÇÃO NOTURNA E NUVENS REALISTAS
 const key = "4b84b68fcde6831bfc64ed1767626433";
 
 async function getWeather() { 
@@ -973,7 +1035,6 @@ function renderWeatherData(data, stateHint = "") {
   const windSpeed = data.wind.speed; 
   const temp = data.main.temp; 
   
-  // Detecção Noturna via Timestamp Unix (Sunrise/Sunset) da API
   const now = data.dt || Math.floor(Date.now() / 1000);
   const isNight = data.sys && (now < data.sys.sunrise || now > data.sys.sunset);
 
@@ -983,12 +1044,10 @@ function renderWeatherData(data, stateHint = "") {
   let cStop2 = "#bae6fd"; 
   let weatherAnimationElements = ""; 
 
-  // Astro (Sol ou Lua)
   let astroElement = isNight ? `
     <g class="anim-sun-pulse">
       <circle cx="330" cy="35" r="18" fill="#fef08a" />
       <circle cx="338" cy="30" r="15" fill="#0f172a" />
-      <!-- Estrelas no céu noturno -->
       <circle cx="50" cy="20" r="1.5" fill="#ffffff" opacity="0.8"/>
       <circle cx="120" cy="40" r="2" fill="#ffffff" opacity="0.9"/>
       <circle cx="220" cy="15" r="1.5" fill="#ffffff" opacity="0.7"/>
@@ -999,7 +1058,6 @@ function renderWeatherData(data, stateHint = "") {
       <circle cx="330" cy="40" r="32" fill="#fef08a" opacity="0.4" /> 
     </g>`;
 
-  // Nuvens Realistas SVG (Organic Cloud Paths)
   const realisticCloudsDay = `
     <g class="anim-cloud-slow" style="filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));">
       <path d="M 20,45 C 20,32 32,22 46,22 C 50,14 62,8 74,12 C 84,6 98,10 104,20 C 114,18 126,24 128,34 C 136,36 142,44 140,52 C 140,60 130,65 120,65 L 25,65 C 12,65 5,55 20,45 Z" fill="#ffffff" opacity="0.92"/>
@@ -1018,7 +1076,6 @@ function renderWeatherData(data, stateHint = "") {
       <path d="M 180,38 C 180,28 190,20 202,20 C 206,12 216,8 226,11 C 234,6 246,9 251,18 C 260,16 270,22 272,30 C 279,32 284,38 282,45 C 282,52 273,56 265,56 L 185,56 C 174,56 168,48 180,38 Z" fill="#64748b" opacity="0.75"/>
     </g>`;
 
-  // Configuração visual de Céu Dia vs Noite
   if (isNight) {
     cStop1 = "#0f172a";
     cStop2 = "#1e293b";
@@ -1027,7 +1084,6 @@ function renderWeatherData(data, stateHint = "") {
     cStop2 = "#bae6fd";
   }
 
-  // Lógica de Mensagens e Clima Noturno/Diurno
   if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) { 
     alertMsg = isNight ? "🌧️ Noite com chuva! Cuidado com a quadra molhada ☔" : "🌧️ Chuva na área! Cuidado com a quadra molhada ☔"; 
     alertStyle = "background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3);"; 
@@ -1089,7 +1145,7 @@ function renderWeatherData(data, stateHint = "") {
         <line x1="325" y1="85" x2="325" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/> 
         <polygon points="75,90 325,90 325,120 75,120" fill="rgba(0,0,0,0.15)"/> 
         <path d="M 75 100 L 325 100 M 75 110 L 325 110" stroke="#ffffff" stroke-width="1" opacity="0.7"/> 
-        <path d="M 100 90 L 100 120 M 125 90 L 125 120 M 150 90 L 150 120 M 175 90 L 175 120 M 200 90 L 200 120 M 225 90 L 225 120 M 250 90 L 250 120 M 275 90 L 275 120 M 300 90 L 300 120" stroke="#ffffff" stroke-width="1" opacity="0.7"/> 
+        <path d="M 100 90 L 100 120 M 125 90 L 125 120 M 150 90 L 150 120 M 200 90 L 200 120 M 225 90 L 225 120 M 250 90 L 250 120 M 275 90 L 275 120 M 300 90 L 300 120" stroke="#ffffff" stroke-width="1" opacity="0.7"/> 
         <line x1="73" y1="90" x2="327" y2="90" stroke="#ffffff" stroke-width="4"/> 
         <line x1="85" y1="65" x2="85" y2="120" stroke="#ef4444" stroke-width="2"/> 
         <line x1="315" y1="65" x2="315" y2="120" stroke="#ef4444" stroke-width="2"/> 

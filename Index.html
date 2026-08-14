@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#38bdf8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Nosso volei</title> 
+<title>Vôlei Arena Pro</title> 
 <style> 
 :root { 
   --bg-sky: #38bdf8; 
@@ -316,7 +316,7 @@ nav button.active-nav::after {
 </head> 
 <body> 
 
-<div class="app-header"> 🏐 Vôlei Arena Pro </div> 
+<div class="app-header"> 🏐 Arena Pro </div> 
 
 <!-- ABA: PLACAR --> 
 <div id="tab-placar" class="tab-content active"> 
@@ -623,15 +623,11 @@ function updateMatchTeams() {
   document.getElementById('labelTeamB').innerText = nameB || "Time B"; 
 } 
 
+// PONTUAÇÃO LIVRE SEM AVISO DE TROCA AUTOMÁTICA
 function addPoint(team) { 
   if (team === 1) s1++; 
   else s2++; 
   updateScoreboard(); 
-  
-  const total = s1 + s2;
-  if (total > 0 && total % 7 === 0) {
-    alert("🔄 Troca de Lados! (Soma de pontos do set: " + total + ")");
-  }
 } 
 
 function removePoint(team) { 
@@ -1061,7 +1057,7 @@ function renderWeatherData(data, stateHint = "") {
       alertMsg = "🌙 Noite limpa e agradável! Ótimo momento para uma partida noturna.";
       alertStyle = "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);";
     } else {
-      alertMsg = temp >= 30 ? "🔥 Dia quente! Beba bastante água na arena ☀️" : "☀️ Dia de sol perfeito para o vôlei de praia!"; 
+      alertMsg = temp >= 30 ? "🔥 Dia quente! Beba bastante água na arena ☀️" : "☀️ Dia de sol perfeito para o esporte!"; 
       alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.15); color: #c2410c; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);"; 
     }
     weatherAnimationElements = astroElement + (isNight ? realisticCloudsNight : realisticCloudsDay); 

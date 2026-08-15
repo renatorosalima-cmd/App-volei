@@ -54,18 +54,15 @@ body {
 } 
 .tab-content.active { display: block; } 
 
-/* CUSTOMIZAÇÃO DA ABA PLACAR COM IMAGEM DE FUNDO */
+/* ESTILIZAÇÃO DO PLACAR */
 #tab-placar {
-  background: url('79968.jpg') no-repeat center center fixed;
-  background-size: cover;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 24px;
   min-height: calc(100vh - 120px);
-  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.3);
 }
 
-/* CARDS TRANSLÚCIDOS COM ESTILO VIDRO FOSCO PARA MELHOR LEITURA NO PLACAR */
 #tab-placar .card {
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -161,9 +158,6 @@ input:focus, select:focus, textarea:focus {
   border-color: var(--primary); 
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25); 
 } 
-.search-inputs { display: flex; gap: 8px; } 
-.search-inputs input { flex: 3; } 
-.search-inputs select { flex: 1; } 
 button { 
   padding: 12px 18px; 
   border-radius: 12px; 
@@ -221,95 +215,42 @@ button:active { transform: scale(0.96); }
 .score-number { font-size: 3.5rem; font-weight: 900; color: #d97706; line-height: 1; margin: 6px 0; text-shadow: 0 2px 4px rgba(217, 119, 6, 0.15); } 
 .score-control { display: flex; justify-content: center; align-items: center; gap: 10px; } 
 .divider { height: 1px; background: rgba(0, 0, 0, 0.08); margin: 16px 0; } 
-.grid-weather { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; } 
-.weather-item { 
-  background: rgba(255, 255, 255, 0.6); 
-  padding: 12px; 
-  border-radius: 12px; 
-  border: 1px solid rgba(255, 255, 255, 0.8); 
-  font-size: 0.9rem; 
-  color: var(--text-muted); 
-} 
-.weather-item strong { color: var(--text); font-size: 1.05rem; display: block; margin-top: 2px; } 
-.volley-alert { margin-top: 15px; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; line-height: 1.4; } 
-.court-illustration-container { 
-  margin-top: 15px; 
-  border-radius: 16px; 
-  overflow: hidden; 
-  background: #7dd3fc; 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
-  position: relative; 
-  border: 2px solid #ffffff; 
-} 
-.court-svg { width: 100%; height: 200px; display: block; } 
-.anim-cloud-slow { animation: moveCloud 28s linear infinite; } 
-.anim-cloud-fast { animation: moveCloud 18s linear infinite; } 
-.anim-rain-drop { animation: fallRain 0.8s linear infinite; } 
-.anim-sun-pulse { transform-origin: center; animation: pulseSun 4s ease-in-out infinite alternate; } 
-.anim-wind-line { animation: blowWind 2s ease-in-out infinite; } 
-@keyframes moveCloud { 0% { transform: translateX(-180px); } 100% { transform: translateX(450px); } } 
-@keyframes fallRain { 0% { transform: translate(0, 0); opacity: 1; } 100% { transform: translate(-20px, 60px); opacity: 0.1; } } 
-@keyframes pulseSun { 0% { transform: scale(0.95); opacity: 0.85; } 100% { transform: scale(1.08); opacity: 1; } } 
-@keyframes blowWind { 0% { transform: translateX(-100px); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateX(400px); opacity: 0; } } 
-table { width: 100%; border-collapse: collapse; margin-top: 10px; } 
-th { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px; border-bottom: 2px solid rgba(0, 0, 0, 0.06); } 
-td { padding: 14px 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); font-size: 0.95rem; } 
-tr:last-child td { border-bottom: none; } 
-.rank-badge { 
-  display: inline-block; 
-  width: 26px; 
-  height: 26px; 
-  line-height: 26px; 
-  border-radius: 50%; 
-  background: rgba(0, 0, 0, 0.08); 
-  font-weight: 800; 
-  font-size: 0.85rem; 
-  color: var(--text); 
-} 
-.rank-1 .rank-badge { background: #facc15; color: #78350f; } 
-.rank-2 .rank-badge { background: #cbd5e1; color: #334155; } 
-.rank-3 .rank-badge { background: #f97316; color: #fff; } 
 
-.media-container {
-  position: relative;
+/* ESTILOS DO JOGO DE TARGET (DESAFIO NO ALVO) */
+#gameCanvas {
+  background: #0284c7;
+  border-radius: 16px;
+  touch-action: none;
+  cursor: crosshair;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
   width: 100%;
-  padding-bottom: 56.25%;
-  height: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 12px 0;
-  background: #000;
+  height: 260px;
 }
-.media-container iframe, .media-container img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border: none;
-}
-.tip-item {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 10px;
-  text-align: left;
-}
-.tip-item h4 {
-  margin: 0 0 6px 0;
-  color: #0369a1;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
+.game-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 6px;
+  margin-bottom: 12px;
 }
-.tip-item p {
-  margin: 0;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  line-height: 1.4;
+.game-btn {
+  background: rgba(2, 132, 199, 0.15);
+  color: #0284c7;
+  font-size: 0.8rem;
+  padding: 8px 4px;
+}
+.game-btn.active {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 nav { 
@@ -358,31 +299,13 @@ nav button.active-nav::after {
   background: #0284c7; 
   border-radius: 50%; 
 } 
-.history-item {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  padding: 12px;
-  border-radius: 12px;
-  margin-bottom: 8px;
-  text-align: left;
-}
-.mode-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  background: rgba(2, 132, 199, 0.15);
-  color: #0284c7;
-  margin-left: 6px;
-}
 </style> 
 </head> 
 <body> 
 
 <div class="app-header"> 🏐 Arena Pro </div> 
 
-<!-- ABA: PLACAR COM IMAGEM DE FUNDO DA QUADRA --> 
+<!-- ABA: PLACAR --> 
 <div id="tab-placar" class="tab-content active"> 
   <div class="card"> 
     <h3>👥 Confronto</h3> 
@@ -411,7 +334,6 @@ nav button.active-nav::after {
 
   <!-- Placar Principal --> 
   <div class="card"> 
-    <!-- TIME A --> 
     <div class="score-display-box"> 
       <div class="team-name-title"><span id="labelTeamA">Time A</span></div> 
       <div style="font-size: 0.85rem; color: #cbd5e1; font-weight: 600;">Sets Vencidos: <strong id="sets1" style="color: #38bdf8;">0</strong></div> 
@@ -424,7 +346,6 @@ nav button.active-nav::after {
 
     <div class="divider"></div> 
 
-    <!-- TIME B --> 
     <div class="score-display-box"> 
       <div class="team-name-title"><span id="labelTeamB">Time B</span></div> 
       <div style="font-size: 0.85rem; color: #cbd5e1; font-weight: 600;">Sets Vencidos: <strong id="sets2" style="color: #38bdf8;">0</strong></div> 
@@ -443,7 +364,44 @@ nav button.active-nav::after {
   </div> 
 </div> 
 
-<!-- ABA: EQUIPES (DUPLA, QUARTETO, TIME) --> 
+<!-- ABA: DESAFIO NO ALVO (MINI-JOGO) -->
+<div id="tab-jogo" class="tab-content">
+  <div class="card">
+    <h3>🎯 Desafio no Alvo</h3>
+    
+    <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; display: block; text-align: left;">Escolha o Jogador:</label>
+    <select id="gamePlayerSelect">
+      <option value="Ramon">Ramon</option>
+      <option value="Ta">Ta</option>
+      <option value="Kami">Kami</option>
+      <option value="Tato">Tato</option>
+      <option value="Mi">Mi</option>
+      <option value="Manel">Manel</option>
+    </select>
+
+    <div class="game-controls">
+      <button class="game-btn active" id="btnModeSaque" onclick="setGameMode('saque')">🏐 Saque</button>
+      <button class="game-btn" id="btnModeCorte" onclick="setGameMode('corte')">💥 Corte</button>
+      <button class="game-btn" id="btnModeLevar" onclick="setGameMode('levar')">🤲 Levar/Passe</button>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 800; font-size: 0.9rem;">
+      <span style="color: #0284c7;">Pontos: <strong id="gameScore">0</strong></span>
+      <span style="color: #d97706;">Tentativas: <strong id="gameShots">5</strong>/5</span>
+    </div>
+
+    <canvas id="gameCanvas" width="400" height="260" onclick="handleCanvasClick(event)"></canvas>
+
+    <button class="btn-main" style="margin-top: 10px;" onclick="resetMinigame()">🔄 Reiniciar Rodada</button>
+  </div>
+
+  <div class="card">
+    <h3>🏆 Melhores Pontuações (Alvo)</h3>
+    <div id="gameRecordsList" style="text-align: left; font-size: 0.9rem;"></div>
+  </div>
+</div>
+
+<!-- ABA: EQUIPES --> 
 <div id="tab-times" class="tab-content"> 
   <div class="card"> 
     <h3>➕ Cadastrar Equipe</h3> 
@@ -479,7 +437,7 @@ nav button.active-nav::after {
     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;"> 
       Digite um nome por linha para sortear as equipes aleatoriamente. 
     </p> 
-    <textarea id="playersInput" placeholder="Renato&#10;Carlos&#10;Lucas&#10;Marcos&#10;Felipe&#10;Bruno"></textarea> 
+    <textarea id="playersInput" placeholder="Ramon&#10;Ta&#10;Kami&#10;Tato&#10;Mi&#10;Manel"></textarea> 
     <button class="btn-main" onclick="drawnTeams()">🎰 Formar Equipes</button> 
   </div> 
 
@@ -499,119 +457,32 @@ nav button.active-nav::after {
   </div> 
 </div> 
 
-<!-- ABA: HISTÓRICO -->
-<div id="tab-historico" class="tab-content">
-  <div class="card">
-    <h3>📜 Histórico de Partidas</h3>
-    <div id="historyList"></div>
-    <button onclick="clearHistory()" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3); margin-top: 15px; width: 100%;">🗑️ Limpar Histórico</button>
-  </div>
-</div>
-
-<!-- ABA: DICAS & MÍDIA --> 
-<div id="tab-dicas" class="tab-content"> 
-  <div class="card"> 
-    <h3>🎬 Central Visual & Vídeos</h3> 
-    <div class="media-container" id="mediaBox"></div>
-    <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;">
-      <button onclick="loadMedia('vid1')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(2, 132, 199, 0.15); color: #0284c7;">🎥 Vídeo: Saque</button>
-      <button onclick="loadMedia('vid2')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(2, 132, 199, 0.15); color: #0284c7;">🎥 Vídeo: Ataque</button>
-      <button onclick="loadMedia('img1')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(245, 158, 11, 0.15); color: #b45309;">🖼️ Img: Bloqueio</button>
-      <button onclick="loadMedia('img2')" style="font-size: 0.75rem; padding: 6px 10px; background: rgba(245, 158, 11, 0.15); color: #b45309;">🖼️ Img: Posicionamento</button>
-    </div>
-  </div>
-
-  <div class="card"> 
-    <h3>💡 Táticas & Dicas Avançadas</h3> 
-    <div class="tip-item">
-      <h4>🗣️ Comunicação em Quadra</h4>
-      <p>Chame a bola sempre pelo nome ou gritando "Minha!" no momento da decisão para evitar colisões e saques caindo no meio da equipe.</p>
-    </div>
-    <div class="tip-item">
-      <h4>💨 Leitura e Ajuste ao Vento</h4>
-      <p>A favor do vento: prefira ataques com margem de segurança e saques flutuantes. Contra o vento: force o saque e acelere o passe baixo.</p>
-    </div>
-    <div class="tip-item">
-      <h4>🏐 Domínio da Recepção</h4>
-      <p>Na areia, não tente dar passos rápidos após o saque adversário. Firme os pés, flexione os joelhos e direcione o quadril para a rede.</p>
-    </div>
-    <div class="tip-item">
-      <h4>🤚 Sinais de Mão na Defesa</h4>
-      <p>1 Dedo estendido = Bloqueia a paralela. 2 Dedos estendidos = Bloqueia a diagonal. Mão aberta = Bloqueia a bola no meio.</p>
-    </div>
-    <div class="tip-item">
-      <h4>☀️ Posicionamento em Relação ao Sol</h4>
-      <p>Ajuste o ângulo de recepção para não olhar diretamente para o sol ao levantar a cabeça. Use óculos esportivos com proteção UV.</p>
-    </div>
-    <div class="tip-item">
-      <h4>🎯 Estratégia de Saque</h4>
-      <p>Busque o jogador mais cansado ou o recebedor que está cobrindo a maior parte da quadra. Varie com saques curtos de largada (poking).</p>
-    </div>
-  </div> 
-</div> 
-
-<!-- ABA: PREVISÃO DO TEMPO --> 
-<div id="tab-tempo" class="tab-content"> 
-  <div class="card"> 
-    <h3>☀️ Previsão do Tempo</h3> 
-    <div class="search-inputs"> 
-      <input type="text" id="cityName" placeholder="Cidade (ex: Carlópolis)"> 
-      <select id="stateSelect"> 
-        <option value="">UF</option> 
-        <option value="PR" selected>PR</option> 
-        <option value="SP">SP</option> 
-        <option value="SC">SC</option> 
-        <option value="RS">RS</option> 
-        <option value="MG">MG</option> 
-        <option value="RJ">RJ</option> 
-        <option value="AC">AC</option> 
-        <option value="AL">AL</option> 
-        <option value="AP">AP</option> 
-        <option value="AM">AM</option> 
-        <option value="BA">BA</option> 
-        <option value="CE">CE</option> 
-        <option value="DF">DF</option> 
-        <option value="ES">ES</option> 
-        <option value="GO">GO</option> 
-        <option value="MA">MA</option> 
-        <option value="MT">MT</option> 
-        <option value="MS">MS</option> 
-        <option value="PA">PA</option> 
-        <option value="PB">PB</option> 
-        <option value="PE">PE</option> 
-        <option value="PI">PI</option> 
-        <option value="RN">RN</option> 
-        <option value="RO">RO</option> 
-        <option value="RR">RR</option> 
-        <option value="SE">SE</option> 
-        <option value="TO">TO</option> 
-      </select> 
-    </div> 
-    <button onclick="getWeather()" class="btn-main">Buscar Previsão</button> 
-    <button onclick="getWeatherByGPS()" style="background: rgba(2, 132, 199, 0.1); color: #0284c7; width: 100%; margin-top: 6px;">📍 Minha Localização Atual</button> 
-    <div id="weather-display" style="margin-top: 15px;"></div> 
-  </div> 
-</div> 
-
 <!-- NAVEGAÇÃO INFERIOR DOCK --> 
 <nav id="appNav"> 
   <button onclick="show('tab-placar', this)" class="active-nav">🏐</button> 
+  <button onclick="show('tab-jogo', this)">🎯</button>
   <button onclick="show('tab-times', this)">👥</button> 
   <button onclick="show('tab-sorteio', this)">🎲</button> 
   <button onclick="show('tab-ranking', this)">🏆</button> 
-  <button onclick="show('tab-historico', this)">📜</button>
-  <button onclick="show('tab-dicas', this)">💡</button> 
-  <button onclick="show('tab-tempo', this)">☀️</button> 
 </nav> 
 
 <!-- LÓGICA DO APLICATIVO --> 
 <script> 
 let teams = JSON.parse(localStorage.getItem('teams')) || []; 
 let matchHistory = JSON.parse(localStorage.getItem('matchHistory')) || [];
+let gameRecords = JSON.parse(localStorage.getItem('gameRecords')) || [];
 let lastDrawnPairs = [];
 let s1 = 0, s2 = 0; 
 let sets1 = 0, sets2 = 0; 
 let timerInterval = null, secs = 0; 
+
+// VARIÁVEIS DO MINIJOGO INTERATIVO
+let currentMode = 'saque';
+let gameScore = 0;
+let shotsLeft = 5;
+let targetX = 200, targetY = 100;
+let ballX = 200, ballY = 220;
+let isAnimating = false;
 
 function show(id, btnEl) { 
   document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); 
@@ -621,10 +492,9 @@ function show(id, btnEl) {
     btnEl.classList.add('active-nav'); 
   } 
   if (id === 'tab-ranking') renderRanking(); 
-  if (id === 'tab-historico') renderHistory();
   if (id === 'tab-placar') populateTeamSelectors(); 
   if (id === 'tab-times') renderPlayerInputs();
-  if (id === 'tab-dicas') loadMedia('vid1');
+  if (id === 'tab-jogo') { initMinigame(); renderGameRecords(); }
 } 
 
 function renderPlayerInputs() {
@@ -635,19 +505,6 @@ function renderPlayerInputs() {
     html += `<input type="text" class="player-input" id="p${i}Name" placeholder="Jogador ${i}">`;
   }
   container.innerHTML = html;
-}
-
-function loadMedia(type) {
-  const box = document.getElementById('mediaBox');
-  if (type === 'vid1') {
-    box.innerHTML = `<iframe src="https://www.youtube.com/embed/9G6xPInL_A0?rel=0" allowfullscreen></iframe>`;
-  } else if (type === 'vid2') {
-    box.innerHTML = `<iframe src="https://www.youtube.com/embed/S2pS3H0jH80?rel=0" allowfullscreen></iframe>`;
-  } else if (type === 'img1') {
-    box.innerHTML = `<img src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=800&q=80" alt="Bloqueio Vôlei">`;
-  } else if (type === 'img2') {
-    box.innerHTML = `<img src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=800&q=80" alt="Quadra Vôlei de Praia">`;
-  }
 }
 
 function populateTeamSelectors() { 
@@ -742,47 +599,9 @@ function finishMatch() {
     localStorage.setItem('teams', JSON.stringify(teams)); 
   } 
 
-  const matchData = {
-    date: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
-    teamA: nameA,
-    teamB: nameB,
-    score: `${sets1} x ${sets2}`,
-    winner: winnerName
-  };
-  matchHistory.unshift(matchData);
-  localStorage.setItem('matchHistory', JSON.stringify(matchHistory));
-
-  alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\nVitória registrada no Ranking e no Histórico!`); 
+  alert(`🎉 Partida Finalizada!\n\nVencedor: ${winnerName}\nVitória registrada no Ranking!`); 
   resetMatch(); 
 } 
-
-function renderHistory() {
-  const container = document.getElementById('historyList');
-  if (!matchHistory.length) {
-    container.innerHTML = "<p style='color: var(--text-muted); text-align: center;'>Nenhuma partida registrada ainda.</p>";
-    return;
-  }
-  let html = "";
-  matchHistory.forEach(h => {
-    html += `
-    <div class="history-item">
-      <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">${h.date}</div>
-      <div style="font-size: 1rem; font-weight: 800; color: #0369a1; margin: 2px 0;">
-        ${h.teamA} <span style="color: #d97706;">${h.score}</span> ${h.teamB}
-      </div>
-      <div style="font-size: 0.85rem; color: var(--success); font-weight: 700;">🏆 Vencedor: ${h.winner}</div>
-    </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function clearHistory() {
-  if (confirm("Deseja apagar todo o histórico de partidas?")) {
-    matchHistory = [];
-    localStorage.setItem('matchHistory', JSON.stringify(matchHistory));
-    renderHistory();
-  }
-}
 
 function startTimer() { 
   if (!timerInterval) { 
@@ -848,32 +667,6 @@ function resetForm() {
   renderPlayerInputs();
 } 
 
-function editTeam(id) { 
-  let t = teams.find(item => item.id == id); 
-  if (t) { 
-    document.getElementById('edit-id').value = t.id; 
-    document.getElementById('timeName').value = t.name; 
-    document.getElementById('teamType').value = t.type || "2";
-    renderPlayerInputs();
-    if (t.players) {
-      t.players.forEach((p, index) => {
-        let el = document.getElementById(`p${index + 1}Name`);
-        if (el) el.value = p;
-      });
-    }
-    show('tab-times', document.querySelectorAll('#appNav button')[1]); 
-  } 
-} 
-
-function deleteTeam(id) { 
-  if (confirm("Deseja apagar esta equipe?")) { 
-    teams = teams.filter(item => item.id != id); 
-    localStorage.setItem('teams', JSON.stringify(teams)); 
-    renderTeams(); 
-    populateTeamSelectors(); 
-  } 
-} 
-
 function renderTeams() { 
   let html = ""; 
   teams.forEach(t => { 
@@ -883,13 +676,9 @@ function renderTeams() {
     <div style="background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255,255,255,0.9); padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;"> 
       <div> 
         <strong style="color: #0369a1; font-size: 1rem;">${t.name}</strong> 
-        <span class="mode-badge">${labelType}</span>
+        <span style="font-size: 0.75rem; background: rgba(2, 132, 199, 0.15); color: #0284c7; padding: 2px 6px; border-radius: 4px; font-weight: 800; margin-left: 4px;">${labelType}</span>
         <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">${playersStr}</div> 
         <small style="color: #64748b; font-weight: 600;">Vitórias: ${t.wins}</small> 
-      </div> 
-      <div> 
-        <button onclick="editTeam(${t.id})" style="background: rgba(2, 132, 199, 0.15); color: #0284c7; padding: 6px 10px; font-size: 0.8rem;">Editar</button> 
-        <button onclick="deleteTeam(${t.id})" style="background: rgba(239, 68, 68, 0.15); color: #b91c1c; padding: 6px 10px; font-size: 0.8rem;">Excluir</button> 
       </div> 
     </div>`; 
   }); 
@@ -925,11 +714,6 @@ function drawnTeams() {
           <strong style="color: #0369a1;">${name}:</strong> ${group.join(' • ')}
         </div>`;
       teamCount++;
-    } else {
-      html += `
-        <div style="background: rgba(245, 158, 11, 0.15); padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(245, 158, 11, 0.3); color: #b45309;">
-          <strong>⚠️ Sobraram sem time completo:</strong> ${group.join(' • ')}
-        </div>`;
     }
   }
 
@@ -960,9 +744,8 @@ function renderRanking() {
   let sorted = [...teams].sort((a, b) => b.wins - a.wins); 
   let html = "<tr><th>Pos</th><th>Equipe</th><th>Vitórias</th></tr>"; 
   sorted.forEach((t, i) => { 
-    let rankClass = i === 0 ? 'rank-1' : (i === 1 ? 'rank-2' : (i === 2 ? 'rank-3' : '')); 
-    html += `<tr class="${rankClass}"> 
-      <td style="width: 50px;"><span class="rank-badge">${i + 1}</span></td> 
+    html += `<tr> 
+      <td style="width: 50px;"><strong>#${i + 1}</strong></td> 
       <td><strong>${t.name}</strong></td> 
       <td><strong style="color: #d97706; font-size: 1.1rem;">${t.wins}</strong></td> 
     </tr>`; 
@@ -979,191 +762,188 @@ function resetRanking() {
   } 
 } 
 
-const key = "4b84b68fcde6831bfc64ed1767626433";
+// ==========================================
+// LÓGICA DO MINIJOGO INTERATIVO
+// ==========================================
+function setGameMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));
+  if (mode === 'saque') document.getElementById('btnModeSaque').classList.add('active');
+  if (mode === 'corte') document.getElementById('btnModeCorte').classList.add('active');
+  if (mode === 'levar') document.getElementById('btnModeLevar').classList.add('active');
+  resetMinigame();
+}
 
-async function getWeather() { 
-  let city = document.getElementById('cityName').value.trim(); 
-  let state = document.getElementById('stateSelect').value; 
-  if (!city) return alert("Por favor, digite o nome de uma cidade!"); 
-  const display = document.getElementById('weather-display'); 
-  display.innerHTML = "<p style='color: var(--text-muted);'>⏳ Buscando previsão...</p>"; 
-  city = city.replace(/paraná|parana|são paulo|sao paulo|santa catarina|rio grande do sul|minas gerais/gi, '').trim(); 
-  try { 
-    let searchQuery = state ? `${city},${state},BR` : `${city},BR`; 
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(searchQuery)}&appid=${key}&units=metric&lang=pt_br`; 
-    let res = await fetch(url); 
-    let data = await res.json(); 
-    if (data.cod === 200) { 
-      renderWeatherData(data, state); 
-    } else { 
-      let retryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)},BR&appid=${key}&units=metric&lang=pt_br`; 
-      let retryRes = await fetch(retryUrl); 
-      let retryData = await retryRes.json(); 
-      if (retryData.cod === 200) { 
-        renderWeatherData(retryData, state); 
-      } else { 
-        display.innerHTML = "❌ Cidade não encontrada."; 
-      } 
-    } 
-  } catch (e) { 
-    display.innerHTML = "❌ Erro ao buscar previsão."; 
-  } 
-} 
+function initMinigame() {
+  spawnNewTarget();
+  drawGameScene();
+}
 
-function getWeatherByGPS() { 
-  const display = document.getElementById('weather-display'); 
-  display.innerHTML = "<p style='color: var(--text-muted);'>📍 Buscando GPS...</p>"; 
-  if (!navigator.geolocation) return alert("Geolocalização não suportada."); 
-  navigator.geolocation.getCurrentPosition( 
-    async (pos) => { 
-      let url = `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${key}&units=metric&lang=pt_br`; 
-      try { 
-        let res = await fetch(url); 
-        let data = await res.json(); 
-        if (data.cod === 200) renderWeatherData(data); 
-      } catch(e) { 
-        display.innerHTML = "Erro ao carregar clima via GPS."; 
-      } 
-    }, 
-    () => alert("Permissão de localização negada.") 
-  ); 
-} 
+function spawnNewTarget() {
+  targetX = Math.floor(Math.random() * 260) + 70;
+  targetY = Math.floor(Math.random() * 100) + 40;
+}
 
-function renderWeatherData(data, stateHint = "") { 
-  const display = document.getElementById('weather-display'); 
-  const mainWeather = data.weather[0].main.toLowerCase(); 
-  const windSpeed = data.wind.speed; 
-  const temp = data.main.temp; 
+function resetMinigame() {
+  gameScore = 0;
+  shotsLeft = 5;
+  isAnimating = false;
+  document.getElementById('gameScore').innerText = gameScore;
+  document.getElementById('gameShots').innerText = shotsLeft;
+  spawnNewTarget();
+  drawGameScene();
+}
+
+function drawGameScene() {
+  const canvas = document.getElementById('gameCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
   
-  const now = data.dt || Math.floor(Date.now() / 1000);
-  const isNight = data.sys && (now < data.sys.sunrise || now > data.sys.sunset);
+  // Fundo Quadra
+  ctx.fillStyle = "#0284c7";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  let alertMsg = ""; 
-  let alertStyle = ""; 
-  let cStop1 = "#38bdf8"; 
-  let cStop2 = "#bae6fd"; 
-  let weatherAnimationElements = ""; 
+  // Linhas da Quadra
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(20, 20, 360, 220);
 
-  let astroElement = isNight ? `
-    <g class="anim-sun-pulse">
-      <circle cx="330" cy="35" r="18" fill="#fef08a" />
-      <circle cx="338" cy="30" r="15" fill="#0f172a" />
-      <circle cx="50" cy="20" r="1.5" fill="#ffffff" opacity="0.8"/>
-      <circle cx="120" cy="40" r="2" fill="#ffffff" opacity="0.9"/>
-      <circle cx="220" cy="15" r="1.5" fill="#ffffff" opacity="0.7"/>
-      <circle cx="280" cy="45" r="1.2" fill="#ffffff" opacity="0.8"/>
-    </g>` : `
-    <g class="anim-sun-pulse"> 
-      <circle cx="330" cy="40" r="26" fill="#facc15" /> 
-      <circle cx="330" cy="40" r="32" fill="#fef08a" opacity="0.4" /> 
-    </g>`;
+  // Rede
+  ctx.strokeStyle = "rgba(255,255,255,0.8)";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(20, 150);
+  ctx.lineTo(380, 150);
+  ctx.stroke();
 
-  const realisticCloudsDay = `
-    <g class="anim-cloud-slow" style="filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));">
-      <path d="M 20,45 C 20,32 32,22 46,22 C 50,14 62,8 74,12 C 84,6 98,10 104,20 C 114,18 126,24 128,34 C 136,36 142,44 140,52 C 140,60 130,65 120,65 L 25,65 C 12,65 5,55 20,45 Z" fill="#ffffff" opacity="0.92"/>
-      <path d="M 35,50 C 40,40 55,38 65,45 C 75,35 95,38 100,48 C 110,48 118,55 115,62 L 30,62 Z" fill="#f1f5f9" opacity="0.6"/>
-    </g>
-    <g class="anim-cloud-fast" style="filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.08));">
-      <path d="M 180,38 C 180,28 190,20 202,20 C 206,12 216,8 226,11 C 234,6 246,9 251,18 C 260,16 270,22 272,30 C 279,32 284,38 282,45 C 282,52 273,56 265,56 L 185,56 C 174,56 168,48 180,38 Z" fill="#ffffff" opacity="0.85"/>
-    </g>`;
+  // Alvo (Círculos concêntricos)
+  ctx.beginPath();
+  ctx.arc(targetX, targetY, 25, 0, Math.PI * 2);
+  ctx.fillStyle = "#ef4444";
+  ctx.fill();
 
-  const realisticCloudsNight = `
-    <g class="anim-cloud-slow" style="filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.4));">
-      <path d="M 20,45 C 20,32 32,22 46,22 C 50,14 62,8 74,12 C 84,6 98,10 104,20 C 114,18 126,24 128,34 C 136,36 142,44 140,52 C 140,60 130,65 120,65 L 25,65 C 12,65 5,55 20,45 Z" fill="#475569" opacity="0.85"/>
-      <path d="M 35,50 C 40,40 55,38 65,45 C 75,35 95,38 100,48 C 110,48 118,55 115,62 L 30,62 Z" fill="#334155" opacity="0.7"/>
-    </g>
-    <g class="anim-cloud-fast" style="filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.3));">
-      <path d="M 180,38 C 180,28 190,20 202,20 C 206,12 216,8 226,11 C 234,6 246,9 251,18 C 260,16 270,22 272,30 C 279,32 284,38 282,45 C 282,52 273,56 265,56 L 185,56 C 174,56 168,48 180,38 Z" fill="#64748b" opacity="0.75"/>
-    </g>`;
+  ctx.beginPath();
+  ctx.arc(targetX, targetY, 15, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
 
-  if (isNight) {
-    cStop1 = "#0f172a";
-    cStop2 = "#1e293b";
-  } else {
-    cStop1 = "#38bdf8";
-    cStop2 = "#bae6fd";
+  ctx.beginPath();
+  ctx.arc(targetX, targetY, 7, 0, Math.PI * 2);
+  ctx.fillStyle = "#ef4444";
+  ctx.fill();
+
+  // Bola/Mira
+  if (!isAnimating) {
+    ctx.beginPath();
+    ctx.arc(ballX, ballY, 10, 0, Math.PI * 2);
+    ctx.fillStyle = "#facc15";
+    ctx.fill();
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 1;
+    ctx.stroke();
   }
+}
 
-  if (mainWeather.includes("rain") || mainWeather.includes("drizzle") || mainWeather.includes("thunderstorm")) { 
-    alertMsg = isNight ? "🌧️ Noite com chuva! Cuidado com a quadra molhada ☔" : "🌧️ Chuva na área! Cuidado com a quadra molhada ☔"; 
-    alertStyle = "background: rgba(239, 68, 68, 0.15); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.3);"; 
-    cStop1 = "#1e293b"; 
-    cStop2 = "#475569"; 
-    weatherAnimationElements = (isNight ? realisticCloudsNight : realisticCloudsDay) + ` 
-      <g class="anim-rain-drop"> 
-        <line x1="60" y1="50" x2="50" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="110" y1="55" x2="100" y2="75" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="210" y1="45" x2="200" y2="65" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-        <line x1="270" y1="50" x2="260" y2="70" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/> 
-      </g> `; 
-  } else if (mainWeather.includes("clouds")) { 
-    alertMsg = isNight ? "🌙 Noite nublada! Clima agradável para jogar sob os refletores." : "☁️ Tempo nublado! Ótimo para jogar sem o sol queimando."; 
-    alertStyle = isNight ? "background: rgba(30, 41, 59, 0.4); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);" : "background: rgba(100, 116, 139, 0.15); color: #334155; border: 1px solid rgba(100, 116, 139, 0.3);"; 
-    weatherAnimationElements = astroElement + (isNight ? realisticCloudsNight : realisticCloudsDay); 
-  } else if (windSpeed > 5) { 
-    alertMsg = "💨 Vento forte! A bola pode mudar de trajeto no ar."; 
-    alertStyle = "background: rgba(245, 158, 11, 0.15); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.3);"; 
-    weatherAnimationElements = astroElement + ` 
-      <g class="anim-wind-line"> 
-        <path d="M 10 30 Q 60 20 120 35 T 200 25" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8" stroke-dasharray="8"/> 
-        <path d="M 50 50 Q 110 40 180 55 T 260 45" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.7" stroke-dasharray="6"/> 
-      </g> `; 
-  } else { 
-    if (isNight) {
-      alertMsg = "🌙 Noite limpa e agradável! Ótimo momento para uma partida noturna.";
-      alertStyle = "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);";
-    } else {
-      alertMsg = temp >= 30 ? "🔥 Dia quente! Beba bastante água na arena ☀️" : "☀️ Dia de sol perfeito para o esporte!"; 
-      alertStyle = temp >= 30 ? "background: rgba(234, 88, 12, 0.15); color: #c2410c; border: 1px solid rgba(234, 88, 12, 0.3);" : "background: rgba(16, 185, 129, 0.15); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3);"; 
+function handleCanvasClick(e) {
+  if (shotsLeft <= 0 || isAnimating) return;
+
+  const canvas = document.getElementById('gameCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const clickX = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const clickY = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+  animateShot(clickX, clickY);
+}
+
+function animateShot(endX, endY) {
+  isAnimating = true;
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  let startX = 200;
+  let startY = 230;
+  let progress = 0;
+
+  let animInterval = setInterval(() => {
+    progress += 0.08;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGameScene();
+
+    let curX = startX + (endX - startX) * progress;
+    let curY = startY + (endY - startY) * progress;
+
+    // Bola voando
+    ctx.beginPath();
+    ctx.arc(curX, curY, 12 * (1 - progress * 0.3), 0, Math.PI * 2);
+    ctx.fillStyle = "#facc15";
+    ctx.fill();
+    ctx.strokeStyle = "#000";
+    ctx.stroke();
+
+    if (progress >= 1) {
+      clearInterval(animInterval);
+      isAnimating = false;
+      calculateHit(endX, endY);
     }
-    weatherAnimationElements = astroElement + (isNight ? realisticCloudsNight : realisticCloudsDay); 
-  } 
+  }, 20);
+}
 
-  let locationText = data.name + (stateHint ? `, ${stateHint}` : '') + ` - ${data.sys.country}`; 
-  display.innerHTML = ` 
-    <div style="font-size: 1.2rem; font-weight: 800; color: #0369a1;">${locationText}</div> 
-    <div style="font-size: 3.2rem; font-weight: 900; color: #d97706; margin: 2px 0;">${Math.round(temp)}°C</div> 
-    <div style="text-transform: capitalize; font-size: 1rem; color: var(--text-muted); font-weight: 600;">${data.weather[0].description}</div> 
-    <div class="court-illustration-container"> 
-      <svg class="court-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"> 
-        <defs> 
-          <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%"> 
-            <stop offset="0%" stop-color="${cStop1}" /> 
-            <stop offset="100%" stop-color="${cStop2}" /> 
-          </linearGradient> 
-          <linearGradient id="sandGrad" x1="0%" y1="0%" x2="0%" y2="100%"> 
-            <stop offset="0%" stop-color="${isNight ? '#b45309' : '#f59e0b'}" /> 
-            <stop offset="100%" stop-color="${isNight ? '#78350f' : '#d97706'}" /> 
-          </linearGradient> 
-        </defs> 
-        <rect width="400" height="130" fill="url(#skyGrad)"/> 
-        ${weatherAnimationElements} 
-        <rect y="125" width="400" height="75" fill="url(#sandGrad)"/> 
-        <polygon points="30,190 370,190 320,135 80,135" fill="${isNight ? '#ca8a04' : '#eab308'}" stroke="#fef08a" stroke-width="3" /> 
-        <line x1="200" y1="135" x2="200" y2="190" stroke="#ffffff" stroke-width="2" stroke-dasharray="4"/> 
-        <line x1="75" y1="85" x2="75" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/> 
-        <line x1="325" y1="85" x2="325" y2="150" stroke="#334155" stroke-width="6" stroke-linecap="round"/> 
-        <polygon points="75,90 325,90 325,120 75,120" fill="rgba(0,0,0,0.15)"/> 
-        <path d="M 75 100 L 325 100 M 75 110 L 325 110" stroke="#ffffff" stroke-width="1" opacity="0.7"/> 
-        <path d="M 100 90 L 100 120 M 125 90 L 125 120 M 150 90 L 150 120 M 200 90 L 200 120 M 225 90 L 225 120 M 250 90 L 250 120 M 275 90 L 275 120 M 300 90 L 300 120" stroke="#ffffff" stroke-width="1" opacity="0.7"/> 
-        <line x1="73" y1="90" x2="327" y2="90" stroke="#ffffff" stroke-width="4"/> 
-        <line x1="85" y1="65" x2="85" y2="120" stroke="#ef4444" stroke-width="2"/> 
-        <line x1="315" y1="65" x2="315" y2="120" stroke="#ef4444" stroke-width="2"/> 
-        <g transform="translate(230, 68)"> 
-          <circle cx="0" cy="0" r="12" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/> 
-          <path d="M -10 -4 Q 0 4 10 -4" stroke="#facc15" stroke-width="2.5" fill="none"/> 
-          <path d="M -8 6 Q 0 -2 8 6" stroke="#0284c7" stroke-width="2.5" fill="none"/> 
-        </g> 
-      </svg> 
-    </div> 
-    <div class="volley-alert" style="${alertStyle}"> ${alertMsg} </div> 
-    <div class="grid-weather"> 
-      <div class="weather-item">Sensação<strong>${Math.round(data.main.feels_like)}°C</strong></div> 
-      <div class="weather-item">Umidade<strong>${data.main.humidity}%</strong></div> 
-      <div class="weather-item">Vento<strong>${windSpeed} m/s</strong></div> 
-      <div class="weather-item">Mín / Máx<strong>${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°</strong></div> 
-    </div> `; 
-} 
+function calculateHit(x, y) {
+  let dist = Math.hypot(x - targetX, y - targetY);
+  let pts = 0;
+
+  if (dist <= 8) pts = 100;
+  else if (dist <= 16) pts = 50;
+  else if (dist <= 28) pts = 20;
+
+  gameScore += pts;
+  shotsLeft--;
+
+  document.getElementById('gameScore').innerText = gameScore;
+  document.getElementById('gameShots').innerText = shotsLeft;
+
+  if (shotsLeft > 0) {
+    spawnNewTarget();
+    drawGameScene();
+  } else {
+    drawGameScene();
+    saveGameRecord();
+    setTimeout(() => {
+      alert(`🎯 Fim de rodada!\nJogador: ${document.getElementById('gamePlayerSelect').value}\nAção: ${currentMode.toUpperCase()}\nPontuação Final: ${gameScore} pts`);
+    }, 200);
+  }
+}
+
+function saveGameRecord() {
+  const player = document.getElementById('gamePlayerSelect').value;
+  gameRecords.push({
+    player,
+    mode: currentMode.toUpperCase(),
+    score: gameScore,
+    date: new Date().toLocaleDateString('pt-BR')
+  });
+  gameRecords.sort((a,b) => b.score - a.score);
+  gameRecords = gameRecords.slice(0, 10);
+  localStorage.setItem('gameRecords', JSON.stringify(gameRecords));
+  renderGameRecords();
+}
+
+function renderGameRecords() {
+  const list = document.getElementById('gameRecordsList');
+  if (!gameRecords.length) {
+    list.innerHTML = "<p style='color: var(--text-muted); text-align: center;'>Nenhum recorde registrado ainda.</p>";
+    return;
+  }
+  let html = "";
+  gameRecords.forEach((r, i) => {
+    html += `
+    <div style="background: rgba(255,255,255,0.7); padding: 8px 12px; border-radius: 10px; margin-bottom: 6px; display: flex; justify-content: space-between;">
+      <span><strong>#${i+1} ${r.player}</strong> (${r.mode})</span>
+      <strong style="color: #d97706;">${r.score} pts</strong>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
 
 renderTeams(); 
 populateTeamSelectors(); 
